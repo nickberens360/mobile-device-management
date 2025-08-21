@@ -4,58 +4,104 @@
     <p class="text-body-1 text-medium-emphasis mb-6">
       Overview of all NBC Universal devices, locations, and recent configuration activities across film sets, theme parks, and corporate offices.
     </p>
-    
+
     <v-row>
-      <v-col cols="12" md="3">
-        <v-card>
-          <v-card-text class="d-flex align-center">
-            <div>
-              <div class="text-overline mb-1">Total Devices</div>
-              <div class="text-h4 font-weight-bold">{{ totalDevices }}</div>
-            </div>
-            <v-spacer />
-            <v-icon size="48" color="primary">mdi-devices</v-icon>
-          </v-card-text>
-        </v-card>
+      <v-col cols="12" sm="6" md="3">
+        <StatsCard
+          title="Total Devices"
+          :value="totalDevices"
+          icon="mdi-devices"
+          icon-color="primary"
+          has-action
+          action-text="View All"
+          @action-click="$router.push('/devices')"
+        />
       </v-col>
 
-      <v-col cols="12" md="3">
-        <v-card>
-          <v-card-text class="d-flex align-center">
-            <div>
-              <div class="text-overline mb-1">Online Devices</div>
-              <div class="text-h4 font-weight-bold text-success">{{ onlineDevices }}</div>
-            </div>
-            <v-spacer />
-            <v-icon size="48" color="success">mdi-check-circle</v-icon>
-          </v-card-text>
-        </v-card>
+      <v-col cols="12" sm="6" md="3">
+        <StatsCard
+          title="Online Devices"
+          :value="onlineDevices"
+          icon="mdi-check-circle"
+          icon-color="success"
+          has-action
+          action-text="View Online"
+          @action-click="$router.push('/devices?filter=online')"
+        />
       </v-col>
 
-      <v-col cols="12" md="3">
-        <v-card>
-          <v-card-text class="d-flex align-center">
-            <div>
-              <div class="text-overline mb-1">Locations</div>
-              <div class="text-h4 font-weight-bold">{{ totalLocations }}</div>
-            </div>
-            <v-spacer />
-            <v-icon size="48" color="secondary">mdi-map-marker</v-icon>
-          </v-card-text>
-        </v-card>
+      <v-col cols="12" sm="6" md="3">
+        <StatsCard
+          title="Locations"
+          :value="totalLocations"
+          icon="mdi-map-marker"
+          icon-color="secondary"
+          has-action
+          action-text="Manage"
+          action-color="secondary"
+          @action-click="$router.push('/locations')"
+        />
       </v-col>
 
-      <v-col cols="12" md="3">
-        <v-card>
-          <v-card-text class="d-flex align-center">
-            <div>
-              <div class="text-overline mb-1">Templates</div>
-              <div class="text-h4 font-weight-bold">{{ totalTemplates }}</div>
-            </div>
-            <v-spacer />
-            <v-icon size="48" color="accent">mdi-file-document-multiple</v-icon>
-          </v-card-text>
-        </v-card>
+      <v-col cols="12" sm="6" md="3">
+        <StatsCard
+          title="Device Exceptions"
+          :value="devicesNeedingAttention"
+          icon="mdi-alert-circle"
+          icon-color="warning"
+          has-action
+          action-text="View Issues"
+          @action-click="$router.push('/devices?filter=attention')"
+        />
+      </v-col>
+    </v-row>
+
+    <!-- Additional Metrics Row -->
+    <v-row class="mt-4">
+      <v-col cols="12" sm="6" md="3">
+        <StatsCard
+          title="Templates"
+          :value="totalTemplates"
+          icon="mdi-file-document-multiple"
+          icon-color="accent"
+          has-action
+          action-text="View All"
+          @action-click="$router.push('/templates')"
+        />
+      </v-col>
+      <v-col cols="12" sm="6" md="3">
+        <StatsCard
+          title="Recent Configs"
+          :value="recentConfigurations"
+          icon="mdi-cog"
+          icon-color="info"
+          has-action
+          action-text="Configure"
+          @action-click="$router.push('/configure')"
+        />
+      </v-col>
+      <v-col cols="12" sm="6" md="3">
+        <StatsCard
+          title="Uptime"
+          :value="systemUptime"
+          suffix="%"
+          icon="mdi-server"
+          icon-color="success"
+          has-action
+          action-text="History"
+          @action-click="$router.push('/history')"
+        />
+      </v-col>
+      <v-col cols="12" sm="6" md="3">
+        <StatsCard
+          title="Active Users"
+          :value="activeUsers"
+          icon="mdi-account-multiple"
+          icon-color="primary"
+          has-action
+          action-text="View Activity"
+          @action-click="$router.push('/history')"
+        />
       </v-col>
     </v-row>
 
@@ -101,7 +147,7 @@
               color="secondary"
               class="mb-2"
               prepend-icon="mdi-plus"
-              @click="$router.push('/templates')"
+              @click="$router.push('/templates/new')"
             >
               Create Template
             </v-btn>
@@ -160,7 +206,7 @@
                         :model-value="location.onlinePercentage"
                         height="20"
                         rounded
-                        color="success"
+                        color="green-lighten-3"
                       >
                         {{ location.online }}/{{ location.total }} online
                       </v-progress-linear>
@@ -182,17 +228,34 @@ import { useDeviceStore } from '@/stores/devices';
 import { useLocationStore } from '@/stores/locations';
 import { useTemplateStore } from '@/stores/templates';
 import { DeviceStatus } from '@/types/device';
+import StatsCard from '@/components/common/StatsCard.vue';
 
 const deviceStore = useDeviceStore();
 const locationStore = useLocationStore();
 const templateStore = useTemplateStore();
 
 const totalDevices = computed(() => deviceStore.devices.length);
-const onlineDevices = computed(() => 
+const onlineDevices = computed(() =>
   deviceStore.devices.filter(d => d.status === DeviceStatus.ONLINE).length
+);
+const devicesNeedingAttention = computed(() =>
+  deviceStore.devices.filter(d =>
+    d.status === DeviceStatus.ERROR || d.status === DeviceStatus.OFFLINE
+  ).length
 );
 const totalLocations = computed(() => locationStore.locations.length);
 const totalTemplates = computed(() => templateStore.templates.length);
+
+// Additional metrics
+const recentConfigurations = computed(() => {
+  const last24Hours = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  return deviceStore.devices.filter(d =>
+    d.currentConfig && new Date(d.currentConfig.appliedAt) > last24Hours
+  ).length;
+});
+
+const systemUptime = computed(() => 99.7); // Simulated uptime
+const activeUsers = computed(() => 12); // Simulated active users
 
 const recentActivities = ref([
   {
