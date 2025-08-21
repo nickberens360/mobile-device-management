@@ -1,0 +1,38 @@
+{
+  "name": "nbc-device-management",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview",
+    "type-check": "vue-tsc --noEmit",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+  },
+  "dependencies": {
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0",
+    "pinia": "^2.3.0",
+    "axios": "^1.7.9",
+    "vuetify": "^3.7.6",
+    "@mdi/font": "^7.4.47",
+    "@formkit/vue": "^1.6.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5",
+    "vue-tsc": "^2.2.0",
+    "@vue/tsconfig": "^0.7.0",
+    "@tsconfig/node18": "^18.2.4",
+    "@types/node": "^22.10.2",
+    "sass": "^1.83.0",
+    "vite-plugin-vuetify": "^2.0.4",
+    "@typescript-eslint/eslint-plugin": "^8.19.1",
+    "@typescript-eslint/parser": "^8.19.1",
+    "eslint": "^9.18.0",
+    "eslint-plugin-vue": "^9.32.0",
+    "prettier": "^3.4.2"
+  }
+}
