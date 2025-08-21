@@ -1,6 +1,9 @@
 <template>
   <v-container fluid>
-    <h1 class="text-h4 mb-6">Configuration History</h1>
+    <h1 class="text-h4 mb-2">Configuration History</h1>
+    <p class="text-body-1 text-medium-emphasis mb-6">
+      Track all device configuration changes, template updates, and system activities. View detailed logs with rollback capabilities for audit and troubleshooting.
+    </p>
     
     <v-card>
       <v-card-title>Recent Activities</v-card-title>

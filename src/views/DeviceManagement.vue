@@ -1,6 +1,9 @@
 <template>
   <v-container fluid>
-    <h1 class="text-h4 mb-6">Device Management</h1>
+    <h1 class="text-h4 mb-2">Device Management</h1>
+    <p class="text-body-1 text-medium-emphasis mb-6">
+      View and manage all networked devices including iPads, laptops, and mobile phones across NBC Universal locations. Monitor device status and perform individual actions.
+    </p>
     
     <v-card>
       <v-card-title>
@@ -51,26 +54,42 @@
               icon="mdi-cog"
               size="small"
               variant="text"
-              @click="configureDevice(item)"
+              @click="openDeviceDialog(item)"
             />
           </template>
         </v-data-table>
       </v-card-text>
     </v-card>
+
+    <!-- Device Details Dialog -->
+    <DeviceDetailsDialog
+      v-model="showDeviceDialog"
+      :device="selectedDevice"
+      @device-updated="onDeviceUpdated"
+      @dialog-closed="onDialogClosed"
+    />
+
+    <!-- Router outlet for nested routes -->
+    <router-view />
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed, onMounted, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useDeviceStore } from '@/stores/devices';
+import DeviceDetailsDialog from '@/components/devices/DeviceDetailsDialog.vue';
 import type { Device } from '@/types/device';
 
+const route = useRoute();
 const router = useRouter();
 const deviceStore = useDeviceStore();
 
 const devices = computed(() => deviceStore.devices);
 const loading = computed(() => deviceStore.loading);
+
+const showDeviceDialog = ref(false);
+const selectedDevice = ref<Device | null>(null);
 
 const headers = [
   { title: 'Name', key: 'name' },
@@ -99,11 +118,59 @@ const viewDevice = (device: Device) => {
   console.log('View device:', device.name);
 };
 
-const configureDevice = (_device: Device) => {
-  router.push('/configure');
+const openDeviceDialog = (device: Device) => {
+  router.push(`/devices/${device.id}`);
 };
 
-onMounted(() => {
+const onDeviceUpdated = (updatedDevice: Device) => {
+  // In a real app, this would update the device in the store
+  // For now, we'll just refresh the devices list
   deviceStore.fetchDevices();
+  console.log('Device updated:', updatedDevice.name);
+};
+
+const onDialogClosed = () => {
+  if (route.params.deviceId) {
+    router.push('/devices');
+  }
+};
+
+const handleDeviceRoute = async (deviceId?: string | string[]) => {
+  if (deviceId && typeof deviceId === 'string') {
+    // Ensure devices are loaded
+    if (devices.value.length === 0) {
+      await deviceStore.fetchDevices();
+    }
+    
+    const device = devices.value.find(d => d.id === deviceId);
+    if (device) {
+      selectedDevice.value = device;
+      showDeviceDialog.value = true;
+    } else {
+      // Device not found, redirect to devices list
+      router.push('/devices');
+    }
+  } else {
+    selectedDevice.value = null;
+    showDeviceDialog.value = false;
+  }
+};
+
+// Watch for route changes to open/close dialog
+watch(() => route.params.deviceId, handleDeviceRoute, { immediate: true });
+
+// Also watch for devices being loaded to handle initial route
+watch(() => devices.value.length, () => {
+  if (devices.value.length > 0 && route.params.deviceId) {
+    handleDeviceRoute(route.params.deviceId);
+  }
+});
+
+onMounted(async () => {
+  await deviceStore.fetchDevices();
+  // Handle initial route after devices are loaded
+  if (route.params.deviceId) {
+    handleDeviceRoute(route.params.deviceId);
+  }
 });
 </script>

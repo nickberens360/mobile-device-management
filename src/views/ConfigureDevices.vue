@@ -1,6 +1,9 @@
 <template>
   <v-container fluid>
-    <h1 class="text-h4 mb-6">Configure Devices</h1>
+    <h1 class="text-h4 mb-2">Configure Devices</h1>
+    <p class="text-body-1 text-medium-emphasis mb-6">
+      Apply configuration templates to multiple devices simultaneously. Select a location, choose devices, and deploy settings across your NBC Universal properties.
+    </p>
     
     <v-stepper v-model="currentStep" :items="steps" flat>
       <template v-slot:item.1>
@@ -188,13 +191,14 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useDeviceStore } from '@/stores/devices';
 import { useTemplateStore } from '@/stores/templates';
 import DeviceSelector from '@/components/devices/DeviceSelector.vue';
 import type { DeviceType } from '@/types/device';
 import type { Location } from '@/types/location';
 
+const route = useRoute();
 const router = useRouter();
 const deviceStore = useDeviceStore();
 const templateStore = useTemplateStore();
@@ -279,8 +283,19 @@ const deployConfiguration = async () => {
   }
 };
 
-onMounted(() => {
-  templateStore.fetchTemplates();
+onMounted(async () => {
+  await templateStore.fetchTemplates();
+  
+  // Check if we have device context from query parameters
+  const { deviceId, locationId, deviceType } = route.query;
+  
+  if (locationId && typeof locationId === 'string') {
+    // Pre-populate location from device context
+    await deviceStore.fetchDevices();
+    // This would typically fetch location by ID from the location store
+    // and pre-select the device's location in the configuration wizard
+    console.log('Pre-populating with device context:', { deviceId, locationId, deviceType });
+  }
 });
 
 watch(selectedDeviceType, () => {

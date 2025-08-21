@@ -2,17 +2,26 @@
   <v-app-bar
     elevation="1"
     color="white"
+    class="d-flex align-center justify-space-between"
   >
     <v-app-bar-nav-icon @click="drawer = !drawer" />
-    
-    <v-toolbar-title class="text-h6 font-weight-bold">
-      NBC Device Manager
+
+    <v-img
+      :src="logoUrl"
+      alt="NBC Logo"
+      contain
+      class="mr-3"
+      style="max-width: 150px;"
+    />
+
+    <v-toolbar-title class="text-h6  mb-0 font-weight-bold">
+      Device Manager
     </v-toolbar-title>
 
     <v-spacer />
 
     <v-btn icon="mdi-bell-outline" />
-    
+
     <v-menu>
       <template v-slot:activator="{ props }">
         <v-btn
@@ -40,6 +49,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
+import logoUrl from '@/assets/logo.png';
 
 const router = useRouter();
 const userStore = useUserStore();

@@ -1,6 +1,9 @@
 <template>
   <v-container fluid>
-    <h1 class="text-h4 mb-6">Dashboard</h1>
+    <h1 class="text-h4 mb-2">Dashboard</h1>
+    <p class="text-body-1 text-medium-emphasis mb-6">
+      Overview of all NBC Universal devices, locations, and recent configuration activities across film sets, theme parks, and corporate offices.
+    </p>
     
     <v-row>
       <v-col cols="12" md="3">

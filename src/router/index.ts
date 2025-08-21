@@ -19,12 +19,28 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/devices',
     name: 'DeviceManagement',
-    component: () => import('@/views/DeviceManagement.vue')
+    component: () => import('@/views/DeviceManagement.vue'),
+    children: [
+      {
+        path: ':deviceId',
+        name: 'DeviceDetails',
+        component: () => import('@/views/DeviceManagement.vue'),
+        props: true
+      }
+    ]
   },
   {
     path: '/templates',
     name: 'Templates',
-    component: () => import('@/views/Templates.vue')
+    component: () => import('@/views/Templates.vue'),
+    children: [
+      {
+        path: ':templateId',
+        name: 'TemplateDetails',
+        component: () => import('@/views/Templates.vue'),
+        props: true
+      }
+    ]
   },
   {
     path: '/history',
