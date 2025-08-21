@@ -3,6 +3,8 @@
     v-model="drawer"
     rail-width="72"
     permanent
+    height="100vh"
+    style="position: fixed;"
   >
     <v-list nav>
       <v-list-item
@@ -19,6 +21,12 @@
       <v-divider />
       <v-list nav>
         <v-list-item
+          prepend-icon="mdi-code-tags"
+          title="Component Docs"
+          href="/atomic-docs"
+          target="_blank"
+        />
+        <v-list-item
           prepend-icon="mdi-help-circle-outline"
           title="Help"
         />
@@ -28,9 +36,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { useDrawer } from '@/composables/useDrawer';
 
-const drawer = ref(true);
+const { drawer } = useDrawer();
 
 const navigationItems = [
   {
@@ -49,6 +57,11 @@ const navigationItems = [
     to: '/devices'
   },
   {
+    title: 'Locations',
+    icon: 'mdi-map-marker',
+    to: '/locations'
+  },
+  {
     title: 'Templates',
     icon: 'mdi-file-document-multiple',
     to: '/templates'
@@ -60,3 +73,4 @@ const navigationItems = [
   }
 ];
 </script>
+

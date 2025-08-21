@@ -59,6 +59,21 @@ class LocationApi {
     }
     return apiService.put<Location>(`/locations/${id}`, location);
   }
+
+  async deleteLocation(id: string): Promise<ApiResponse<void>> {
+    if (this.useMock) {
+      const index = mockLocations.findIndex(l => l.id === id);
+      if (index === -1) {
+        return Promise.reject(new Error('Location not found'));
+      }
+      mockLocations.splice(index, 1);
+      return Promise.resolve({
+        data: undefined,
+        status: 204,
+      });
+    }
+    return apiService.delete<void>(`/locations/${id}`);
+  }
 }
 
 export default new LocationApi();

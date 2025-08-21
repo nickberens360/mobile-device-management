@@ -5,7 +5,7 @@ import * as directives from 'vuetify/directives';
 import { aliases, mdi } from 'vuetify/iconsets/mdi';
 import '@mdi/font/css/materialdesignicons.css';
 
-const nbcTheme = {
+const nbcLightTheme = {
   dark: false,
   colors: {
     primary: '#5E2C91',
@@ -20,13 +20,29 @@ const nbcTheme = {
   },
 };
 
+const nbcDarkTheme = {
+  dark: true,
+  colors: {
+    primary: '#7C4DFF',
+    secondary: '#F37021',
+    accent: '#40C4FF',
+    error: '#F44336',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    background: '#121212',
+    surface: '#1E1E1E',
+  },
+};
+
 export default createVuetify({
   components,
   directives,
   theme: {
-    defaultTheme: 'nbcTheme',
+    defaultTheme: 'light',
     themes: {
-      nbcTheme,
+      light: nbcLightTheme,
+      dark: nbcDarkTheme,
     },
   },
   icons: {

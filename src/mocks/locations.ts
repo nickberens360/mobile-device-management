@@ -41,5 +41,32 @@ export const mockLocations: Location[] = [
     address: '1 Blachley Rd, Stamford, CT',
     deviceCount: 102,
     networkProfiles: ['BROADCAST_NET', 'PRODUCTION_WIFI']
+  },
+  {
+    id: 'loc-6',
+    name: 'Universal Orlando - Volcano Bay',
+    type: LocationType.THEME_PARK,
+    address: '6000 Universal Blvd, Orlando, FL',
+    activeProductions: [],
+    deviceCount: 78,
+    networkProfiles: ['PARK_WIFI', 'STAFF_WIFI', 'GUEST_SERVICES']
+  },
+  {
+    id: 'loc-7',
+    name: 'SNL Studio 8H',
+    type: LocationType.FILM_SET,
+    address: '30 Rockefeller Plaza, New York, NY',
+    activeProductions: ['Saturday Night Live'],
+    deviceCount: 35,
+    networkProfiles: ['PROD_WIFI', 'BROADCAST_NET', 'SECURE_NET']
+  },
+  {
+    id: 'loc-8',
+    name: 'DreamWorks Animation Studio',
+    type: LocationType.CORPORATE_OFFICE,
+    address: '1000 Flower St, Glendale, CA',
+    activeProductions: ['Trolls 3', 'Kung Fu Panda 4'],
+    deviceCount: 278,
+    networkProfiles: ['CORP_WIFI', 'CREATIVE_NET', 'RENDER_FARM']
   }
 ];

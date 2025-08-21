@@ -111,19 +111,11 @@
           <v-card-title>Recent Configuration Activities</v-card-title>
           <v-card-text>
             <v-list>
-              <v-list-item
+              <ConfigurationActivityItem
                 v-for="activity in recentActivities"
                 :key="activity.id"
-                :title="activity.title"
-                :subtitle="activity.subtitle"
-              >
-                <template v-slot:prepend>
-                  <v-icon :color="activity.color">{{ activity.icon }}</v-icon>
-                </template>
-                <template v-slot:append>
-                  <v-list-item-subtitle>{{ activity.time }}</v-list-item-subtitle>
-                </template>
-              </v-list-item>
+                :activity="activity"
+              />
             </v-list>
           </v-card-text>
         </v-card>
@@ -187,32 +179,12 @@
                 sm="6"
                 md="4"
               >
-                <v-card variant="outlined">
-                  <v-card-text>
-                    <div class="d-flex align-center mb-2">
-                      <v-icon color="primary" class="mr-2">mdi-map-marker</v-icon>
-                      <div class="text-subtitle-1 font-weight-bold">{{ location.name }}</div>
-                    </div>
-                    <v-chip
-                      size="small"
-                      color="primary"
-                      variant="tonal"
-                      class="mr-2"
-                    >
-                      {{ location.type }}
-                    </v-chip>
-                    <div class="mt-3">
-                      <v-progress-linear
-                        :model-value="location.onlinePercentage"
-                        height="20"
-                        rounded
-                        color="green-lighten-3"
-                      >
-                        {{ location.online }}/{{ location.total }} online
-                      </v-progress-linear>
-                    </div>
-                  </v-card-text>
-                </v-card>
+                <LocationCard
+                  :location="location"
+                  :online-count="location.online"
+                  :total-count="location.total"
+                  show-details
+                />
               </v-col>
             </v-row>
           </v-card-text>
@@ -229,6 +201,8 @@ import { useLocationStore } from '@/stores/locations';
 import { useTemplateStore } from '@/stores/templates';
 import { DeviceStatus } from '@/types/device';
 import StatsCard from '@/components/common/StatsCard.vue';
+import LocationCard from '@/components/locations/LocationCard.vue';
+import ConfigurationActivityItem, { type ConfigurationActivity } from '@/components/common/ConfigurationActivityItem.vue';
 
 const deviceStore = useDeviceStore();
 const locationStore = useLocationStore();
@@ -257,14 +231,16 @@ const recentConfigurations = computed(() => {
 const systemUptime = computed(() => 99.7); // Simulated uptime
 const activeUsers = computed(() => 12); // Simulated active users
 
-const recentActivities = ref([
+const recentActivities = ref<ConfigurationActivity[]>([
   {
     id: 1,
     title: '15 devices configured',
     subtitle: 'Universal Studios - Stage 12',
     icon: 'mdi-check-circle',
     color: 'success',
-    time: '2 hours ago'
+    time: '2 hours ago',
+    type: 'device_configuration',
+    locationId: 'loc-1'
   },
   {
     id: 2,
@@ -272,7 +248,9 @@ const recentActivities = ref([
     subtitle: 'Film Production - Crew Devices',
     icon: 'mdi-file-document-edit',
     color: 'info',
-    time: '5 hours ago'
+    time: '5 hours ago',
+    type: 'template_update',
+    templateId: 'tpl-1'
   },
   {
     id: 3,
@@ -280,7 +258,10 @@ const recentActivities = ref([
     subtitle: '3 devices at 30 Rockefeller Plaza',
     icon: 'mdi-alert-circle',
     color: 'error',
-    time: '1 day ago'
+    time: '1 day ago',
+    type: 'configuration_failure',
+    locationId: 'loc-3',
+    deviceIds: ['dev-001', 'dev-002', 'dev-003']
   },
   {
     id: 4,
@@ -288,7 +269,9 @@ const recentActivities = ref([
     subtitle: 'Press Event - Media Devices',
     icon: 'mdi-plus-circle',
     color: 'primary',
-    time: '2 days ago'
+    time: '2 days ago',
+    type: 'template_create',
+    templateId: 'tpl-4'
   }
 ]);
 

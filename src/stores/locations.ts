@@ -57,5 +57,59 @@ export const useLocationStore = defineStore('locations', {
         return null;
       }
     },
+
+    async createLocation(location: Omit<Location, 'id'>): Promise<Location | null> {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const response = await locationApi.createLocation(location);
+        this.locations.push(response.data);
+        return response.data;
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : 'Failed to create location';
+        return null;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async updateLocation(id: string, location: Partial<Location>): Promise<Location | null> {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const response = await locationApi.updateLocation(id, location);
+        const index = this.locations.findIndex(loc => loc.id === id);
+        if (index !== -1) {
+          this.locations[index] = response.data;
+        }
+        return response.data;
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : 'Failed to update location';
+        return null;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async deleteLocation(id: string): Promise<boolean> {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        await locationApi.deleteLocation(id);
+        const index = this.locations.findIndex(loc => loc.id === id);
+        if (index !== -1) {
+          this.locations.splice(index, 1);
+        }
+        return true;
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : 'Failed to delete location';
+        return false;
+      } finally {
+        this.loading = false;
+      }
+    },
   },
 });

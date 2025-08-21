@@ -2,188 +2,510 @@
   <v-container fluid>
     <h1 class="text-h4 mb-2">Configure Devices</h1>
     <p class="text-body-1 text-medium-emphasis mb-6">
-      Apply configuration templates to multiple devices simultaneously. Select a location, choose devices, and deploy settings across your NBC Universal properties.
+      Apply configuration templates to multiple devices simultaneously. Select devices from any location and device type, then deploy compatible templates across your NBC Universal properties.
     </p>
-    
-    <v-stepper v-model="currentStep" :items="steps" flat>
+
+    <v-stepper
+      v-model="currentStep"
+      :items="steps"
+      flat
+      :complete-icon="'mdi-check'"
+      editable
+    >
+      <!-- Step 1: Select Devices -->
       <template v-slot:item.1>
-        <DeviceSelector @location-selected="onLocationSelected" />
-        <v-card-actions class="justify-end">
-          <v-btn
-            color="primary"
-            @click="currentStep++"
-            :disabled="!selectedLocation"
-          >
-            Next
-            <v-icon end>mdi-arrow-right</v-icon>
-          </v-btn>
-        </v-card-actions>
-      </template>
-
-      <template v-slot:item.2>
-        <v-card>
-          <v-card-title>Select Device Type</v-card-title>
+        <v-card flat>
+          <v-card-title class="d-flex align-center">
+            <v-icon class="mr-2">mdi-devices</v-icon>
+            Select Devices for Configuration
+          </v-card-title>
           <v-card-text>
-            <v-chip-group
-              v-model="selectedDeviceType"
-              class="mb-4"
-              filter
-              mandatory
-            >
-              <v-chip
-                v-for="type in deviceTypes"
-                :key="type.value"
-                :value="type.value"
-              >
-                <v-icon start>{{ type.icon }}</v-icon>
-                {{ type.label }}
-              </v-chip>
-            </v-chip-group>
+            <!-- Filter Controls -->
+            <v-row class="mb-4">
+              <v-col cols="12" md="3">
+                <v-select
+                  v-model="deviceFilters.location"
+                  :items="locationOptions"
+                  item-title="name"
+                  item-value="id"
+                  label="Filter by Location"
+                  variant="outlined"
+                  prepend-inner-icon="mdi-map-marker"
+                  clearable
+                  multiple
+                  chips
+                  closable-chips
+                />
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-select
+                  v-model="deviceFilters.type"
+                  :items="deviceTypeOptions"
+                  item-title="label"
+                  item-value="value"
+                  label="Filter by Type"
+                  variant="outlined"
+                  prepend-inner-icon="mdi-tablet"
+                  clearable
+                  multiple
+                  chips
+                  closable-chips
+                />
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-select
+                  v-model="deviceFilters.status"
+                  :items="deviceStatusOptions"
+                  item-title="label"
+                  item-value="value"
+                  label="Filter by Status"
+                  variant="outlined"
+                  prepend-inner-icon="mdi-information"
+                  clearable
+                  multiple
+                  chips
+                  closable-chips
+                />
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-text-field
+                  v-model="deviceFilters.search"
+                  label="Search devices"
+                  variant="outlined"
+                  prepend-inner-icon="mdi-magnify"
+                  clearable
+                />
+              </v-col>
+            </v-row>
 
+            <!-- Device Selection Summary -->
             <v-alert
-              v-if="!locationDevices.length"
+              v-if="selectedDevices.length > 0"
               type="info"
               variant="tonal"
               class="mb-4"
             >
-              No devices found for the selected location and type.
+              <div class="d-flex align-center">
+                <div>
+                  <strong>{{ selectedDevices.length }} devices selected</strong>
+                  <div class="text-body-2 mt-1">
+                    Locations: {{ selectedDevicesByLocation.length }} |
+                    Types: {{ selectedDevicesByType.length }} |
+                    Compatible templates: {{ compatibleTemplatesCount }}
+                  </div>
+                </div>
+                <v-spacer />
+                <v-btn
+                  variant="text"
+                  size="small"
+                  @click="clearSelection"
+                >
+                  Clear All
+                </v-btn>
+              </div>
             </v-alert>
 
+            <!-- Device Table -->
             <v-data-table
-              v-else
               v-model="selectedDevices"
               :headers="deviceHeaders"
-              :items="locationDevices"
+              :items="filteredDevices"
               :loading="devicesLoading"
               show-select
               class="elevation-1"
               item-value="id"
+              :items-per-page="15"
             >
+              <template v-slot:item.name="{ item }">
+                <div class="d-flex align-center">
+                  <v-icon class="mr-2" :color="getDeviceTypeColor(item.type)">
+                    {{ getDeviceTypeIcon(item.type) }}
+                  </v-icon>
+                  {{ item.name }}
+                </div>
+              </template>
+
               <template v-slot:item.status="{ item }">
                 <v-chip
                   :color="getStatusColor(item.status)"
                   size="small"
                   variant="tonal"
                 >
+                  <v-icon start>{{ getStatusIcon(item.status) }}</v-icon>
                   {{ item.status }}
                 </v-chip>
               </template>
+
               <template v-slot:item.type="{ item }">
                 <v-chip size="small" variant="outlined">
                   {{ item.type.replace('_', ' ') }}
                 </v-chip>
               </template>
+
+              <template v-slot:item.location="{ item }">
+                <div class="d-flex align-center">
+                  <v-icon class="mr-1" size="small">mdi-map-marker</v-icon>
+                  {{ getLocationName(item.location) }}
+                </div>
+              </template>
             </v-data-table>
           </v-card-text>
-          <v-card-actions>
-            <v-btn @click="currentStep--">Back</v-btn>
-            <v-spacer />
-            <v-btn
-              color="primary"
-              @click="currentStep++"
-              :disabled="selectedDevices.length === 0"
-            >
-              Next ({{ selectedDevices.length }} devices)
-              <v-icon end>mdi-arrow-right</v-icon>
-            </v-btn>
-          </v-card-actions>
         </v-card>
       </template>
 
-      <template v-slot:item.3>
-        <v-card>
-          <v-card-title>Select Template</v-card-title>
+      <!-- Step 2: Select Compatible Templates -->
+      <template v-slot:item.2>
+        <v-card flat>
+          <v-card-title class="d-flex align-center">
+            <v-icon class="mr-2">mdi-file-document-multiple</v-icon>
+            Select Compatible Templates
+          </v-card-title>
           <v-card-text>
-            <v-select
-              v-model="selectedTemplate"
-              :items="availableTemplates"
-              item-title="name"
-              item-value="id"
-              label="Configuration Template"
-              variant="outlined"
-              prepend-inner-icon="mdi-file-document-outline"
-              :loading="templatesLoading"
+            <v-alert
+              v-if="selectedDevices.length === 0"
+              type="warning"
+              variant="tonal"
+              class="mb-4"
             >
-              <template v-slot:item="{ props, item }">
-                <v-list-item v-bind="props" :subtitle="item.raw.description" />
-              </template>
-            </v-select>
+              Please select devices in the previous step to see compatible templates.
+            </v-alert>
 
-            <v-card
-              v-if="selectedTemplateData"
-              variant="outlined"
-              class="mt-4"
+            <v-alert
+              v-else-if="compatibleTemplates.length === 0"
+              type="info"
+              variant="tonal"
+              class="mb-4"
             >
-              <v-card-title>Template Preview</v-card-title>
-              <v-card-text>
-                <v-expansion-panels>
-                  <v-expansion-panel title="Network Settings">
-                    <v-expansion-panel-text>
-                      <div class="d-flex align-center mb-2">
-                        <v-icon class="mr-2">mdi-wifi</v-icon>
-                        <strong>SSID:</strong>
-                        <v-chip size="small" class="ml-2">
-                          {{ selectedTemplateData.settings.network.ssid }}
-                        </v-chip>
-                      </div>
-                      <div class="d-flex align-center mb-2">
-                        <v-icon class="mr-2">mdi-shield</v-icon>
-                        <strong>Security:</strong>
-                        <v-chip size="small" class="ml-2" color="success">
-                          {{ selectedTemplateData.settings.network.security }}
-                        </v-chip>
-                      </div>
-                      <div class="d-flex align-center">
-                        <v-icon class="mr-2">mdi-network</v-icon>
-                        <strong>VLAN:</strong>
-                        <v-chip size="small" class="ml-2">
-                          {{ selectedTemplateData.settings.network.vlan }}
-                        </v-chip>
-                      </div>
-                    </v-expansion-panel-text>
-                  </v-expansion-panel>
+              No templates are compatible with all selected devices. Consider selecting devices of similar types or creating a new template.
+            </v-alert>
 
-                  <v-expansion-panel title="Security Settings">
-                    <v-expansion-panel-text>
-                      <div class="d-flex align-center mb-2">
-                        <v-icon class="mr-2" :color="selectedTemplateData.settings.security.encryption ? 'success' : 'error'">
-                          {{ selectedTemplateData.settings.security.encryption ? 'mdi-check' : 'mdi-close' }}
-                        </v-icon>
-                        <span>Encryption {{ selectedTemplateData.settings.security.encryption ? 'Enabled' : 'Disabled' }}</span>
+            <!-- Template Selection -->
+            <div v-if="compatibleTemplates.length > 0">
+              <v-row>
+                <v-col
+                  v-for="template in compatibleTemplates"
+                  :key="template.id"
+                  cols="12"
+                  md="6"
+                >
+                  <v-card
+                    :variant="selectedTemplate === template.id ? 'tonal' : 'outlined'"
+                    :color="selectedTemplate === template.id ? 'primary' : undefined"
+                    class="h-100 cursor-pointer"
+                    @click="selectedTemplate = template.id"
+                  >
+                    <v-card-title class="d-flex align-center">
+                      <v-radio
+                        :value="template.id"
+                        :model-value="selectedTemplate"
+                        color="primary"
+                        class="mr-2"
+                      />
+                      {{ template.name }}
+                      <v-spacer />
+                      <v-chip
+                        size="small"
+                        :color="getTemplateTypeColor(template.deviceTypes[0] || 'default')"
+                        variant="tonal"
+                      >
+                        {{ template.deviceTypes[0] || 'Multi-Device' }}
+                      </v-chip>
+                    </v-card-title>
+
+                    <v-card-text>
+                      <p class="text-body-2 mb-3">{{ template.description }}</p>
+
+                      <div class="mb-2">
+                        <v-chip-group>
+                          <v-chip
+                            v-for="deviceType in template.deviceTypes"
+                            :key="deviceType"
+                            size="x-small"
+                            variant="outlined"
+                          >
+                            {{ deviceType.replace('_', ' ') }}
+                          </v-chip>
+                        </v-chip-group>
                       </div>
-                      <div class="d-flex align-center mb-2">
-                        <v-icon class="mr-2" :color="selectedTemplateData.settings.security.remoteWipe ? 'success' : 'error'">
-                          {{ selectedTemplateData.settings.security.remoteWipe ? 'mdi-check' : 'mdi-close' }}
-                        </v-icon>
-                        <span>Remote Wipe {{ selectedTemplateData.settings.security.remoteWipe ? 'Enabled' : 'Disabled' }}</span>
+
+                      <div class="text-caption text-medium-emphasis">
+                        Compatible with {{ getMatchingDeviceCount(template) }} of {{ selectedDevices.length }} selected devices
                       </div>
-                      <div class="d-flex align-center">
-                        <v-icon class="mr-2">mdi-lock</v-icon>
-                        <strong>Passcode:</strong>
-                        <v-chip size="small" class="ml-2">
-                          {{ selectedTemplateData.settings.security.passcode }}
-                        </v-chip>
-                      </div>
-                    </v-expansion-panel-text>
-                  </v-expansion-panel>
-                </v-expansion-panels>
-              </v-card-text>
-            </v-card>
+                    </v-card-text>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </div>
           </v-card-text>
-          <v-card-actions>
-            <v-btn @click="currentStep--">Back</v-btn>
-            <v-spacer />
-            <v-btn
-              color="success"
-              @click="deployConfiguration"
-              :disabled="!selectedTemplate"
-              :loading="deploying"
-            >
-              Deploy Configuration
-              <v-icon end>mdi-rocket-launch</v-icon>
-            </v-btn>
-          </v-card-actions>
         </v-card>
+      </template>
+
+      <!-- Step 3: Customize and Deploy -->
+      <template v-slot:item.3>
+        <v-card flat>
+          <v-card-title class="d-flex align-center">
+            <v-icon class="mr-2">mdi-cog</v-icon>
+            Customize and Deploy Configuration
+          </v-card-title>
+          <v-card-text>
+            <v-alert
+              v-if="!selectedTemplate"
+              type="warning"
+              variant="tonal"
+              class="mb-4"
+            >
+              Please select a template in the previous step to customize and deploy.
+            </v-alert>
+
+            <div v-if="selectedTemplate && selectedTemplateData">
+              <!-- Deployment Summary -->
+              <v-card variant="outlined" class="mb-4">
+                <v-card-title>Deployment Summary</v-card-title>
+                <v-card-text>
+                  <v-row>
+                    <v-col cols="12" md="4">
+                      <div class="text-subtitle-2 mb-1">Template</div>
+                      <v-chip color="primary" variant="tonal">
+                        {{ selectedTemplateData.name }}
+                      </v-chip>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <div class="text-subtitle-2 mb-1">Target Devices</div>
+                      <v-chip color="success" variant="tonal">
+                        {{ compatibleDeviceCount }} devices
+                      </v-chip>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <div class="text-subtitle-2 mb-1">Locations</div>
+                      <v-chip color="info" variant="tonal">
+                        {{ selectedDevicesByLocation.length }} locations
+                      </v-chip>
+                    </v-col>
+                  </v-row>
+
+                  <!-- Incompatible devices warning -->
+                  <v-alert
+                    v-if="incompatibleDeviceCount > 0"
+                    type="warning"
+                    variant="tonal"
+                    class="mt-3"
+                  >
+                    <div class="text-body-2">
+                      <strong>{{ incompatibleDeviceCount }} devices</strong> are not compatible with this template and will be skipped:
+                      <ul class="mt-2 ml-4">
+                        <li v-for="device in incompatibleDevices.slice(0, 5)" :key="device.id">
+                          {{ device.name }} ({{ device.type.replace('_', ' ') }})
+                        </li>
+                        <li v-if="incompatibleDevices.length > 5">
+                          ... and {{ incompatibleDevices.length - 5 }} more
+                        </li>
+                      </ul>
+                    </div>
+                  </v-alert>
+                </v-card-text>
+              </v-card>
+
+              <!-- Configuration Preview and Customization -->
+              <v-card variant="outlined" class="mb-4">
+                <v-card-title class="d-flex align-center">
+                  <v-icon class="mr-2">mdi-eye</v-icon>
+                  Configuration Preview
+                  <v-spacer />
+                  <v-switch
+                    v-model="enableCustomization"
+                    label="Enable Customization"
+                    color="primary"
+                    hide-details
+                  />
+                </v-card-title>
+                <v-card-text>
+                  <v-expansion-panels multiple>
+                    <v-expansion-panel title="Network Settings">
+                      <v-expansion-panel-text>
+                        <v-row>
+                          <v-col cols="12" md="4">
+                            <v-text-field
+                              v-model="customSettings.network.ssid"
+                              label="SSID"
+                              variant="outlined"
+                              prepend-inner-icon="mdi-wifi"
+                              :readonly="!enableCustomization"
+                              density="compact"
+                            />
+                          </v-col>
+                          <v-col cols="12" md="4">
+                            <v-select
+                              v-model="customSettings.network.security"
+                              :items="securityOptions"
+                              label="Security Type"
+                              variant="outlined"
+                              prepend-inner-icon="mdi-shield"
+                              :readonly="!enableCustomization"
+                              density="compact"
+                            />
+                          </v-col>
+                          <v-col cols="12" md="4">
+                            <v-text-field
+                              v-model="customSettings.network.vlan"
+                              label="VLAN"
+                              type="number"
+                              variant="outlined"
+                              prepend-inner-icon="mdi-network"
+                              :readonly="!enableCustomization"
+                              density="compact"
+                            />
+                          </v-col>
+                        </v-row>
+                      </v-expansion-panel-text>
+                    </v-expansion-panel>
+
+                    <v-expansion-panel title="Security Settings">
+                      <v-expansion-panel-text>
+                        <v-row>
+                          <v-col cols="12" md="4">
+                            <v-switch
+                              v-model="customSettings.security.encryption"
+                              label="Device Encryption"
+                              color="success"
+                              :readonly="!enableCustomization"
+                            />
+                          </v-col>
+                          <v-col cols="12" md="4">
+                            <v-switch
+                              v-model="customSettings.security.remoteWipe"
+                              label="Remote Wipe Capability"
+                              color="error"
+                              :readonly="!enableCustomization"
+                            />
+                          </v-col>
+                          <v-col cols="12" md="4">
+                            <v-select
+                              v-model="customSettings.security.passcode"
+                              :items="passcodeOptions"
+                              label="Passcode Policy"
+                              variant="outlined"
+                              prepend-inner-icon="mdi-lock"
+                              :readonly="!enableCustomization"
+                              density="compact"
+                            />
+                          </v-col>
+                        </v-row>
+                      </v-expansion-panel-text>
+                    </v-expansion-panel>
+
+                    <v-expansion-panel title="Application Settings" v-if="customSettings.apps">
+                      <v-expansion-panel-text>
+                        <div class="text-body-2 mb-3">Configure which applications will be installed:</div>
+                        <v-chip-group
+                          v-model="customSettings.apps.required"
+                          multiple
+                          :disabled="!enableCustomization"
+                        >
+                          <v-chip
+                            v-for="app in availableApps"
+                            :key="app.id"
+                            :value="app.id"
+                            filter
+                          >
+                            <v-icon start>{{ app.icon }}</v-icon>
+                            {{ app.name }}
+                          </v-chip>
+                        </v-chip-group>
+                      </v-expansion-panel-text>
+                    </v-expansion-panel>
+                  </v-expansion-panels>
+                </v-card-text>
+              </v-card>
+
+              <!-- Deployment Options -->
+              <v-card variant="outlined">
+                <v-card-title class="d-flex align-center">
+                  <v-icon class="mr-2">mdi-rocket-launch</v-icon>
+                  Deployment Options
+                </v-card-title>
+                <v-card-text>
+                  <v-row>
+                    <v-col cols="12" md="6">
+                      <v-select
+                        v-model="deploymentOptions.mode"
+                        :items="deploymentModes"
+                        item-title="label"
+                        item-value="value"
+                        label="Deployment Mode"
+                        variant="outlined"
+                        prepend-inner-icon="mdi-speedometer"
+                      />
+                    </v-col>
+                    <v-col cols="12" md="6">
+                      <v-select
+                        v-model="deploymentOptions.schedule"
+                        :items="scheduleOptions"
+                        item-title="label"
+                        item-value="value"
+                        label="Schedule"
+                        variant="outlined"
+                        prepend-inner-icon="mdi-clock"
+                      />
+                    </v-col>
+                  </v-row>
+
+                  <v-checkbox
+                    v-model="deploymentOptions.notifyUsers"
+                    label="Notify device users before configuration"
+                    color="primary"
+                  />
+
+                  <v-checkbox
+                    v-model="deploymentOptions.rollbackOnFailure"
+                    label="Automatically rollback on failure"
+                    color="primary"
+                  />
+                </v-card-text>
+              </v-card>
+            </div>
+          </v-card-text>
+        </v-card>
+      </template>
+
+      <template v-slot:actions="{ next, prev }">
+        <div class="d-flex justify-space-between w-100 pa-4">
+          <v-btn
+            v-if="currentStep > 1"
+            @click="prev"
+            variant="outlined"
+          >
+            <v-icon start>mdi-arrow-left</v-icon>
+            Back
+          </v-btn>
+          <v-spacer v-else />
+
+          <v-btn
+            v-if="currentStep < steps.length"
+            @click="next"
+            color="primary"
+            :disabled="!canProceedToNext"
+          >
+            Next
+            <v-badge
+              v-if="currentStep === 2 && selectedDevices.length > 0"
+              :content="selectedDevices.length"
+              color="secondary"
+              inline
+            />
+            <v-icon end>mdi-arrow-right</v-icon>
+          </v-btn>
+
+          <v-btn
+            v-else
+            @click="deployConfiguration"
+            color="success"
+            :disabled="!selectedTemplate"
+            :loading="deploying"
+          >
+            Deploy Configuration
+            <v-icon end>mdi-rocket-launch</v-icon>
+          </v-btn>
+        </div>
       </template>
     </v-stepper>
   </v-container>
@@ -193,60 +515,213 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useDeviceStore } from '@/stores/devices';
+import { useLocationStore } from '@/stores/locations';
 import { useTemplateStore } from '@/stores/templates';
-import DeviceSelector from '@/components/devices/DeviceSelector.vue';
-import type { DeviceType } from '@/types/device';
-import type { Location } from '@/types/location';
+import { useNotifications } from '@/composables/useNotifications';
 
 const route = useRoute();
 const router = useRouter();
 const deviceStore = useDeviceStore();
+const locationStore = useLocationStore();
 const templateStore = useTemplateStore();
+const { showSuccess, showError } = useNotifications();
 
 const currentStep = ref(1);
-const steps = ['Select Location', 'Select Devices', 'Configure & Deploy'];
+const steps = ['Select Devices', 'Select Templates', 'Customize & Deploy'];
 
-const selectedLocation = ref<Location | null>(null);
+// Device selection
 const selectedDevices = ref<string[]>([]);
-const selectedDeviceType = ref<DeviceType>('ipad_pro' as DeviceType);
 const selectedTemplate = ref<string>('');
 
-const devicesLoading = ref(false);
-const templatesLoading = computed(() => templateStore.loading);
+// UI state
+const devicesLoading = computed(() => deviceStore.loading);
+// const templatesLoading = computed(() => templateStore.loading);
 const deploying = ref(false);
 
-const deviceTypes = [
+// Customization state
+const enableCustomization = ref(false);
+
+// Device filters
+const deviceFilters = ref({
+  location: [] as string[],
+  type: [] as string[],
+  status: [] as string[],
+  search: ''
+});
+
+// Custom settings (initialized from template)
+const customSettings = ref({
+  network: {
+    ssid: '',
+    security: '',
+    vlan: ''
+  },
+  security: {
+    encryption: false,
+    remoteWipe: false,
+    passcode: ''
+  },
+  apps: {
+    required: [] as string[]
+  }
+});
+
+// Deployment options
+const deploymentOptions = ref({
+  mode: 'standard',
+  schedule: 'immediate',
+  notifyUsers: true,
+  rollbackOnFailure: true
+});
+
+// Options for filters and forms
+const deviceTypeOptions = [
   { value: 'ipad_pro', label: 'iPad Pro', icon: 'mdi-tablet' },
   { value: 'ipad_air', label: 'iPad Air', icon: 'mdi-tablet' },
   { value: 'macbook_pro', label: 'MacBook Pro', icon: 'mdi-laptop' },
   { value: 'iphone', label: 'iPhone', icon: 'mdi-cellphone' }
 ];
 
+const deviceStatusOptions = [
+  { value: 'online', label: 'Online' },
+  { value: 'offline', label: 'Offline' },
+  { value: 'configuring', label: 'Configuring' },
+  { value: 'error', label: 'Error' }
+];
+
+const securityOptions = ['WPA2', 'WPA3', 'WEP', 'Open'];
+const passcodeOptions = ['Simple', 'Complex', 'Alphanumeric', 'None'];
+
+const deploymentModes = [
+  { value: 'standard', label: 'Standard (Normal Priority)' },
+  { value: 'express', label: 'Express (High Priority)' },
+  { value: 'maintenance', label: 'Maintenance Window' }
+];
+
+const scheduleOptions = [
+  { value: 'immediate', label: 'Deploy Immediately' },
+  { value: 'off_hours', label: 'During Off Hours' },
+  { value: 'custom', label: 'Custom Schedule' }
+];
+
+const availableApps = [
+  { id: 'teams', name: 'Microsoft Teams', icon: 'mdi-microsoft-teams' },
+  { id: 'zoom', name: 'Zoom', icon: 'mdi-video' },
+  { id: 'slack', name: 'Slack', icon: 'mdi-slack' },
+  { id: 'chrome', name: 'Chrome', icon: 'mdi-google-chrome' },
+  { id: 'office', name: 'Office 365', icon: 'mdi-microsoft-office' }
+];
+
 const deviceHeaders = [
   { title: 'Name', key: 'name' },
   { title: 'Type', key: 'type' },
   { title: 'Status', key: 'status' },
+  { title: 'Location', key: 'location' },
   { title: 'Last Seen', key: 'metadata.lastSeen' }
 ];
 
-const locationDevices = computed(() => {
-  if (!selectedLocation.value) return [];
-  return deviceStore.devices.filter(d => 
-    d.location === selectedLocation.value!.id && 
-    d.type === selectedDeviceType.value
+// Computed properties for the new workflow
+const locationOptions = computed(() => {
+  return [{ id: 'all', name: 'All Locations' }, ...locationStore.locations];
+});
+
+const allDevices = computed(() => deviceStore.devices);
+
+const filteredDevices = computed(() => {
+  let devices = allDevices.value;
+
+  // Filter by location
+  if (deviceFilters.value.location.length > 0) {
+    devices = devices.filter(d => deviceFilters.value.location.includes(d.location));
+  }
+
+  // Filter by type
+  if (deviceFilters.value.type.length > 0) {
+    devices = devices.filter(d => deviceFilters.value.type.includes(d.type));
+  }
+
+  // Filter by status
+  if (deviceFilters.value.status.length > 0) {
+    devices = devices.filter(d => deviceFilters.value.status.includes(d.status));
+  }
+
+  // Filter by search
+  if (deviceFilters.value.search) {
+    const search = deviceFilters.value.search.toLowerCase();
+    devices = devices.filter(d =>
+      d.name.toLowerCase().includes(search) ||
+      d.type.toLowerCase().includes(search) ||
+      getLocationName(d.location).toLowerCase().includes(search)
+    );
+  }
+
+  return devices;
+});
+
+const selectedDevicesData = computed(() =>
+  allDevices.value.filter(d => selectedDevices.value.includes(d.id))
+);
+
+const selectedDevicesByLocation = computed(() => {
+  const locations = new Set(selectedDevicesData.value.map(d => d.location));
+  return Array.from(locations);
+});
+
+const selectedDevicesByType = computed(() => {
+  const types = new Set(selectedDevicesData.value.map(d => d.type));
+  return Array.from(types);
+});
+
+// Template compatibility logic
+const compatibleTemplates = computed(() => {
+  if (selectedDevices.value.length === 0) return [];
+
+  const selectedTypes = selectedDevicesByType.value;
+  return templateStore.templates.filter(template => {
+    // Template is compatible if it supports all selected device types
+    return selectedTypes.every(type =>
+      template.deviceTypes?.includes(type as any)
+    );
+  });
+});
+
+const compatibleTemplatesCount = computed(() => compatibleTemplates.value.length);
+
+const selectedTemplateData = computed(() =>
+  templateStore.templates.find(t => t.id === selectedTemplate.value)
+);
+
+// Device compatibility for selected template
+const compatibleDeviceCount = computed(() => {
+  if (!selectedTemplateData.value) return 0;
+  return selectedDevicesData.value.filter(device =>
+    selectedTemplateData.value!.deviceTypes?.includes(device.type as any)
+  ).length;
+});
+
+const incompatibleDevices = computed(() => {
+  if (!selectedTemplateData.value) return [];
+  return selectedDevicesData.value.filter(device =>
+    !selectedTemplateData.value!.deviceTypes?.includes(device.type as any)
   );
 });
 
-const availableTemplates = computed(() => {
-  return templateStore.templates.filter(template =>
-    template.deviceTypes.includes(selectedDeviceType.value)
-  );
+const incompatibleDeviceCount = computed(() => incompatibleDevices.value.length);
+
+const canProceedToNext = computed(() => {
+  switch (currentStep.value) {
+    case 1:
+      return selectedDevices.value.length > 0;
+    case 2:
+      return !!selectedTemplate.value;
+    case 3:
+      return !!selectedTemplate.value && selectedTemplateData.value;
+    default:
+      return false;
+  }
 });
 
-const selectedTemplateData = computed(() => {
-  return templateStore.templates.find(t => t.id === selectedTemplate.value);
-});
-
+// Helper functions
 const getStatusColor = (status: string): string => {
   const colors: Record<string, string> = {
     online: 'success',
@@ -257,49 +732,150 @@ const getStatusColor = (status: string): string => {
   return colors[status] || 'grey';
 };
 
-const onLocationSelected = async (location: Location) => {
-  selectedLocation.value = location;
-  devicesLoading.value = true;
-  try {
-    await deviceStore.fetchDevices();
-  } finally {
-    devicesLoading.value = false;
-  }
+const getStatusIcon = (status: string): string => {
+  const icons: Record<string, string> = {
+    online: 'mdi-check-circle',
+    offline: 'mdi-close-circle',
+    configuring: 'mdi-loading',
+    error: 'mdi-alert-circle'
+  };
+  return icons[status] || 'mdi-help-circle';
 };
+
+const getDeviceTypeIcon = (type: string): string => {
+  const icons: Record<string, string> = {
+    ipad_pro: 'mdi-tablet',
+    ipad_air: 'mdi-tablet',
+    macbook_pro: 'mdi-laptop',
+    iphone: 'mdi-cellphone'
+  };
+  return icons[type] || 'mdi-devices';
+};
+
+const getDeviceTypeColor = (type: string): string => {
+  const colors: Record<string, string> = {
+    ipad_pro: 'primary',
+    ipad_air: 'secondary',
+    macbook_pro: 'info',
+    iphone: 'success'
+  };
+  return colors[type] || 'grey';
+};
+
+const getTemplateTypeColor = (type: string): string => {
+  const colors: Record<string, string> = {
+    production: 'purple',
+    corporate: 'blue',
+    event: 'orange',
+    educational: 'green'
+  };
+  return colors[type] || 'grey';
+};
+
+const getLocationName = (locationId: string): string => {
+  const location = locationStore.locations.find(l => l.id === locationId);
+  return location?.name || 'Unknown Location';
+};
+
+const getMatchingDeviceCount = (template: any): number => {
+  return selectedDevicesData.value.filter(device =>
+    template.deviceTypes?.includes(device.type)
+  ).length;
+};
+
+// Actions
+const clearSelection = () => {
+  selectedDevices.value = [];
+};
+
+// Watch for template selection to initialize custom settings
+watch(selectedTemplate, () => {
+  if (selectedTemplateData.value) {
+    customSettings.value = {
+      network: {
+        ssid: selectedTemplateData.value.settings.network.ssid,
+        security: selectedTemplateData.value.settings.network.security,
+        vlan: String(selectedTemplateData.value.settings.network.vlan)
+      },
+      security: {
+        encryption: selectedTemplateData.value.settings.security.encryption,
+        remoteWipe: selectedTemplateData.value.settings.security.remoteWipe,
+        passcode: selectedTemplateData.value.settings.security.passcode
+      },
+      apps: {
+        required: selectedTemplateData.value.settings.apps?.required || []
+      }
+    };
+  }
+});
 
 const deployConfiguration = async () => {
   if (!selectedTemplate.value || selectedDevices.value.length === 0) return;
-  
+
   deploying.value = true;
   try {
-    await deviceStore.configureDevices(selectedTemplate.value, selectedDevices.value);
-    
-    // Show success message and redirect
-    router.push('/devices');
+    // Filter to only compatible devices
+    const compatibleDeviceIds = selectedDevicesData.value
+      .filter(device =>
+        selectedTemplateData.value!.deviceTypes?.includes(device.type as any)
+      )
+      .map(device => device.id);
+
+    if (compatibleDeviceIds.length === 0) {
+      showError('No Compatible Devices', 'Selected template is not compatible with any selected devices');
+      return;
+    }
+
+    // Use custom settings if customization is enabled (for future implementation)
+    // const finalSettings = enableCustomization.value ? customSettings.value : selectedTemplateData.value!.settings;
+
+    await deviceStore.configureDevices(selectedTemplate.value, compatibleDeviceIds);
+
+    const locationCount = selectedDevicesByLocation.value.length;
+    const deviceCount = compatibleDeviceIds.length;
+
+    showSuccess(
+      'Configuration Deployed Successfully!',
+      `Applied ${selectedTemplateData.value!.name} to ${deviceCount} devices across ${locationCount} location${locationCount > 1 ? 's' : ''}`
+    );
+
+    // Redirect after success
+    setTimeout(() => {
+      router.push('/devices');
+    }, 2000);
   } catch (error) {
     console.error('Configuration failed:', error);
+    showError(
+      'Configuration Failed',
+      error instanceof Error ? error.message : 'An unexpected error occurred'
+    );
   } finally {
     deploying.value = false;
   }
 };
 
 onMounted(async () => {
-  await templateStore.fetchTemplates();
-  
+  await Promise.all([
+    templateStore.fetchTemplates(),
+    deviceStore.fetchDevices(),
+    locationStore.fetchLocations()
+  ]);
+
   // Check if we have device context from query parameters
   const { deviceId, locationId, deviceType } = route.query;
-  
-  if (locationId && typeof locationId === 'string') {
-    // Pre-populate location from device context
-    await deviceStore.fetchDevices();
-    // This would typically fetch location by ID from the location store
-    // and pre-select the device's location in the configuration wizard
-    console.log('Pre-populating with device context:', { deviceId, locationId, deviceType });
-  }
-});
 
-watch(selectedDeviceType, () => {
-  selectedDevices.value = [];
-  selectedTemplate.value = '';
+  if (deviceId && typeof deviceId === 'string') {
+    // Pre-select the specific device
+    selectedDevices.value = [deviceId];
+    currentStep.value = 2; // Skip to template selection
+  } else if (locationId && typeof locationId === 'string') {
+    // Pre-filter by location
+    deviceFilters.value.location = [locationId];
+  }
+
+  if (deviceType && typeof deviceType === 'string') {
+    // Pre-filter by device type
+    deviceFilters.value.type = [deviceType];
+  }
 });
 </script>

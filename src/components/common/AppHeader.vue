@@ -1,24 +1,29 @@
 <template>
   <v-app-bar
     elevation="1"
-    color="white"
+    color="surface"
     class="d-flex align-center justify-space-between"
   >
-    <v-app-bar-nav-icon @click="drawer = !drawer" />
+    <v-app-bar-nav-icon @click="toggleDrawer" />
 
     <v-img
       :src="logoUrl"
       alt="NBC Logo"
       contain
-      class="mr-3"
+      class="mr-1"
       style="max-width: 150px;"
     />
 
-    <v-toolbar-title class="text-h6  mb-0 font-weight-bold">
+    <v-toolbar-title class="mb-0">
       Device Manager
     </v-toolbar-title>
 
     <v-spacer />
+
+    <v-btn
+      :icon="theme.global.current.value.dark ? 'mdi-weather-sunny' : 'mdi-weather-night'"
+      @click="toggleTheme"
+    />
 
     <v-btn icon="mdi-bell-outline" />
 
@@ -46,14 +51,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useTheme } from 'vuetify';
+import { useDrawer } from '@/composables/useDrawer';
 import { useUserStore } from '@/stores/user';
 import logoUrl from '@/assets/logo.png';
 
 const router = useRouter();
 const userStore = useUserStore();
-const drawer = ref(true);
+const theme = useTheme();
+const { toggleDrawer } = useDrawer();
+
+const toggleTheme = () => {
+  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark';
+};
 
 const logout = () => {
   userStore.logout();

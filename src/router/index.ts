@@ -35,6 +35,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/Templates.vue'),
     children: [
       {
+        path: 'new',
+        name: 'CreateTemplate',
+        component: () => import('@/views/Templates.vue'),
+        props: true
+      },
+      {
         path: ':templateId',
         name: 'TemplateDetails',
         component: () => import('@/views/Templates.vue'),
@@ -43,10 +49,42 @@ const routes: RouteRecordRaw[] = [
     ]
   },
   {
+    path: '/locations',
+    name: 'Locations',
+    component: () => import('@/views/Locations.vue'),
+    children: [
+      {
+        path: 'new',
+        name: 'CreateLocation',
+        component: () => import('@/views/Locations.vue'),
+        props: true
+      },
+      {
+        path: ':locationId',
+        name: 'LocationDetails',
+        component: () => import('@/views/Locations.vue'),
+        props: true
+      },
+      {
+        path: ':locationId/edit',
+        name: 'EditLocation',
+        component: () => import('@/views/Locations.vue'),
+        props: true
+      }
+    ]
+  },
+  {
     path: '/history',
     name: 'History',
     component: () => import('@/views/History.vue')
-  }
+  },
+  ...(import.meta.env.VITE_ENABLE_ATOMIC_DOCS === 'true' ? [
+    {
+      path: '/atomic-docs/:pathMatch(.*)*',
+      name: 'componentDocsHandler',
+      component: { render: () => null }
+    }
+  ] : [])
 ];
 
 const router = createRouter({

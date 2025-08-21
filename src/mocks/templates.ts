@@ -115,5 +115,91 @@ export const mockTemplates: ConfigurationTemplate[] = [
     createdAt: '2024-01-03T00:00:00Z',
     updatedAt: '2024-01-12T16:00:00Z',
     createdBy: 'media.admin@nbcuni.com'
+  },
+  {
+    id: 'tpl-5',
+    name: 'Broadcast Production - MacBook Setup',
+    description: 'Specialized configuration for broadcast and live production MacBooks',
+    deviceTypes: [DeviceType.MACBOOK_PRO],
+    settings: {
+      network: {
+        ssid: 'BROADCAST_NET',
+        security: 'WPA3',
+        vlan: 400
+      },
+      vpn: {
+        enabled: true,
+        server: 'broadcast-vpn.nbcuni.com'
+      },
+      apps: {
+        required: ['Final Cut Pro', 'Adobe Creative Suite', 'Slack', 'NBC Broadcast Tools'],
+        blocked: ['Social Media Apps', 'Gaming Apps']
+      },
+      security: {
+        passcode: 'required',
+        encryption: true,
+        remoteWipe: true
+      }
+    },
+    createdAt: '2024-01-04T00:00:00Z',
+    updatedAt: '2024-01-14T09:00:00Z',
+    createdBy: 'broadcast.admin@nbcuni.com'
+  },
+  {
+    id: 'tpl-6',
+    name: 'Mobile Guest Services',
+    description: 'Configuration for guest-facing mobile devices in theme parks',
+    deviceTypes: [DeviceType.IPHONE, DeviceType.IPAD_AIR],
+    settings: {
+      network: {
+        ssid: 'GUEST_SERVICES',
+        security: 'WPA2',
+        vlan: 500
+      },
+      vpn: {
+        enabled: false
+      },
+      apps: {
+        required: ['Universal App', 'Guest Services Portal', 'Translation App'],
+        blocked: ['Personal Apps']
+      },
+      security: {
+        passcode: 'optional',
+        encryption: false,
+        remoteWipe: true
+      }
+    },
+    createdAt: '2024-01-06T00:00:00Z',
+    updatedAt: '2024-01-13T11:00:00Z',
+    createdBy: 'guest.services@nbcuni.com'
+  },
+  {
+    id: 'tpl-7',
+    name: 'Executive Mobile Setup',
+    description: 'High-security configuration for executive and management devices',
+    deviceTypes: [DeviceType.IPHONE, DeviceType.IPAD_PRO, DeviceType.MACBOOK_PRO],
+    settings: {
+      network: {
+        ssid: 'EXECUTIVE_NET',
+        security: 'WPA3',
+        vlan: 10
+      },
+      vpn: {
+        enabled: true,
+        server: 'executive-vpn.nbcuni.com'
+      },
+      apps: {
+        required: ['Microsoft Office', 'Zoom', 'Slack', 'NBC Executive Dashboard'],
+        blocked: []
+      },
+      security: {
+        passcode: 'required',
+        encryption: true,
+        remoteWipe: true
+      }
+    },
+    createdAt: '2024-01-07T00:00:00Z',
+    updatedAt: '2024-01-11T15:00:00Z',
+    createdBy: 'exec.admin@nbcuni.com'
   }
 ];

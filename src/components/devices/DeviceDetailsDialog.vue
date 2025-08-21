@@ -236,6 +236,115 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <!-- Location Change Confirmation Dialog -->
+  <v-dialog
+    v-model="showLocationChangeDialog"
+    max-width="500px"
+    persistent
+  >
+    <v-card>
+      <v-card-title class="d-flex align-center">
+        <v-icon class="mr-3" color="warning">mdi-map-marker-alert</v-icon>
+        Confirm Location Change
+      </v-card-title>
+      
+      <v-card-text>
+        <div class="mb-4">
+          <p class="text-body-1 mb-3">
+            You are about to move <strong>{{ props.device?.name }}</strong> to a new location.
+          </p>
+          
+          <v-row>
+            <v-col cols="12" sm="6">
+              <div class="text-subtitle-2 mb-1">From:</div>
+              <v-chip size="small" color="error" variant="outlined">
+                <v-icon start>mdi-map-marker</v-icon>
+                {{ originalLocationObj?.name || 'Unknown Location' }}
+              </v-chip>
+            </v-col>
+            <v-col cols="12" sm="6">
+              <div class="text-subtitle-2 mb-1">To:</div>
+              <v-chip size="small" color="success" variant="outlined">
+                <v-icon start>mdi-map-marker</v-icon>
+                {{ currentLocation?.name || 'Unknown Location' }}
+              </v-chip>
+            </v-col>
+          </v-row>
+          
+          <!-- Capacity Information -->
+          <v-divider class="my-4" />
+          
+          <div v-if="targetLocationCapacityInfo" class="mb-4">
+            <div class="text-subtitle-2 mb-2">Target Location Capacity</div>
+            <v-row align="center">
+              <v-col cols="8">
+                <v-progress-linear
+                  :model-value="targetLocationCapacityInfo.utilizationPercent"
+                  :color="targetLocationCapacityInfo.isNearCapacity ? 'warning' : 'success'"
+                  height="20"
+                  rounded
+                >
+                  {{ Math.round(targetLocationCapacityInfo.utilizationPercent) }}%
+                </v-progress-linear>
+              </v-col>
+              <v-col cols="4" class="text-right">
+                <span class="text-body-2">
+                  {{ targetLocationCapacityInfo.currentDevices }}/{{ targetLocationCapacityInfo.maxCapacity }} devices
+                </span>
+              </v-col>
+            </v-row>
+          </div>
+          
+          <!-- Warnings -->
+          <div v-if="locationChangeWarnings.length > 0" class="mb-4">
+            <v-alert
+              type="warning"
+              variant="tonal"
+              density="compact"
+            >
+              <div class="text-subtitle-2 mb-2">Important Considerations:</div>
+              <ul class="ml-4">
+                <li v-for="warning in locationChangeWarnings" :key="warning" class="text-body-2">
+                  {{ warning }}
+                </li>
+              </ul>
+            </v-alert>
+          </div>
+          
+          <div class="text-body-2 text-medium-emphasis">
+            <v-icon class="mr-1">mdi-information-outline</v-icon>
+            This action will:
+            <ul class="ml-4 mt-2">
+              <li>Update the device location immediately</li>
+              <li>Create an entry in the activity history</li>
+              <li v-if="locationChangeWarnings.some(w => w.includes('network'))">
+                Require device network reconfiguration
+              </li>
+            </ul>
+          </div>
+        </div>
+      </v-card-text>
+      
+      <v-card-actions>
+        <v-btn
+          variant="outlined"
+          @click="cancelLocationChange"
+        >
+          Cancel
+        </v-btn>
+        <v-spacer />
+        <v-btn
+          color="primary"
+          :loading="saving"
+          :disabled="!!(targetLocationCapacityInfo && !targetLocationCapacityInfo.hasCapacity)"
+          @click="confirmLocationChange"
+        >
+          {{ targetLocationCapacityInfo && !targetLocationCapacityInfo.hasCapacity ? 'Location Full' : 'Confirm Move' }}
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
@@ -266,6 +375,8 @@ const formRef = ref();
 const isFormValid = ref(false);
 const isEditing = ref(false);
 const saving = ref(false);
+const showLocationChangeDialog = ref(false);
+const originalLocation = ref('');
 
 const isOpen = computed({
   get: () => props.modelValue,
@@ -273,6 +384,64 @@ const isOpen = computed({
 });
 
 const locations = computed(() => locationStore.locations);
+
+const hasLocationChanged = computed(() => 
+  formData.value.location !== originalLocation.value
+);
+
+const currentLocation = computed(() => 
+  locations.value.find(loc => loc.id === formData.value.location)
+);
+
+const originalLocationObj = computed(() => 
+  locations.value.find(loc => loc.id === originalLocation.value)
+);
+
+// Location capacity validation
+const targetLocationCapacityInfo = computed(() => {
+  if (!currentLocation.value) return null;
+  
+  const location = currentLocation.value as any;
+  const maxCapacity = location.maxCapacity || Math.max(location.deviceCount * 1.2, 100);
+  const currentDevices = location.deviceCount;
+  const availableCapacity = maxCapacity - currentDevices;
+  const utilizationPercent = (currentDevices / maxCapacity) * 100;
+  
+  return {
+    maxCapacity,
+    currentDevices,
+    availableCapacity,
+    utilizationPercent,
+    hasCapacity: availableCapacity > 0,
+    isNearCapacity: utilizationPercent > 80
+  };
+});
+
+const locationChangeWarnings = computed(() => {
+  const warnings: string[] = [];
+  const capacity = targetLocationCapacityInfo.value;
+  
+  if (capacity && !capacity.hasCapacity) {
+    warnings.push('Target location is at maximum capacity');
+  } else if (capacity && capacity.isNearCapacity) {
+    warnings.push('Target location is near capacity (>80% utilized)');
+  }
+  
+  // Check network profile compatibility
+  if (currentLocation.value && originalLocationObj.value) {
+    const currentProfiles = new Set(currentLocation.value.networkProfiles);
+    const originalProfiles = new Set(originalLocationObj.value.networkProfiles);
+    const sharedProfiles = [...currentProfiles].filter(profile => originalProfiles.has(profile));
+    
+    if (sharedProfiles.length === 0) {
+      warnings.push('Network profiles differ completely - device may need reconfiguration');
+    } else if (sharedProfiles.length < Math.min(currentProfiles.size, originalProfiles.size)) {
+      warnings.push('Some network profiles differ - minor reconfiguration may be needed');
+    }
+  }
+  
+  return warnings;
+});
 
 const formData = ref<{
   name: string;
@@ -351,6 +520,7 @@ const loadDeviceData = () => {
         lastSeen: props.device.metadata.lastSeen
       }
     };
+    originalLocation.value = props.device.location;
   }
 };
 
@@ -366,13 +536,23 @@ const cancelEditing = () => {
 const saveChanges = async () => {
   if (!props.device || !isFormValid.value) return;
 
+  // Check if location changed and show confirmation dialog
+  if (hasLocationChanged.value) {
+    showLocationChangeDialog.value = true;
+    return;
+  }
+
+  await performSave();
+};
+
+const performSave = async () => {
   saving.value = true;
   try {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     const updatedDevice: Device = {
-      ...props.device,
+      ...props.device!,
       name: formData.value.name,
       type: formData.value.type,
       location: formData.value.location,
@@ -382,9 +562,55 @@ const saveChanges = async () => {
       }
     };
 
+    // Create history entry for location changes
+    if (hasLocationChanged.value && originalLocationObj.value && currentLocation.value) {
+      const historyEntry = {
+        id: Date.now(),
+        title: 'Device Location Changed',
+        description: `Moved ${props.device?.name} from ${originalLocationObj.value.name} to ${currentLocation.value.name}`,
+        status: 'Success',
+        statusColor: 'success',
+        color: 'info',
+        icon: 'mdi-map-marker-path',
+        user: 'current.user@nbcuni.com', // In real app, would get from auth
+        timestamp: 'Just now',
+        affectedDevices: 1,
+        rollbackAvailable: true,
+        activityType: 'device',
+        rolling: false,
+        details: {
+          deviceId: props.device?.id,
+          deviceName: props.device?.name,
+          fromLocation: originalLocationObj.value.name,
+          toLocation: currentLocation.value.name,
+          locationChangeReason: hasLocationChanged.value ? 'Manual location update' : null
+        }
+      };
+      
+      // In a real application, this would be sent to the backend
+      console.log('History entry created:', historyEntry);
+    }
+
     emit('device-updated', updatedDevice);
-    showSuccess('Device Updated', `${formData.value.name} has been updated successfully.`);
+    
+    const message = hasLocationChanged.value 
+      ? `${formData.value.name} has been updated and moved to ${currentLocation.value?.name}`
+      : `${formData.value.name} has been updated successfully`;
+    
+    showSuccess('Device Updated', message);
+    
+    // Show additional success message for location changes
+    if (hasLocationChanged.value) {
+      setTimeout(() => {
+        showSuccess(
+          'Location Change Logged',
+          'Activity has been recorded in the system history'
+        );
+      }, 1500);
+    }
+    
     isEditing.value = false;
+    originalLocation.value = formData.value.location; // Update original location
   } catch (error) {
     showError('Update Failed', 'Failed to update device. Please try again.');
   } finally {
@@ -409,6 +635,28 @@ const closeDialog = () => {
   isOpen.value = false;
   isEditing.value = false;
   emit('dialog-closed');
+};
+
+// Location change confirmation handlers
+const confirmLocationChange = async () => {
+  // Check if target location has capacity
+  const capacity = targetLocationCapacityInfo.value;
+  if (capacity && !capacity.hasCapacity) {
+    showError(
+      'Move Failed', 
+      'Cannot move device - target location is at maximum capacity'
+    );
+    return;
+  }
+  
+  showLocationChangeDialog.value = false;
+  await performSave();
+};
+
+const cancelLocationChange = () => {
+  showLocationChangeDialog.value = false;
+  // Reset location to original
+  formData.value.location = originalLocation.value;
 };
 
 // Watch for device changes

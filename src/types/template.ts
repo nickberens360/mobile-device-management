@@ -9,6 +9,7 @@ export interface ConfigurationTemplate {
   createdAt: string;
   updatedAt: string;
   createdBy: string;
+  version?: string;
 }
 
 export interface TemplateSettings {

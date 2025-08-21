@@ -84,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useLocationStore } from '@/stores/locations';
 import type { Location } from '@/types/location';
 
@@ -108,4 +108,8 @@ const onLocationChange = (locationId: string) => {
     emit('locationSelected', location);
   }
 };
+
+onMounted(async () => {
+  await locationStore.fetchLocations();
+});
 </script>

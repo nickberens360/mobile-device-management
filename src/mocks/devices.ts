@@ -111,5 +111,136 @@ export const mockDevices: Device[] = [
       osVersion: '17.0',
       lastSeen: '2024-01-15T10:00:00Z'
     }
+  },
+  // Universal Studios Hollywood devices (loc-4)
+  {
+    id: 'dev-8',
+    name: 'iPhone-Park-001',
+    type: DeviceType.IPHONE,
+    location: 'loc-4',
+    status: DeviceStatus.ONLINE,
+    currentConfig: {
+      template: 'tpl-2',
+      appliedAt: '2024-01-12T08:00:00Z',
+      appliedBy: 'park.admin@nbcuni.com'
+    },
+    metadata: {
+      serialNumber: 'IPH002',
+      osVersion: '17.2.1',
+      lastSeen: '2024-01-15T14:35:00Z'
+    }
+  },
+  {
+    id: 'dev-9',
+    name: 'iPad-Park-002',
+    type: DeviceType.IPAD_AIR,
+    location: 'loc-4',
+    status: DeviceStatus.ONLINE,
+    currentConfig: {
+      template: 'tpl-2',
+      appliedAt: '2024-01-12T08:00:00Z',
+      appliedBy: 'park.admin@nbcuni.com'
+    },
+    metadata: {
+      serialNumber: 'IPA002',
+      osVersion: '17.1.2',
+      lastSeen: '2024-01-15T14:33:00Z'
+    }
+  },
+  {
+    id: 'dev-10',
+    name: 'iPad-Attraction-001',
+    type: DeviceType.IPAD_PRO,
+    location: 'loc-4',
+    status: DeviceStatus.CONFIGURING,
+    currentConfig: null,
+    metadata: {
+      serialNumber: 'IPA003',
+      osVersion: '17.2',
+      lastSeen: '2024-01-15T14:00:00Z'
+    }
+  },
+  // NBC Sports Production Center devices (loc-5)
+  {
+    id: 'dev-11',
+    name: 'MacBook-Broadcast-001',
+    type: DeviceType.MACBOOK_PRO,
+    location: 'loc-5',
+    status: DeviceStatus.ONLINE,
+    currentConfig: {
+      template: 'tpl-4',
+      appliedAt: '2024-01-08T07:00:00Z',
+      appliedBy: 'broadcast.admin@nbcuni.com'
+    },
+    metadata: {
+      serialNumber: 'MBB001',
+      osVersion: '14.2.1',
+      lastSeen: '2024-01-15T14:40:00Z'
+    }
+  },
+  {
+    id: 'dev-12',
+    name: 'iPad-Media-001',
+    type: DeviceType.IPAD_PRO,
+    location: 'loc-5',
+    status: DeviceStatus.ONLINE,
+    currentConfig: {
+      template: 'tpl-4',
+      appliedAt: '2024-01-08T07:00:00Z',
+      appliedBy: 'broadcast.admin@nbcuni.com'
+    },
+    metadata: {
+      serialNumber: 'IPM001',
+      osVersion: '17.2',
+      lastSeen: '2024-01-15T14:38:00Z'
+    }
+  },
+  {
+    id: 'dev-13',
+    name: 'iPhone-Media-001',
+    type: DeviceType.IPHONE,
+    location: 'loc-5',
+    status: DeviceStatus.OFFLINE,
+    currentConfig: null,
+    metadata: {
+      serialNumber: 'IPM002',
+      osVersion: '17.1.1',
+      lastSeen: '2024-01-14T16:20:00Z'
+    }
+  },
+  // Additional devices for better demo coverage
+  {
+    id: 'dev-14',
+    name: 'iPad-Prod-003',
+    type: DeviceType.IPAD_AIR,
+    location: 'loc-1',
+    status: DeviceStatus.ONLINE,
+    currentConfig: {
+      template: 'tpl-1',
+      appliedAt: '2024-01-15T10:30:00Z',
+      appliedBy: 'john.doe@nbcuni.com'
+    },
+    metadata: {
+      serialNumber: 'IPA004',
+      osVersion: '17.2',
+      lastSeen: '2024-01-15T14:28:00Z'
+    }
+  },
+  {
+    id: 'dev-15',
+    name: 'iPhone-Corp-001',
+    type: DeviceType.IPHONE,
+    location: 'loc-3',
+    status: DeviceStatus.ONLINE,
+    currentConfig: {
+      template: 'tpl-3',
+      appliedAt: '2024-01-05T11:00:00Z',
+      appliedBy: 'admin@nbcuni.com'
+    },
+    metadata: {
+      serialNumber: 'IPC002',
+      osVersion: '17.2.1',
+      lastSeen: '2024-01-15T14:42:00Z'
+    }
   }
 ];
