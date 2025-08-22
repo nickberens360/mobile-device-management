@@ -489,8 +489,26 @@ const openTemplateDialog = (template: ConfigurationTemplate) => {
 };
 
 
-const deleteTemplate = (template: ConfigurationTemplate) => {
-  openTemplateDialog(template);
+const deleteTemplate = async (template: ConfigurationTemplate) => {
+  const confirmed = confirm(
+    `Are you sure you want to delete "${template.name}"? This action cannot be undone.`
+  );
+  
+  if (!confirmed) return;
+  
+  try {
+    await templateStore.deleteTemplate(template.id);
+    showSuccess(
+      'Template Deleted',
+      `Successfully deleted "${template.name}"`
+    );
+    refreshTemplates();
+  } catch (_error) {
+    showError(
+      'Deletion Failed', 
+      `Failed to delete "${template.name}"`
+    );
+  }
 };
 
 const useTemplate = (template: ConfigurationTemplate) => {
