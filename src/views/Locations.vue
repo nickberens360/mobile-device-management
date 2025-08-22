@@ -144,7 +144,7 @@
           item-value="id"
           @update:options="handleTableOptions"
         >
-          <template #item.name="{ item }">
+          <template #[`item.name`]="{ item }">
             <div class="d-flex align-center">
               <v-icon
                 class="mr-2"
@@ -163,7 +163,7 @@
             </div>
           </template>
 
-          <template #item.type="{ item }">
+          <template #[`item.type`]="{ item }">
             <v-chip
               :color="getLocationTypeColor(item.type)"
               size="small"
@@ -173,7 +173,7 @@
             </v-chip>
           </template>
 
-          <template #item.deviceCount="{ item }">
+          <template #[`item.deviceCount`]="{ item }">
             <div class="d-flex align-center">
               <span class="text-h6 mr-2">{{ item.deviceCount }}</span>
               <v-progress-circular
@@ -185,7 +185,7 @@
             </div>
           </template>
 
-          <template #item.activeProductions="{ item }">
+          <template #[`item.activeProductions`]="{ item }">
             <div v-if="item.activeProductions?.length">
               <v-chip
                 v-for="production in item.activeProductions.slice(0, 2)"
@@ -211,7 +211,7 @@
             >None</span>
           </template>
 
-          <template #item.networkProfiles="{ item }">
+          <template #[`item.networkProfiles`]="{ item }">
             <div class="d-flex flex-wrap ga-1">
               <v-chip
                 v-for="profile in item.networkProfiles.slice(0, 3)"
@@ -232,7 +232,7 @@
             </div>
           </template>
 
-          <template #item.status="{ item }">
+          <template #[`item.status`]="{ item }">
             <v-chip
               :color="getLocationStatusColor(item)"
               size="small"
@@ -242,7 +242,7 @@
             </v-chip>
           </template>
 
-          <template #item.actions="{ item }">
+          <template #[`item.actions`]="{ item }">
             <v-btn
               icon="mdi-cog"
               size="small"
@@ -266,6 +266,9 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({
+  name: 'LocationsView'
+})
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useLocationStore } from '@/stores/locations';
@@ -454,7 +457,7 @@ const bulkUpdateNetworkProfiles = async () => {
     );
     clearSelection();
     refreshLocations();
-  } catch (error) {
+  } catch (_error) {
     showError('Update Failed', 'Failed to update network profiles');
   }
 };
@@ -475,7 +478,7 @@ const bulkExportData = async () => {
     
     showSuccess('Export Complete', `Exported data for ${selectedLocations.value.length} locations`);
     clearSelection();
-  } catch (error) {
+  } catch (_error) {
     showError('Export Failed', 'Failed to export location data');
   }
 };

@@ -15,7 +15,7 @@
       editable
     >
       <!-- Step 1: Select Devices -->
-      <template #item.1>
+      <template #[`item.1`]>
         <v-card flat>
           <v-card-title class="d-flex align-center">
             <v-icon class="mr-2">
@@ -132,7 +132,7 @@
               item-value="id"
               :items-per-page="15"
             >
-              <template #item.name="{ item }">
+              <template #[`item.name`]="{ item }">
                 <div class="d-flex align-center">
                   <v-icon
                     class="mr-2"
@@ -144,7 +144,7 @@
                 </div>
               </template>
 
-              <template #item.status="{ item }">
+              <template #[`item.status`]="{ item }">
                 <v-chip
                   :color="getStatusColor(item.status)"
                   size="small"
@@ -157,7 +157,7 @@
                 </v-chip>
               </template>
 
-              <template #item.type="{ item }">
+              <template #[`item.type`]="{ item }">
                 <v-chip
                   size="small"
                   variant="outlined"
@@ -166,7 +166,7 @@
                 </v-chip>
               </template>
 
-              <template #item.location="{ item }">
+              <template #[`item.location`]="{ item }">
                 <div class="d-flex align-center">
                   <v-icon
                     class="mr-1"
@@ -183,7 +183,7 @@
       </template>
 
       <!-- Step 2: Select Compatible Templates -->
-      <template #item.2>
+      <template #[`item.2`]>
         <v-card flat>
           <v-card-title class="d-flex align-center">
             <v-icon class="mr-2">
@@ -274,7 +274,7 @@
       </template>
 
       <!-- Step 3: Customize and Deploy -->
-      <template #item.3>
+      <template #[`item.3`]>
         <v-card flat>
           <v-card-title class="d-flex align-center">
             <v-icon class="mr-2">

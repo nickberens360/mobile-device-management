@@ -27,6 +27,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   type: 'info',
   closable: true,
+  title: '',
+  text: '',
   variant: 'tonal',
   modelValue: true
 });

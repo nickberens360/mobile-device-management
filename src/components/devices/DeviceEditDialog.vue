@@ -88,8 +88,8 @@
                         variant="outlined"
                         prepend-inner-icon="mdi-information"
                       >
-                        <template #item="{ props, item }">
-                          <v-list-item v-bind="props">
+                        <template #item="{ props: selectProps, item }">
+                          <v-list-item v-bind="selectProps">
                             <template #prepend>
                               <v-icon :color="getStatusColor(item.raw.value)">
                                 {{ getStatusIcon(item.raw.value) }}
@@ -579,7 +579,7 @@ const performSave = async () => {
     
     originalLocation.value = formData.value.location; // Update original location
     closeDialog();
-  } catch (error) {
+  } catch (_error) {
     showError('Update Failed', 'Failed to update device. Please try again.');
   } finally {
     saving.value = false;

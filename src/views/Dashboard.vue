@@ -248,6 +248,9 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({
+  name: 'DashboardView'
+})
 import { ref, computed, onMounted } from 'vue';
 import { useDeviceStore } from '@/stores/devices';
 import { useLocationStore } from '@/stores/locations';

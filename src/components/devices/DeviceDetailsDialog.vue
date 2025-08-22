@@ -110,8 +110,8 @@
                         prepend-inner-icon="mdi-information"
                         :readonly="!isEditing"
                       >
-                        <template #item="{ props, item }">
-                          <v-list-item v-bind="props">
+                        <template #item="{ props: selectProps, item }">
+                          <v-list-item v-bind="selectProps">
                             <template #prepend>
                               <v-icon :color="getStatusColor(item.raw.value)">
                                 {{ getStatusIcon(item.raw.value) }}

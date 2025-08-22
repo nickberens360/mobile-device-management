@@ -143,7 +143,7 @@
           item-value="id"
           @update:options="handleTableOptions"
         >
-          <template #item.name="{ item }">
+          <template #[`item.name`]="{ item }">
             <div class="d-flex align-center">
               <v-icon
                 class="mr-2"
@@ -162,7 +162,7 @@
             </div>
           </template>
 
-          <template #item.deviceTypes="{ item }">
+          <template #[`item.deviceTypes`]="{ item }">
             <div class="d-flex flex-wrap ga-1">
               <v-chip
                 v-for="deviceType in item.deviceTypes.slice(0, 2)"
@@ -182,7 +182,7 @@
             </div>
           </template>
 
-          <template #item.settings.network.ssid="{ item }">
+          <template #[`item.settings.network.ssid`]="{ item }">
             <v-chip
               size="small"
               color="primary"
@@ -192,7 +192,7 @@
             </v-chip>
           </template>
 
-          <template #item.security="{ item }">
+          <template #[`item.security`]="{ item }">
             <div class="d-flex align-center">
               <v-icon
                 size="small"
@@ -217,7 +217,7 @@
             </div>
           </template>
 
-          <template #item.version="{ item }">
+          <template #[`item.version`]="{ item }">
             <v-chip
               size="small"
               variant="outlined"
@@ -226,15 +226,15 @@
             </v-chip>
           </template>
 
-          <template #item.updatedAt="{ item }">
+          <template #[`item.updatedAt`]="{ item }">
             <span>{{ formatDate(item.updatedAt) }}</span>
           </template>
 
-          <template #item.createdBy="{ item }">
+          <template #[`item.createdBy`]="{ item }">
             <span>{{ item.createdBy }}</span>
           </template>
 
-          <template #item.actions="{ item }">
+          <template #[`item.actions`]="{ item }">
             <v-menu>
               <template #activator="{ props }">
                 <v-btn
@@ -296,6 +296,9 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({
+  name: 'TemplatesView'
+})
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useTemplateStore } from '@/stores/templates';
@@ -452,7 +455,7 @@ const bulkDuplicate = async () => {
     );
     clearSelection();
     refreshTemplates();
-  } catch (error) {
+  } catch (_error) {
     showError('Duplication Failed', 'Failed to duplicate templates');
   }
 };
@@ -469,7 +472,7 @@ const bulkDelete = async () => {
       `Successfully deleted ${selectedTemplates.value.length} templates`
     );
     clearSelection();
-  } catch (error) {
+  } catch (_error) {
     showError('Deletion Failed', 'Failed to delete templates');
   }
 };

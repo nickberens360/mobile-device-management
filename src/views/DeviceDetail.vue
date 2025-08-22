@@ -412,7 +412,7 @@ const refreshStatus = async () => {
     showSuccess('Status Updated', 'Device status has been refreshed');
     // In a real app, this would fetch the latest device data
     await loadDevice();
-  } catch (error) {
+  } catch (_error) {
     showError('Update Failed', 'Failed to refresh device status');
   }
 };

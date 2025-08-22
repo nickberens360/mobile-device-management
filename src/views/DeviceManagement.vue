@@ -153,7 +153,7 @@
           :aria-busy="loading ? 'true' : 'false'"
           @update:options="handleTableOptions"
         >
-          <template #item.status="{ item }">
+          <template #[`item.status`]="{ item }">
             <v-chip
               :color="getStatusColor(item.status)"
               size="small"
@@ -163,7 +163,7 @@
             </v-chip>
           </template>
 
-          <template #item.type="{ item }">
+          <template #[`item.type`]="{ item }">
             <v-chip
               size="small"
               variant="outlined"
@@ -172,15 +172,15 @@
             </v-chip>
           </template>
 
-          <template #item.location="{ item }">
+          <template #[`item.location`]="{ item }">
             <span>{{ getLocationName(item.location) }}</span>
           </template>
 
-          <template #item.metadata.lastSeen="{ item }">
+          <template #[`item.metadata.lastSeen`]="{ item }">
             <span>{{ formatDate(item.metadata.lastSeen) }}</span>
           </template>
 
-          <template #item.actions="{ item }">
+          <template #[`item.actions`]="{ item }">
             <div class="d-flex align-center">
               <v-btn
                 icon="mdi-cog"

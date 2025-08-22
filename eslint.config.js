@@ -15,9 +15,16 @@ export default [
     ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**', '**/node_modules/**'],
   },
 
-  js.configs.recommended,
+  {
+    ...js.configs.recommended,
+    rules: {
+      ...js.configs.recommended.rules,
+      'no-unused-vars': 'off', // TypeScript handles this better
+    },
+  },
 
   ...pluginVue.configs['flat/recommended'],
+  ...pluginVue.configs['flat/strongly-recommended'],
   {
     name: 'app/vue-rules',
     files: ['**/*.vue'],
@@ -29,7 +36,8 @@ export default [
       },
     },
     rules: {
-      'vue/no-unused-vars': 'warn',
+      'vue/no-unused-vars': ['warn', { ignorePattern: '^_' }],
+      'no-unused-vars': 'off',
     },
   },
 
@@ -46,7 +54,7 @@ export default [
       '@typescript-eslint': configTypeScript,
     },
     rules: {
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
     },
   },
 ]

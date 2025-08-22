@@ -46,7 +46,7 @@ import type { ConfigurationTemplate } from '@/types/template';
 import { DeviceType } from '@/types/device';
 
 const showDialog = ref(false);
-const readonly = ref(false);
+const _readonly = ref(false);
 const selectedTemplateId = ref('tpl-1');
 
 const mockTemplates: ConfigurationTemplate[] = [
@@ -169,7 +169,7 @@ const handleTemplateDeleted = (templateId: string) => {
   closeDialog();
 };
 
-const handleUseTemplate = (template: ConfigurationTemplate) => {
+const _handleUseTemplate = (template: ConfigurationTemplate) => {
   console.log('Use template:', template);
   closeDialog();
 };

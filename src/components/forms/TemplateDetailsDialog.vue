@@ -516,7 +516,7 @@ const saveChanges = async () => {
     emit('template-updated', updatedTemplate);
     showSuccess('Template Updated', `${formData.value.name} has been updated successfully.`);
     isEditing.value = false;
-  } catch (error) {
+  } catch (_error) {
     showError('Update Failed', 'Failed to update template. Please try again.');
   } finally {
     saving.value = false;
@@ -544,7 +544,7 @@ const deleteTemplate = async () => {
       emit('template-deleted', props.template.id);
       showSuccess('Template Deleted', `${props.template.name} has been deleted.`);
       closeDialog();
-    } catch (error) {
+    } catch (_error) {
       showError('Delete Failed', 'Failed to delete template. Please try again.');
     }
   }
