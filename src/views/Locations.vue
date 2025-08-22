@@ -318,11 +318,11 @@ const headers = [
 
 // Filter options
 const locationTypeOptions = [
-  { value: 'FILM_SET', label: 'Film Set' },
-  { value: 'THEME_PARK', label: 'Theme Park' },
-  { value: 'CORPORATE_OFFICE', label: 'Corporate Office' },
-  { value: 'EVENT_VENUE', label: 'Event Venue' },
-  { value: 'BROADCAST_STUDIO', label: 'Broadcast Studio' }
+  { value: LocationType.FILM_SET, label: 'Film Set' },
+  { value: LocationType.THEME_PARK, label: 'Theme Park' },
+  { value: LocationType.CORPORATE_OFFICE, label: 'Corporate Office' },
+  { value: LocationType.EVENT_VENUE, label: 'Event Venue' },
+  { value: LocationType.BROADCAST_STUDIO, label: 'Broadcast Studio' }
 ];
 
 const productionFilterOptions = [
@@ -535,6 +535,27 @@ watch(() => route.params.locationId, (locationId) => {
 }, { immediate: true });
 
 onMounted(async () => {
+  // Load query params if present
+  if (route.query.type) {
+    // Validate that the type is a valid LocationType enum value
+    const typeValue = route.query.type as string;
+    if (Object.values(LocationType).includes(typeValue as LocationType)) {
+      filters.value.type = typeValue as LocationType;
+    }
+  }
+  if (route.query.hasProductions !== undefined) {
+    filters.value.hasProductions = route.query.hasProductions === 'true';
+  }
+  if (route.query.deviceCountRange) {
+    const rangeValue = route.query.deviceCountRange as string;
+    if (['low', 'medium', 'high'].includes(rangeValue)) {
+      filters.value.deviceCountRange = rangeValue;
+    }
+  }
+  if (route.query.search) {
+    filters.value.search = route.query.search as string;
+  }
+  
   await Promise.all([
     locationStore.fetchLocations(),
     deviceStore.fetchDevices()
