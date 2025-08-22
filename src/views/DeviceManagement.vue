@@ -203,6 +203,7 @@ import { useRouter } from 'vue-router';
 import { useDeviceStore } from '@/stores/devices';
 import { useLocationStore } from '@/stores/locations';
 import { useNotifications } from '@/composables/useNotifications';
+import { getStringParam, hasQueryValue } from '@/utils/queryParams';
 import type { Device } from '@/types/device';
 
 const router = useRouter();
@@ -361,17 +362,20 @@ const openDeviceDialog = (device: Device) => {
 onMounted(async () => {
   // Load query params if present
   const route = router.currentRoute.value;
-  if (route.query.filter === 'attention') {
+  if (hasQueryValue(route.query, 'filter', 'attention')) {
     filters.value.showAttention = true;
   }
-  if (route.query.location) {
-    filters.value.location = route.query.location as string;
+  const locationParam = getStringParam(route.query, 'location');
+  if (locationParam) {
+    filters.value.location = locationParam;
   }
-  if (route.query.type) {
-    filters.value.type = route.query.type as string;
+  const typeParam = getStringParam(route.query, 'type');
+  if (typeParam) {
+    filters.value.type = typeParam;
   }
-  if (route.query.status) {
-    filters.value.status = route.query.status as string;
+  const statusParam = getStringParam(route.query, 'status');
+  if (statusParam) {
+    filters.value.status = statusParam;
   }
   
   await Promise.all([

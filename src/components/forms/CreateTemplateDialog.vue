@@ -322,6 +322,7 @@ import { ref, computed, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useNotifications } from '@/composables/useNotifications';
 import { useTemplateStore } from '@/stores/templates';
+import { getStringParam } from '@/utils/queryParams';
 import type { ConfigurationTemplate, TemplateSettings } from '@/types/template';
 import { DeviceType } from '@/types/device';
 
@@ -527,7 +528,7 @@ watch(() => props.modelValue, (newValue) => {
 
 // Handle query parameters for duplicate functionality
 onMounted(() => {
-  const duplicateId = route.query.duplicate as string;
+  const duplicateId = getStringParam(route.query, 'duplicate');
   if (duplicateId && templateStore.templates.length > 0) {
     const templateToDuplicate = templateStore.templates.find(t => t.id === duplicateId);
     if (templateToDuplicate) {

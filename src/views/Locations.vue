@@ -274,6 +274,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useLocationStore } from '@/stores/locations';
 import { useDeviceStore } from '@/stores/devices';
 import { useNotifications } from '@/composables/useNotifications';
+import { getStringParam, getBooleanParam } from '@/utils/queryParams';
 import LocationEditDialog from '@/components/locations/LocationEditDialog.vue';
 import { Location, LocationType } from '@/types/location';
 
@@ -536,24 +537,24 @@ watch(() => route.params.locationId, (locationId) => {
 
 onMounted(async () => {
   // Load query params if present
-  if (route.query.type) {
-    // Validate that the type is a valid LocationType enum value
-    const typeValue = route.query.type as string;
-    if (Object.values(LocationType).includes(typeValue as LocationType)) {
-      filters.value.type = typeValue as LocationType;
-    }
+  const typeParam = getStringParam(route.query, 'type');
+  if (typeParam && Object.values(LocationType).includes(typeParam as LocationType)) {
+    filters.value.type = typeParam as LocationType;
   }
-  if (route.query.hasProductions !== undefined) {
-    filters.value.hasProductions = route.query.hasProductions === 'true';
+  
+  const hasProductionsParam = getBooleanParam(route.query, 'hasProductions');
+  if (hasProductionsParam !== null) {
+    filters.value.hasProductions = hasProductionsParam;
   }
-  if (route.query.deviceCountRange) {
-    const rangeValue = route.query.deviceCountRange as string;
-    if (['low', 'medium', 'high'].includes(rangeValue)) {
-      filters.value.deviceCountRange = rangeValue;
-    }
+  
+  const rangeParam = getStringParam(route.query, 'deviceCountRange');
+  if (rangeParam && ['low', 'medium', 'high'].includes(rangeParam)) {
+    filters.value.deviceCountRange = rangeParam;
   }
-  if (route.query.search) {
-    filters.value.search = route.query.search as string;
+  
+  const searchParam = getStringParam(route.query, 'search');
+  if (searchParam) {
+    filters.value.search = searchParam;
   }
   
   await Promise.all([

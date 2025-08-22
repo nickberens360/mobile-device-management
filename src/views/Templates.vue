@@ -297,6 +297,7 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useTemplateStore } from '@/stores/templates';
 import { useNotifications } from '@/composables/useNotifications';
+import { getStringParam } from '@/utils/queryParams';
 import CreateTemplateDialog from '@/components/forms/CreateTemplateDialog.vue';
 import type { ConfigurationTemplate } from '@/types/template';
 
@@ -521,7 +522,7 @@ const handleTemplateRoute = async () => {
     duplicateTemplate.value = null;
 
     // Check for duplicate query parameter
-    const duplicateId = route.query.duplicate as string;
+    const duplicateId = getStringParam(route.query, 'duplicate');
     if (duplicateId && templates.value.length > 0) {
       const templateToDuplicate = templates.value.find(t => t.id === duplicateId);
       duplicateTemplate.value = templateToDuplicate || null;
@@ -540,17 +541,21 @@ watch(() => route.path, handleTemplateRoute, { immediate: true });
 
 onMounted(async () => {
   // Load query params if present
-  if (route.query.deviceType) {
-    filters.value.deviceType = route.query.deviceType as string;
+  const deviceTypeParam = getStringParam(route.query, 'deviceType');
+  if (deviceTypeParam) {
+    filters.value.deviceType = deviceTypeParam;
   }
-  if (route.query.createdBy) {
-    filters.value.createdBy = route.query.createdBy as string;
+  const createdByParam = getStringParam(route.query, 'createdBy');
+  if (createdByParam) {
+    filters.value.createdBy = createdByParam;
   }
-  if (route.query.securityLevel) {
-    filters.value.securityLevel = route.query.securityLevel as string;
+  const securityLevelParam = getStringParam(route.query, 'securityLevel');
+  if (securityLevelParam) {
+    filters.value.securityLevel = securityLevelParam;
   }
-  if (route.query.search) {
-    filters.value.search = route.query.search as string;
+  const searchParam = getStringParam(route.query, 'search');
+  if (searchParam) {
+    filters.value.search = searchParam;
   }
   
   await templateStore.fetchTemplates();
