@@ -622,7 +622,7 @@ const deviceHeaders = [
 
 // Computed properties for the new workflow
 const locationOptions = computed(() => {
-  return [{ id: 'all', name: 'All Locations' }, ...locationStore.locations];
+  return locationStore.locations;
 });
 
 const allDevices = computed(() => deviceStore.devices);
