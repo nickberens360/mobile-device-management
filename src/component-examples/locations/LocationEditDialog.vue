@@ -126,19 +126,19 @@ const propItems = [
   {
     name: 'location',
     type: 'Location',
-    default: 'null',
+    default: null,
     description: 'Location to edit'
   },
   {
     name: 'modelValue',
     type: 'boolean',
-    default: 'false',
+    default: false,
     description: 'Controls dialog visibility (v-model)'
   },
   {
     name: 'isCreating',
     type: 'boolean',
-    default: 'false',
+    default: false,
     description: 'Whether this is creating a new location'
   }
 ];

@@ -277,13 +277,6 @@
       @location-saved="onLocationSaved"
       @dialog-closed="onDialogClosed"
     />
-
-    <!-- Location Details Dialog -->
-    <LocationDetailsDialog
-      v-model="showDetailsDialog"
-      :location="selectedLocation"
-      @dialog-closed="onDialogClosed"
-    />
   </v-container>
 </template>
 
@@ -294,7 +287,6 @@ import { useLocationStore } from '@/stores/locations';
 import { useDeviceStore } from '@/stores/devices';
 import { useNotifications } from '@/composables/useNotifications';
 import LocationEditDialog from '@/components/locations/LocationEditDialog.vue';
-import LocationDetailsDialog from '@/components/locations/LocationDetailsDialog.vue';
 import { Location, LocationType } from '@/types/location';
 
 const route = useRoute();
@@ -314,7 +306,6 @@ const totalItems = computed(() => filteredLocations.value.length);
 
 // Dialog states
 const showEditDialog = ref(false);
-const showDetailsDialog = ref(false);
 const selectedLocation = ref<Location | null>(null);
 const isCreating = ref(false);
 
@@ -553,48 +544,23 @@ const onDialogClosed = () => {
 
 // Route handling
 const handleLocationRoute = (locationId: string | string[]) => {
-  const isEditRoute = route.path.endsWith('/edit');
-  
   if (locationId === 'new') {
     selectedLocation.value = null;
     isCreating.value = true;
     showEditDialog.value = true;
-    showDetailsDialog.value = false;
-  } else if (typeof locationId === 'string') {
-    const location = locations.value.find(l => l.id === locationId);
-    if (location) {
-      selectedLocation.value = location;
-      if (isEditRoute) {
-        isCreating.value = false;
-        showEditDialog.value = true;
-        showDetailsDialog.value = false;
-      } else {
-        // Details view
-        showDetailsDialog.value = true;
-        showEditDialog.value = false;
-      }
-    }
   }
 };
 
 // Watch for route changes
-watch(() => [route.params.locationId, route.path], ([locationId]) => {
+watch(() => route.params.locationId, (locationId) => {
   if (locationId) {
     handleLocationRoute(locationId);
   } else {
     // No location ID, close dialogs
     showEditDialog.value = false;
-    showDetailsDialog.value = false;
     selectedLocation.value = null;
   }
 }, { immediate: true });
-
-// Handle route changes when locations are loaded
-watch(locations, () => {
-  if (locations.value.length > 0 && route.params.locationId) {
-    handleLocationRoute(route.params.locationId);
-  }
-});
 
 onMounted(async () => {
   await Promise.all([

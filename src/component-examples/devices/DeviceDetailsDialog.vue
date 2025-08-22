@@ -133,13 +133,13 @@ const propItems = [
   {
     name: 'device',
     type: 'Device',
-    default: 'null',
+    default: null,
     description: 'Device to display details for'
   },
   {
     name: 'modelValue',
     type: 'boolean',
-    default: 'false',
+    default: false,
     description: 'Controls dialog visibility (v-model)'
   }
 ];

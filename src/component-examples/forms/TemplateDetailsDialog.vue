@@ -175,13 +175,13 @@ const propItems = [
   {
     name: 'template',
     type: 'ConfigurationTemplate',
-    default: 'null',
+    default: null,
     description: 'Template to display/edit'
   },
   {
     name: 'modelValue',
     type: 'boolean',
-    default: 'false',
+    default: false,
     description: 'Controls dialog visibility (v-model)'
   }
 ];

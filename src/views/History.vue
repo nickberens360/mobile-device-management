@@ -4,9 +4,9 @@
     <p class="text-body-1 text-medium-emphasis mb-6">
       Track all device configuration changes, template updates, and system activities. View detailed logs with rollback capabilities for audit and troubleshooting.
     </p>
-    
+
     <v-card>
-      <v-card-title>
+      <v-card-title class="d-flex align-center py-4">
         Configuration History
         <v-spacer />
         <v-btn
@@ -26,7 +26,7 @@
           Refresh
         </v-btn>
       </v-card-title>
-      
+
       <v-card-text>
         <!-- Filters -->
         <v-row class="mb-4">
@@ -88,7 +88,7 @@
             <template v-slot:icon>
               <v-icon :color="activity.color">{{ activity.icon }}</v-icon>
             </template>
-            
+
             <v-card variant="outlined">
               <v-card-text>
                 <div class="d-flex justify-space-between align-start mb-2">
@@ -104,22 +104,22 @@
                     {{ activity.status }}
                   </v-chip>
                 </div>
-                
+
                 <div class="d-flex align-center mt-2">
                   <v-icon size="small" class="mr-1">mdi-account</v-icon>
                   <span class="text-caption mr-4">{{ activity.user }}</span>
-                  
+
                   <v-icon size="small" class="mr-1">mdi-clock-outline</v-icon>
                   <span class="text-caption">{{ activity.timestamp }}</span>
                 </div>
-                
+
                 <div v-if="activity.affectedDevices" class="mt-2">
                   <v-chip size="small" variant="outlined">
                     {{ activity.affectedDevices }} devices affected
                   </v-chip>
                 </div>
               </v-card-text>
-              
+
               <v-card-actions v-if="activity.rollbackAvailable">
                 <v-spacer />
                 <v-btn
@@ -310,7 +310,7 @@ const historyItems = computed(() => {
 
   if (filters.value.search) {
     const search = filters.value.search.toLowerCase();
-    result = result.filter(item => 
+    result = result.filter(item =>
       item.title.toLowerCase().includes(search) ||
       item.description.toLowerCase().includes(search) ||
       item.user.toLowerCase().includes(search)
@@ -349,7 +349,7 @@ const exportHistory = async () => {
     link.download = `configuration-history-${new Date().toISOString().split('T')[0]}.json`;
     link.click();
     URL.revokeObjectURL(url);
-    
+
     showSuccess('Export Complete', 'Configuration history exported successfully');
   } catch (error) {
     showError('Export Failed', 'Failed to export history data');

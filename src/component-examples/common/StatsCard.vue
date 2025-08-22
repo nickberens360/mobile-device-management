@@ -186,7 +186,7 @@ const propItems = [
   {
     name: 'hasAction',
     type: 'boolean',
-    default: 'false',
+    default: false,
     description: 'Whether to show action button'
   },
   {

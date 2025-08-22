@@ -255,15 +255,6 @@
       </v-card-text>
     </v-card>
 
-    <!-- Template Details Dialog -->
-    <TemplateDetailsDialog
-      v-model="showTemplateDialog"
-      :template="selectedTemplate"
-      @template-updated="onTemplateUpdated"
-      @template-deleted="onTemplateDeleted"
-      @dialog-closed="onDialogClosed"
-    />
-
     <!-- Create Template Dialog -->
     <CreateTemplateDialog
       v-model="showCreateDialog"
@@ -271,9 +262,6 @@
       @template-created="onTemplateCreated"
       @dialog-closed="onDialogClosed"
     />
-
-    <!-- Router outlet for nested routes -->
-    <router-view />
   </v-container>
 </template>
 
@@ -282,7 +270,6 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useTemplateStore } from '@/stores/templates';
 import { useNotifications } from '@/composables/useNotifications';
-import TemplateDetailsDialog from '@/components/forms/TemplateDetailsDialog.vue';
 import CreateTemplateDialog from '@/components/forms/CreateTemplateDialog.vue';
 import type { ConfigurationTemplate } from '@/types/template';
 
@@ -307,9 +294,6 @@ const filters = ref({
   securityLevel: null as string | null,
   search: ''
 });
-
-const showTemplateDialog = ref(false);
-const selectedTemplate = ref<ConfigurationTemplate | null>(null);
 
 const showCreateDialog = ref(false);
 const duplicateTemplate = ref<ConfigurationTemplate | null>(null);
@@ -494,30 +478,19 @@ const useTemplate = (template: ConfigurationTemplate) => {
   });
 };
 
-const onTemplateUpdated = (updatedTemplate: ConfigurationTemplate) => {
-  templateStore.fetchTemplates();
-  console.log('Template updated:', updatedTemplate.name);
-};
-
-const onTemplateDeleted = (templateId: string) => {
-  templateStore.fetchTemplates();
-  console.log('Template deleted:', templateId);
-};
-
 const onTemplateCreated = (newTemplate: ConfigurationTemplate) => {
   templateStore.fetchTemplates();
   console.log('Template created:', newTemplate.name);
 };
 
 const onDialogClosed = () => {
-  if (route.params.templateId || route.path === '/templates/new') {
+  if (route.path === '/templates/new') {
     router.push('/templates');
   }
 };
 
 const handleTemplateRoute = async () => {
   const isNewRoute = route.path === '/templates/new';
-  const templateId = route.params.templateId as string;
 
   if (isNewRoute) {
     // Handle create new template
@@ -530,46 +503,21 @@ const handleTemplateRoute = async () => {
       duplicateTemplate.value = templateToDuplicate || null;
     }
 
-    selectedTemplate.value = null;
-    showTemplateDialog.value = false;
     showCreateDialog.value = true;
-  } else if (templateId && typeof templateId === 'string') {
-    // Handle existing template
-    if (templates.value.length === 0) {
-      await templateStore.fetchTemplates();
-    }
-
-    const template = templates.value.find(t => t.id === templateId);
-    if (template) {
-      selectedTemplate.value = template;
-      showTemplateDialog.value = true;
-      showCreateDialog.value = false;
-    } else {
-      router.push('/templates');
-    }
   } else {
     // Default state
-    selectedTemplate.value = null;
-    showTemplateDialog.value = false;
     showCreateDialog.value = false;
     duplicateTemplate.value = null;
   }
 };
 
 // Watch for route changes to open/close dialog
-watch(() => [route.params.templateId, route.path], handleTemplateRoute, { immediate: true });
-
-// Also watch for templates being loaded to handle initial route
-watch(() => templates.value.length, () => {
-  if (templates.value.length > 0 && (route.params.templateId || route.path === '/templates/new')) {
-    handleTemplateRoute();
-  }
-});
+watch(() => route.path, handleTemplateRoute, { immediate: true });
 
 onMounted(async () => {
   await templateStore.fetchTemplates();
   // Handle initial route after templates are loaded
-  if (route.params.templateId || route.path === '/templates/new') {
+  if (route.path === '/templates/new') {
     handleTemplateRoute();
   }
 });

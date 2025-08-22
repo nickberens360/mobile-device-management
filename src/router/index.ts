@@ -19,59 +19,53 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/devices',
     name: 'DeviceManagement',
-    component: () => import('@/views/DeviceManagement.vue'),
-    children: [
-      {
-        path: ':deviceId',
-        name: 'DeviceDetails',
-        component: () => import('@/views/DeviceManagement.vue'),
-        props: true
-      }
-    ]
+    component: () => import('@/views/DeviceManagement.vue')
+  },
+  {
+    path: '/devices/:deviceId',
+    name: 'DeviceDetails',
+    component: () => import('@/views/DeviceDetail.vue'),
+    props: true
   },
   {
     path: '/templates',
     name: 'Templates',
+    component: () => import('@/views/Templates.vue')
+  },
+  {
+    path: '/templates/new',
+    name: 'CreateTemplate',
     component: () => import('@/views/Templates.vue'),
-    children: [
-      {
-        path: 'new',
-        name: 'CreateTemplate',
-        component: () => import('@/views/Templates.vue'),
-        props: true
-      },
-      {
-        path: ':templateId',
-        name: 'TemplateDetails',
-        component: () => import('@/views/Templates.vue'),
-        props: true
-      }
-    ]
+    props: true
+  },
+  {
+    path: '/templates/:templateId',
+    name: 'TemplateDetails',
+    component: () => import('@/views/TemplateDetail.vue'),
+    props: true
   },
   {
     path: '/locations',
     name: 'Locations',
+    component: () => import('@/views/Locations.vue')
+  },
+  {
+    path: '/locations/new',
+    name: 'CreateLocation',
     component: () => import('@/views/Locations.vue'),
-    children: [
-      {
-        path: 'new',
-        name: 'CreateLocation',
-        component: () => import('@/views/Locations.vue'),
-        props: true
-      },
-      {
-        path: ':locationId',
-        name: 'LocationDetails',
-        component: () => import('@/views/Locations.vue'),
-        props: true
-      },
-      {
-        path: ':locationId/edit',
-        name: 'EditLocation',
-        component: () => import('@/views/Locations.vue'),
-        props: true
-      }
-    ]
+    props: true
+  },
+  {
+    path: '/locations/:locationId',
+    name: 'LocationDetails',
+    component: () => import('@/views/LocationDetail.vue'),
+    props: true
+  },
+  {
+    path: '/locations/:locationId/edit',
+    name: 'EditLocation',
+    component: () => import('@/views/LocationDetail.vue'),
+    props: true
   },
   {
     path: '/history',

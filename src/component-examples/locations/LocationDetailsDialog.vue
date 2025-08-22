@@ -124,13 +124,13 @@ const propItems = [
   {
     name: 'location',
     type: 'Location',
-    default: 'null',
+    default: null,
     description: 'Location to display details for'
   },
   {
     name: 'modelValue',
     type: 'boolean',
-    default: 'false',
+    default: false,
     description: 'Controls dialog visibility (v-model)'
   }
 ];

@@ -153,13 +153,13 @@ const propItems = [
   {
     name: 'multiple',
     type: 'boolean',
-    default: 'true',
+    default: true,
     description: 'Allow multiple device selection'
   },
   {
     name: 'showFilters',
     type: 'boolean',
-    default: 'true',
+    default: true,
     description: 'Show filtering options'
   },
   {

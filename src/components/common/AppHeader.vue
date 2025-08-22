@@ -2,7 +2,10 @@
   <v-app-bar
     elevation="1"
     color="surface"
+    app
+    fixed
     class="d-flex align-center justify-space-between"
+    style="position: fixed !important; top: 0 !important; z-index: 1000 !important;"
   >
     <v-app-bar-nav-icon @click="toggleDrawer" />
 

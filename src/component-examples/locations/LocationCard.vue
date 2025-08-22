@@ -91,7 +91,7 @@ const propItems = [
   {
     name: 'location',
     type: 'Location',
-    default: 'null',
+    default: null,
     description: 'Location object with details'
   },
   {
@@ -109,7 +109,7 @@ const propItems = [
   {
     name: 'showDetails',
     type: 'boolean',
-    default: 'false',
+    default: false,
     description: 'Show address and navigation chevron'
   }
 ];

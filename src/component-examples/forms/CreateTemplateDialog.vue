@@ -140,13 +140,13 @@ const propItems = [
   {
     name: 'modelValue',
     type: 'boolean',
-    default: 'false',
+    default: false,
     description: 'Controls dialog visibility (v-model)'
   },
   {
     name: 'duplicateTemplate',
     type: 'ConfigurationTemplate | null',
-    default: 'null',
+    default: null,
     description: 'Template to duplicate (optional)'
   }
 ];

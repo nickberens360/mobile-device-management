@@ -9,6 +9,7 @@ A Vue.js web application with TypeScript that enables NBC Universal network engi
 - **Template Management**: Pre-defined configuration templates for different scenarios
 - **Device Management**: View and manage all devices across locations
 - **Configuration History**: Track all configuration changes with rollback capability
+- **vue-atomic-docs**: Atomic design documentation and component library
 
 ## Tech Stack
 

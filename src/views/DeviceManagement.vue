@@ -175,29 +175,17 @@
       </v-card-text>
     </v-card>
 
-    <!-- Device Details Dialog -->
-    <DeviceDetailsDialog
-      v-model="showDeviceDialog"
-      :device="selectedDevice"
-      @device-updated="onDeviceUpdated"
-      @dialog-closed="onDialogClosed"
-    />
-
-    <!-- Router outlet for nested routes -->
-    <router-view />
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { useDeviceStore } from '@/stores/devices';
 import { useLocationStore } from '@/stores/locations';
 import { useNotifications } from '@/composables/useNotifications';
-import DeviceDetailsDialog from '@/components/devices/DeviceDetailsDialog.vue';
 import type { Device } from '@/types/device';
 
-const route = useRoute();
 const router = useRouter();
 const deviceStore = useDeviceStore();
 const locationStore = useLocationStore();
@@ -206,8 +194,6 @@ const { showSuccess, showError } = useNotifications();
 const devices = computed(() => deviceStore.devices);
 const loading = computed(() => deviceStore.loading);
 
-const showDeviceDialog = ref(false);
-const selectedDevice = ref<Device | null>(null);
 const selectedDevices = ref<string[]>([]);
 
 // Pagination and filtering
@@ -348,72 +334,17 @@ const bulkUpdateStatus = async () => {
 };
 
 const viewDevice = (device: Device) => {
-  console.log('View device:', device.name);
+  router.push(`/devices/${device.id}`);
 };
 
 const openDeviceDialog = (device: Device) => {
   router.push(`/devices/${device.id}`);
 };
 
-const onDeviceUpdated = (updatedDevice: Device) => {
-  // In a real app, this would update the device in the store
-  // For now, we'll just refresh the devices list
-  deviceStore.fetchDevices();
-  console.log('Device updated:', updatedDevice.name);
-};
-
-const onDialogClosed = () => {
-  if (route.params.deviceId) {
-    router.push('/devices');
-  }
-};
-
-const handleDeviceRoute = async (deviceId?: string | string[]) => {
-  if (deviceId && typeof deviceId === 'string') {
-    // Ensure devices are loaded
-    if (devices.value.length === 0) {
-      await deviceStore.fetchDevices();
-    }
-
-    const device = devices.value.find(d => d.id === deviceId);
-    if (device) {
-      selectedDevice.value = device;
-      showDeviceDialog.value = true;
-    } else {
-      // Device not found, redirect to devices list
-      router.push('/devices');
-    }
-  } else {
-    selectedDevice.value = null;
-    showDeviceDialog.value = false;
-  }
-};
-
-// Watch for route changes to open/close dialog
-watch(() => route.params.deviceId, handleDeviceRoute, { immediate: true });
-
-// Also watch for devices being loaded to handle initial route
-watch(() => devices.value.length, () => {
-  if (devices.value.length > 0 && route.params.deviceId) {
-    handleDeviceRoute(route.params.deviceId);
-  }
-});
-
 onMounted(async () => {
   await Promise.all([
     deviceStore.fetchDevices(),
     locationStore.fetchLocations()
   ]);
-  
-  // Handle query parameter for filtering
-  if (route.query.filter === 'attention') {
-    // Set special filter to show devices needing attention (offline or error status)
-    filters.value.showAttention = true;
-  }
-  
-  // Handle initial route after devices are loaded
-  if (route.params.deviceId) {
-    handleDeviceRoute(route.params.deviceId);
-  }
 });
 </script>

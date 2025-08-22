@@ -129,7 +129,7 @@ const propItems = [
   {
     name: 'activity',
     type: 'ConfigurationActivity',
-    default: 'null',
+    default: null,
     description: 'Activity object with navigation metadata'
   }
 ];
