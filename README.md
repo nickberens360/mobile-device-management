@@ -1,4 +1,5 @@
 # NBC Universal Device Management System
+[![Netlify Status](https://api.netlify.com/api/v1/badges/1d32908e-7328-4cac-ba22-4a59ce391522/deploy-status)](https://app.netlify.com/projects/mobile-device-manager/deploys)
 
 A Vue.js web application with TypeScript that enables NBC Universal network engineers to remotely configure and manage networked devices (iPads, laptops, mobile phones) across various properties including movie sets, theme parks, and promotional events.
 

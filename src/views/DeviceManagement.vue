@@ -343,9 +343,7 @@ const bulkUpdateStatus = async () => {
   }
 };
 
-const viewDevice = (device: Device) => {
-  router.push(`/devices/${device.id}`);
-};
+// Removed unused viewDevice function
 
 const openDeviceDialog = (device: Device) => {
   router.push(`/devices/${device.id}`);

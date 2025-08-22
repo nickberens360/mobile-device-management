@@ -485,33 +485,17 @@ const createNewLocation = () => {
   router.push('/locations/new');
 };
 
-const editLocation = (location: Location) => {
-  router.push(`/locations/${location.id}/edit`);
-};
+// Removed unused editLocation function
 
 const viewLocationDetails = (location: Location) => {
   router.push(`/locations/${location.id}`);
 };
 
-const manageDevices = (location: Location) => {
-  router.push(`/devices?location=${location.id}`);
-};
+// Removed unused manageDevices function
 
-const configureNetwork = (location: Location) => {
-  showSuccess(
-    'Network Configuration', 
-    `Opening network settings for ${location.name}`
-  );
-};
+// Removed unused configureNetwork function
 
-const deleteLocation = async (location: Location) => {
-  try {
-    await locationStore.deleteLocation(location.id);
-    showSuccess('Location Deleted', `${location.name} has been removed`);
-  } catch (error) {
-    showError('Delete Failed', 'Failed to delete location');
-  }
-};
+// Removed unused deleteLocation function
 
 const onLocationSaved = (location: Location) => {
   locationStore.fetchLocations();
