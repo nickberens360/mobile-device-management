@@ -9,6 +9,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/dashboard',
     name: 'Dashboard',
+    alias: ['/login'],
     component: () => import('@/views/Dashboard.vue')
   },
   {
@@ -71,11 +72,6 @@ const routes: RouteRecordRaw[] = [
     path: '/history',
     name: 'History',
     component: () => import('@/views/History.vue')
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    redirect: '/dashboard'
   },
   ...(import.meta.env.VITE_ENABLE_ATOMIC_DOCS === 'true' ? [
     {
