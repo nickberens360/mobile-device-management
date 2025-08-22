@@ -571,7 +571,7 @@ const confirmDelete = async () => {
     await templateStore.deleteTemplate(template.value.id);
     showSuccess('Template Deleted', `${template.value.name} has been deleted successfully`);
     router.push('/templates');
-  } catch (error) {
+  } catch (_error) {
     showError('Delete Failed', 'Failed to delete template');
   } finally {
     deleting.value = false;

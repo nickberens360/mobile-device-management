@@ -67,7 +67,9 @@ const props = withDefaults(defineProps<Props>(), {
   suffix: '',
   hasAction: false,
   actionText: 'View',
-  iconColor: 'primary'
+  iconColor: 'primary',
+  valueColor: 'text-primary',
+  actionColor: 'primary'
 });
 
 const computedIconColor = computed(() => props.iconColor || 'primary');

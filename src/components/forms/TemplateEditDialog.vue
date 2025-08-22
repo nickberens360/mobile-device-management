@@ -430,7 +430,7 @@ const saveChanges = async () => {
     emit('template-updated', updatedTemplate);
     showSuccess('Template Updated', `${formData.value.name} has been updated successfully`);
     closeDialog();
-  } catch (error) {
+  } catch (_error) {
     showError('Update Failed', 'Failed to update template. Please try again.');
   } finally {
     saving.value = false;

@@ -122,7 +122,7 @@ const updateSelectedDevice = (deviceId: string) => {
   selectedDeviceId.value = deviceId;
 };
 
-const handleConfigure = (device: Device) => {
+const _handleConfigure = (device: Device) => {
   console.log('Configure device:', device);
   closeDialog();
 };

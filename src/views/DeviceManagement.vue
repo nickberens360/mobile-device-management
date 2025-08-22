@@ -153,7 +153,7 @@
           :aria-busy="loading ? 'true' : 'false'"
           @update:options="handleTableOptions"
         >
-          <template #item.status="{ item }">
+          <template #[`item.status`]="{ item }">
             <v-chip
               :color="getStatusColor(item.status)"
               size="small"
@@ -163,7 +163,7 @@
             </v-chip>
           </template>
 
-          <template #item.type="{ item }">
+          <template #[`item.type`]="{ item }">
             <v-chip
               size="small"
               variant="outlined"
@@ -172,15 +172,15 @@
             </v-chip>
           </template>
 
-          <template #item.location="{ item }">
+          <template #[`item.location`]="{ item }">
             <span>{{ getLocationName(item.location) }}</span>
           </template>
 
-          <template #item.metadata.lastSeen="{ item }">
+          <template #[`item.metadata.lastSeen`]="{ item }">
             <span>{{ formatDate(item.metadata.lastSeen) }}</span>
           </template>
 
-          <template #item.actions="{ item }">
+          <template #[`item.actions`]="{ item }">
             <div class="d-flex align-center">
               <v-btn
                 icon="mdi-cog"
@@ -203,6 +203,7 @@ import { useRouter } from 'vue-router';
 import { useDeviceStore } from '@/stores/devices';
 import { useLocationStore } from '@/stores/locations';
 import { useNotifications } from '@/composables/useNotifications';
+import { getStringParam, hasQueryValue } from '@/utils/queryParams';
 import type { Device } from '@/types/device';
 
 const router = useRouter();
@@ -359,6 +360,24 @@ const openDeviceDialog = (device: Device) => {
 };
 
 onMounted(async () => {
+  // Load query params if present
+  const route = router.currentRoute.value;
+  if (hasQueryValue(route.query, 'filter', 'attention')) {
+    filters.value.showAttention = true;
+  }
+  const locationParam = getStringParam(route.query, 'location');
+  if (locationParam) {
+    filters.value.location = locationParam;
+  }
+  const typeParam = getStringParam(route.query, 'type');
+  if (typeParam) {
+    filters.value.type = typeParam;
+  }
+  const statusParam = getStringParam(route.query, 'status');
+  if (statusParam) {
+    filters.value.status = statusParam;
+  }
+  
   await Promise.all([
     deviceStore.fetchDevices(),
     locationStore.fetchLocations()

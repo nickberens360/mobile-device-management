@@ -143,7 +143,7 @@
           item-value="id"
           @update:options="handleTableOptions"
         >
-          <template #item.name="{ item }">
+          <template #[`item.name`]="{ item }">
             <div class="d-flex align-center">
               <v-icon
                 class="mr-2"
@@ -162,7 +162,7 @@
             </div>
           </template>
 
-          <template #item.deviceTypes="{ item }">
+          <template #[`item.deviceTypes`]="{ item }">
             <div class="d-flex flex-wrap ga-1">
               <v-chip
                 v-for="deviceType in item.deviceTypes.slice(0, 2)"
@@ -182,7 +182,7 @@
             </div>
           </template>
 
-          <template #item.settings.network.ssid="{ item }">
+          <template #[`item.settings.network.ssid`]="{ item }">
             <v-chip
               size="small"
               color="primary"
@@ -192,7 +192,7 @@
             </v-chip>
           </template>
 
-          <template #item.security="{ item }">
+          <template #[`item.security`]="{ item }">
             <div class="d-flex align-center">
               <v-icon
                 size="small"
@@ -217,7 +217,7 @@
             </div>
           </template>
 
-          <template #item.version="{ item }">
+          <template #[`item.version`]="{ item }">
             <v-chip
               size="small"
               variant="outlined"
@@ -226,15 +226,15 @@
             </v-chip>
           </template>
 
-          <template #item.updatedAt="{ item }">
+          <template #[`item.updatedAt`]="{ item }">
             <span>{{ formatDate(item.updatedAt) }}</span>
           </template>
 
-          <template #item.createdBy="{ item }">
+          <template #[`item.createdBy`]="{ item }">
             <span>{{ item.createdBy }}</span>
           </template>
 
-          <template #item.actions="{ item }">
+          <template #[`item.actions`]="{ item }">
             <v-menu>
               <template #activator="{ props }">
                 <v-btn
@@ -250,12 +250,6 @@
                     <v-icon>mdi-eye</v-icon>
                   </template>
                   <v-list-item-title>View Details</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="editTemplate(item)">
-                  <template #prepend>
-                    <v-icon>mdi-pencil</v-icon>
-                  </template>
-                  <v-list-item-title>Edit</v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="duplicateTemplateAction(item)">
                   <template #prepend>
@@ -296,10 +290,14 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({
+  name: 'TemplatesView'
+})
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useTemplateStore } from '@/stores/templates';
 import { useNotifications } from '@/composables/useNotifications';
+import { getStringParam } from '@/utils/queryParams';
 import CreateTemplateDialog from '@/components/forms/CreateTemplateDialog.vue';
 import type { ConfigurationTemplate } from '@/types/template';
 
@@ -452,7 +450,7 @@ const bulkDuplicate = async () => {
     );
     clearSelection();
     refreshTemplates();
-  } catch (error) {
+  } catch (_error) {
     showError('Duplication Failed', 'Failed to duplicate templates');
   }
 };
@@ -469,7 +467,7 @@ const bulkDelete = async () => {
       `Successfully deleted ${selectedTemplates.value.length} templates`
     );
     clearSelection();
-  } catch (error) {
+  } catch (_error) {
     showError('Deletion Failed', 'Failed to delete templates');
   }
 };
@@ -490,12 +488,27 @@ const openTemplateDialog = (template: ConfigurationTemplate) => {
   router.push(`/templates/${template.id}`);
 };
 
-const editTemplate = (template: ConfigurationTemplate) => {
-  openTemplateDialog(template);
-};
 
-const deleteTemplate = (template: ConfigurationTemplate) => {
-  openTemplateDialog(template);
+const deleteTemplate = async (template: ConfigurationTemplate) => {
+  const confirmed = confirm(
+    `Are you sure you want to delete "${template.name}"? This action cannot be undone.`
+  );
+  
+  if (!confirmed) return;
+  
+  try {
+    await templateStore.deleteTemplate(template.id);
+    showSuccess(
+      'Template Deleted',
+      `Successfully deleted "${template.name}"`
+    );
+    refreshTemplates();
+  } catch (_error) {
+    showError(
+      'Deletion Failed', 
+      `Failed to delete "${template.name}"`
+    );
+  }
 };
 
 const useTemplate = (template: ConfigurationTemplate) => {
@@ -527,7 +540,7 @@ const handleTemplateRoute = async () => {
     duplicateTemplate.value = null;
 
     // Check for duplicate query parameter
-    const duplicateId = route.query.duplicate as string;
+    const duplicateId = getStringParam(route.query, 'duplicate');
     if (duplicateId && templates.value.length > 0) {
       const templateToDuplicate = templates.value.find(t => t.id === duplicateId);
       duplicateTemplate.value = templateToDuplicate || null;
@@ -545,6 +558,24 @@ const handleTemplateRoute = async () => {
 watch(() => route.path, handleTemplateRoute, { immediate: true });
 
 onMounted(async () => {
+  // Load query params if present
+  const deviceTypeParam = getStringParam(route.query, 'deviceType');
+  if (deviceTypeParam) {
+    filters.value.deviceType = deviceTypeParam;
+  }
+  const createdByParam = getStringParam(route.query, 'createdBy');
+  if (createdByParam) {
+    filters.value.createdBy = createdByParam;
+  }
+  const securityLevelParam = getStringParam(route.query, 'securityLevel');
+  if (securityLevelParam) {
+    filters.value.securityLevel = securityLevelParam;
+  }
+  const searchParam = getStringParam(route.query, 'search');
+  if (searchParam) {
+    filters.value.search = searchParam;
+  }
+  
   await templateStore.fetchTemplates();
   // Handle initial route after templates are loaded
   if (route.path === '/templates/new') {

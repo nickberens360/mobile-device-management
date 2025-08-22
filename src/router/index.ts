@@ -78,7 +78,12 @@ const routes: RouteRecordRaw[] = [
       name: 'componentDocsHandler',
       component: { render: () => null }
     }
-  ] : [])
+  ] : []),
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    redirect: '/dashboard'
+  }
 ];
 
 const router = createRouter({

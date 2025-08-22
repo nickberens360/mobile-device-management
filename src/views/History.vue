@@ -185,6 +185,9 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({
+  name: 'HistoryView'
+})
 import { ref, computed } from 'vue';
 import { useNotifications } from '@/composables/useNotifications';
 
@@ -367,7 +370,7 @@ const refreshHistory = async () => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     showSuccess('History Refreshed', 'Configuration history has been updated');
-  } catch (error) {
+  } catch (_error) {
     showError('Refresh Failed', 'Failed to refresh history data');
   } finally {
     loading.value = false;
@@ -387,7 +390,7 @@ const exportHistory = async () => {
     URL.revokeObjectURL(url);
 
     showSuccess('Export Complete', 'Configuration history exported successfully');
-  } catch (error) {
+  } catch (_error) {
     showError('Export Failed', 'Failed to export history data');
   }
 };
@@ -402,7 +405,7 @@ const rollbackConfiguration = async (activity: any) => {
       `Successfully rolled back configuration: ${activity.title}`
     );
     activity.rollbackAvailable = false;
-  } catch (error) {
+  } catch (_error) {
     showError('Rollback Failed', 'Failed to rollback configuration');
   } finally {
     activity.rolling = false;
