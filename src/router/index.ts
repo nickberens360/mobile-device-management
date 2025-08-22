@@ -72,6 +72,11 @@ const routes: RouteRecordRaw[] = [
     name: 'History',
     component: () => import('@/views/History.vue')
   },
+  {
+    path: '/login',
+    name: 'Login',
+    redirect: '/dashboard'
+  },
   ...(import.meta.env.VITE_ENABLE_ATOMIC_DOCS === 'true' ? [
     {
       path: '/atomic-docs/:pathMatch(.*)*',

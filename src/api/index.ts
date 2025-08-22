@@ -32,7 +32,12 @@ class ApiService {
       (error) => {
         if (error.response?.status === 401) {
           localStorage.removeItem('authToken');
-          window.location.href = '/login';
+          // Only redirect to login in production - in dev with mock API, just console warn
+          if (import.meta.env.VITE_MOCK_API !== 'true') {
+            window.location.href = '/login';
+          } else {
+            console.warn('401 error intercepted in mock mode - skipping login redirect');
+          }
         }
         return Promise.reject(error);
       }
