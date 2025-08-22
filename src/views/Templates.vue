@@ -251,12 +251,6 @@
                   </template>
                   <v-list-item-title>View Details</v-list-item-title>
                 </v-list-item>
-                <v-list-item @click="editTemplate(item)">
-                  <template #prepend>
-                    <v-icon>mdi-pencil</v-icon>
-                  </template>
-                  <v-list-item-title>Edit</v-list-item-title>
-                </v-list-item>
                 <v-list-item @click="duplicateTemplateAction(item)">
                   <template #prepend>
                     <v-icon>mdi-content-copy</v-icon>
@@ -548,6 +542,20 @@ const handleTemplateRoute = async () => {
 watch(() => route.path, handleTemplateRoute, { immediate: true });
 
 onMounted(async () => {
+  // Load query params if present
+  if (route.query.deviceType) {
+    filters.value.deviceType = route.query.deviceType as string;
+  }
+  if (route.query.createdBy) {
+    filters.value.createdBy = route.query.createdBy as string;
+  }
+  if (route.query.securityLevel) {
+    filters.value.securityLevel = route.query.securityLevel as string;
+  }
+  if (route.query.search) {
+    filters.value.search = route.query.search as string;
+  }
+  
   await templateStore.fetchTemplates();
   // Handle initial route after templates are loaded
   if (route.path === '/templates/new') {

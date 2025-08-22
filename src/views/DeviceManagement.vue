@@ -359,6 +359,21 @@ const openDeviceDialog = (device: Device) => {
 };
 
 onMounted(async () => {
+  // Load query params if present
+  const route = router.currentRoute.value;
+  if (route.query.filter === 'attention') {
+    filters.value.showAttention = true;
+  }
+  if (route.query.location) {
+    filters.value.location = route.query.location as string;
+  }
+  if (route.query.type) {
+    filters.value.type = route.query.type as string;
+  }
+  if (route.query.status) {
+    filters.value.status = route.query.status as string;
+  }
+  
   await Promise.all([
     deviceStore.fetchDevices(),
     locationStore.fetchLocations()
