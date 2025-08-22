@@ -9,6 +9,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/dashboard',
     name: 'Dashboard',
+    alias: ['/login'],
     component: () => import('@/views/Dashboard.vue')
   },
   {

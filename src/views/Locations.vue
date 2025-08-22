@@ -525,11 +525,13 @@ const handleLocationRoute = (locationId: string | string[]) => {
 };
 
 // Watch for route changes
-watch(() => route.params.locationId, (locationId) => {
-  if (locationId) {
-    handleLocationRoute(locationId);
-  } else {
-    // No location ID, close dialogs
+watch(() => route.path, (path) => {
+  if (path === '/locations/new') {
+    handleLocationRoute('new');
+  } else if (route.params.locationId) {
+    handleLocationRoute(route.params.locationId);
+  } else if (path === '/locations') {
+    // On locations page, close dialogs
     showEditDialog.value = false;
     selectedLocation.value = null;
   }
