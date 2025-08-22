@@ -487,9 +487,6 @@ const openTemplateDialog = (template: ConfigurationTemplate) => {
   router.push(`/templates/${template.id}`);
 };
 
-const editTemplate = (template: ConfigurationTemplate) => {
-  openTemplateDialog(template);
-};
 
 const deleteTemplate = (template: ConfigurationTemplate) => {
   openTemplateDialog(template);
