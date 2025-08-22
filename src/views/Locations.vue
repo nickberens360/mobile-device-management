@@ -2,7 +2,9 @@
   <v-container fluid>
     <div class="d-flex justify-space-between align-start mb-6">
       <div>
-        <h1 class="text-h4 mb-2">Location Management</h1>
+        <h1 class="text-h4 mb-2">
+          Location Management
+        </h1>
         <p class="text-body-1 text-medium-emphasis">
           Manage NBC Universal locations including film sets, theme parks, corporate offices, and event venues. Monitor device counts and network profiles for each location.
         </p>
@@ -21,7 +23,7 @@
         All Locations
         <v-spacer />
         <v-menu v-if="selectedLocations.length > 0">
-          <template v-slot:activator="{ props }">
+          <template #activator="{ props }">
             <v-btn
               v-bind="props"
               color="secondary"
@@ -33,19 +35,19 @@
           </template>
           <v-list>
             <v-list-item @click="bulkUpdateNetworkProfiles">
-              <template v-slot:prepend>
+              <template #prepend>
                 <v-icon>mdi-wifi</v-icon>
               </template>
               <v-list-item-title>Update Network Profiles</v-list-item-title>
             </v-list-item>
             <v-list-item @click="bulkExportData">
-              <template v-slot:prepend>
+              <template #prepend>
                 <v-icon>mdi-download</v-icon>
               </template>
               <v-list-item-title>Export Location Data</v-list-item-title>
             </v-list-item>
             <v-list-item @click="clearSelection">
-              <template v-slot:prepend>
+              <template #prepend>
                 <v-icon>mdi-close</v-icon>
               </template>
               <v-list-item-title>Clear Selection</v-list-item-title>
@@ -55,8 +57,8 @@
         <v-btn
           color="primary"
           prepend-icon="mdi-refresh"
-          @click="refreshLocations"
           :loading="loading"
+          @click="refreshLocations"
         >
           Refresh
         </v-btn>
@@ -65,7 +67,10 @@
       <v-card-text>
         <!-- Filters -->
         <v-row class="mb-4">
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-select
               v-model="filters.type"
               :items="locationTypeOptions"
@@ -78,7 +83,10 @@
               @update:model-value="applyFilters"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-select
               v-model="filters.hasProductions"
               :items="productionFilterOptions"
@@ -91,7 +99,10 @@
               @update:model-value="applyFilters"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-select
               v-model="filters.deviceCountRange"
               :items="deviceCountOptions"
@@ -104,7 +115,10 @@
               @update:model-value="applyFilters"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-text-field
               v-model="filters.search"
               label="Search locations"
@@ -130,13 +144,18 @@
           item-value="id"
           @update:options="handleTableOptions"
         >
-          <template v-slot:item.name="{ item }">
+          <template #item.name="{ item }">
             <div class="d-flex align-center">
-              <v-icon class="mr-2" :color="getLocationTypeColor(item.type)">
+              <v-icon
+                class="mr-2"
+                :color="getLocationTypeColor(item.type)"
+              >
                 {{ getLocationTypeIcon(item.type) }}
               </v-icon>
               <div>
-                <div class="font-weight-medium">{{ item.name }}</div>
+                <div class="font-weight-medium">
+                  {{ item.name }}
+                </div>
                 <div class="text-caption text-medium-emphasis">
                   {{ item.address }}
                 </div>
@@ -144,7 +163,7 @@
             </div>
           </template>
 
-          <template v-slot:item.type="{ item }">
+          <template #item.type="{ item }">
             <v-chip
               :color="getLocationTypeColor(item.type)"
               size="small"
@@ -154,7 +173,7 @@
             </v-chip>
           </template>
 
-          <template v-slot:item.deviceCount="{ item }">
+          <template #item.deviceCount="{ item }">
             <div class="d-flex align-center">
               <span class="text-h6 mr-2">{{ item.deviceCount }}</span>
               <v-progress-circular
@@ -166,7 +185,7 @@
             </div>
           </template>
 
-          <template v-slot:item.activeProductions="{ item }">
+          <template #item.activeProductions="{ item }">
             <div v-if="item.activeProductions?.length">
               <v-chip
                 v-for="production in item.activeProductions.slice(0, 2)"
@@ -186,10 +205,13 @@
                 +{{ item.activeProductions.length - 2 }} more
               </v-chip>
             </div>
-            <span v-else class="text-medium-emphasis">None</span>
+            <span
+              v-else
+              class="text-medium-emphasis"
+            >None</span>
           </template>
 
-          <template v-slot:item.networkProfiles="{ item }">
+          <template #item.networkProfiles="{ item }">
             <div class="d-flex flex-wrap ga-1">
               <v-chip
                 v-for="profile in item.networkProfiles.slice(0, 3)"
@@ -210,7 +232,7 @@
             </div>
           </template>
 
-          <template v-slot:item.status="{ item }">
+          <template #item.status="{ item }">
             <v-chip
               :color="getLocationStatusColor(item)"
               size="small"
@@ -220,50 +242,13 @@
             </v-chip>
           </template>
 
-          <template v-slot:item.actions="{ item }">
-            <v-menu>
-              <template v-slot:activator="{ props }">
-                <v-btn
-                  icon="mdi-dots-vertical"
-                  size="small"
-                  variant="text"
-                  v-bind="props"
-                />
-              </template>
-              <v-list>
-                <v-list-item @click="viewLocationDetails(item)">
-                  <template v-slot:prepend>
-                    <v-icon>mdi-eye</v-icon>
-                  </template>
-                  <v-list-item-title>View Details</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="editLocation(item)">
-                  <template v-slot:prepend>
-                    <v-icon>mdi-pencil</v-icon>
-                  </template>
-                  <v-list-item-title>Edit</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="manageDevices(item)">
-                  <template v-slot:prepend>
-                    <v-icon>mdi-devices</v-icon>
-                  </template>
-                  <v-list-item-title>Manage Devices</v-list-item-title>
-                </v-list-item>
-                <v-list-item @click="configureNetwork(item)">
-                  <template v-slot:prepend>
-                    <v-icon>mdi-wifi-settings</v-icon>
-                  </template>
-                  <v-list-item-title>Network Settings</v-list-item-title>
-                </v-list-item>
-                <v-divider />
-                <v-list-item @click="deleteLocation(item)">
-                  <template v-slot:prepend>
-                    <v-icon color="error">mdi-delete</v-icon>
-                  </template>
-                  <v-list-item-title>Delete</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
+          <template #item.actions="{ item }">
+            <v-btn
+              icon="mdi-cog"
+              size="small"
+              variant="text"
+              @click="viewLocationDetails(item)"
+            />
           </template>
         </v-data-table>
       </v-card-text>

@@ -4,19 +4,37 @@
     :slot-items="slotItems"
     description="A container component for displaying app-wide notifications with auto-dismiss functionality."
   >
-    <div class="position-relative" style="height: 200px; border: 1px dashed #ccc;">
+    <div
+      class="position-relative"
+      style="height: 200px; border: 1px dashed #ccc;"
+    >
       <NotificationContainer />
       <div class="pa-4">
-        <v-btn @click="addNotification('success')" color="success" class="mr-2">
+        <v-btn
+          color="success"
+          class="mr-2"
+          @click="addNotification('success')"
+        >
           Add Success
         </v-btn>
-        <v-btn @click="addNotification('error')" color="error" class="mr-2">
+        <v-btn
+          color="error"
+          class="mr-2"
+          @click="addNotification('error')"
+        >
           Add Error
         </v-btn>
-        <v-btn @click="addNotification('warning')" color="warning" class="mr-2">
+        <v-btn
+          color="warning"
+          class="mr-2"
+          @click="addNotification('warning')"
+        >
           Add Warning
         </v-btn>
-        <v-btn @click="addNotification('info')" color="info">
+        <v-btn
+          color="info"
+          @click="addNotification('info')"
+        >
           Add Info
         </v-btn>
       </div>

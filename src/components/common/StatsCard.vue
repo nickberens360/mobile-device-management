@@ -1,13 +1,23 @@
 <template>
   <v-card :height="height">
     <v-card-text class="d-flex flex-column h-100 pa-3">
-      <div class="text-overline mb-1">{{ title }}</div>
+      <div class="text-overline mb-1">
+        {{ title }}
+      </div>
       <div class="d-flex align-center">
-        <div class="text-h4 font-weight-bold" :class="`text-${computedValueColor}`">
+        <div
+          class="text-h4 font-weight-bold"
+          :class="`text-${computedValueColor}`"
+        >
           {{ value }}{{ suffix }}
         </div>
         <v-spacer />
-        <v-icon :size="iconSize" :color="computedIconColor">{{ icon }}</v-icon>
+        <v-icon
+          :size="iconSize"
+          :color="computedIconColor"
+        >
+          {{ icon }}
+        </v-icon>
       </div>
       <v-spacer v-if="hasAction" />
       <v-btn

@@ -11,15 +11,17 @@ const app = createApp(App);
 app.use(createPinia());
 app.use(router);
 app.use(vuetify);
-app.use(componentDocs, {
-  componentModules: import.meta.glob('@/components/**/*.vue'),
-  rawComponentSourceModules: import.meta.glob('@/components/**/*.vue', {query: '?raw', import: 'default'}),
-  exampleModules: import.meta.glob('@/component-examples/**/*.vue'),
-  componentsDirName: 'components',
-  examplesDirName: 'component-examples',
-  mainAppID: 'app',
-  enableDocs: import.meta.env.VITE_ENABLE_ATOMIC_DOCS === 'true',
-  plugins: [vuetify]
-});
+if (import.meta.env.VITE_ENABLE_ATOMIC_DOCS === 'true') {
+  app.use(componentDocs, {
+    componentModules: import.meta.glob('@/components/**/*.vue'),
+    rawComponentSourceModules: import.meta.glob('@/components/**/*.vue', { as: 'raw' }),
+    exampleModules: import.meta.glob('@/component-examples/**/*.vue'),
+    componentsDirName: 'components',
+    examplesDirName: 'component-examples',
+    mainAppID: 'app',
+    enableDocs: true,
+    plugins: [vuetify]
+  });
+}
 
 app.mount('#app');

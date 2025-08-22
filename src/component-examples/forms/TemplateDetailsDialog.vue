@@ -6,7 +6,10 @@
     description="A dialog component for viewing and editing configuration template details with full settings configuration."
   >
     <div>
-      <v-btn @click="openDialog" color="primary">
+      <v-btn
+        color="primary"
+        @click="openDialog"
+      >
         View Template Details
       </v-btn>
       <TemplateDetailsDialog

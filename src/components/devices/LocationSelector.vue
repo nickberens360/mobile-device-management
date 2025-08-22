@@ -14,13 +14,17 @@
         clearable
         @update:model-value="onLocationChange"
       >
-        <template v-slot:item="{ props, item }">
+        <template #item="{ props, item }">
           <v-list-item v-bind="props">
-            <template v-slot:prepend>
+            <template #prepend>
               <v-icon>mdi-map-marker</v-icon>
             </template>
-            <template v-slot:append>
-              <v-chip size="small" color="primary" variant="tonal">
+            <template #append>
+              <v-chip
+                size="small"
+                color="primary"
+                variant="tonal"
+              >
                 {{ item.raw.deviceCount }} devices
               </v-chip>
             </template>
@@ -38,8 +42,15 @@
       >
         <v-card-text>
           <div class="d-flex align-center mb-2">
-            <v-icon color="primary" class="mr-2">mdi-map-marker</v-icon>
-            <div class="text-h6">{{ selectedLocationData.name }}</div>
+            <v-icon
+              color="primary"
+              class="mr-2"
+            >
+              mdi-map-marker
+            </v-icon>
+            <div class="text-h6">
+              {{ selectedLocationData.name }}
+            </div>
           </div>
           <v-chip
             size="small"
@@ -52,8 +63,13 @@
           <div class="text-body-2 text-medium-emphasis mt-2">
             {{ selectedLocationData.address }}
           </div>
-          <div v-if="selectedLocationData.activeProductions?.length" class="mt-2">
-            <div class="text-body-2 font-weight-bold mb-1">Active Productions:</div>
+          <div
+            v-if="selectedLocationData.activeProductions?.length"
+            class="mt-2"
+          >
+            <div class="text-body-2 font-weight-bold mb-1">
+              Active Productions:
+            </div>
             <v-chip
               v-for="production in selectedLocationData.activeProductions"
               :key="production"
@@ -65,7 +81,9 @@
             </v-chip>
           </div>
           <div class="mt-2">
-            <div class="text-body-2 font-weight-bold mb-1">Network Profiles:</div>
+            <div class="text-body-2 font-weight-bold mb-1">
+              Network Profiles:
+            </div>
             <v-chip
               v-for="profile in selectedLocationData.networkProfiles"
               :key="profile"

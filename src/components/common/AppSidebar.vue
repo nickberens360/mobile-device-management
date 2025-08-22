@@ -17,7 +17,7 @@
       />
     </v-list>
 
-    <template v-slot:append>
+    <template #append>
       <v-divider />
       <v-list nav>
         <v-list-item

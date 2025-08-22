@@ -6,7 +6,10 @@
     description="A dialog component for editing location information with form validation and network profile management."
   >
     <div>
-      <v-btn @click="openDialog" color="primary">
+      <v-btn
+        color="primary"
+        @click="openDialog"
+      >
         Edit Location
       </v-btn>
       <LocationEditDialog
@@ -48,6 +51,7 @@
 import { ref, computed } from 'vue';
 import LocationEditDialog from '@/components/locations/LocationEditDialog.vue';
 import type { Location } from '@/types/location';
+import { LocationType } from '@/types/location';
 
 const showDialog = ref(false);
 const selectedLocationId = ref('loc-1');
@@ -56,7 +60,7 @@ const mockLocations: Location[] = [
   {
     id: 'loc-1',
     name: 'Universal Studios - Stage 12',
-    type: 'Studio',
+    type: LocationType.BROADCAST_STUDIO,
     address: '100 Universal City Plaza, Universal City, CA',
     activeProductions: ['Jurassic World: Dominion', 'Fast & Furious 11'],
     deviceCount: 87,
@@ -65,7 +69,7 @@ const mockLocations: Location[] = [
   {
     id: 'loc-2',
     name: 'Universal Orlando - Islands of Adventure',
-    type: 'Theme Park',
+    type: LocationType.THEME_PARK,
     address: '6000 Universal Blvd, Orlando, FL',
     activeProductions: [],
     deviceCount: 234,
@@ -74,7 +78,7 @@ const mockLocations: Location[] = [
   {
     id: 'loc-3',
     name: '30 Rockefeller Plaza',
-    type: 'Corporate Office',
+    type: LocationType.CORPORATE_OFFICE,
     address: '30 Rockefeller Plaza, New York, NY',
     activeProductions: [],
     deviceCount: 156,
@@ -83,7 +87,7 @@ const mockLocations: Location[] = [
   {
     id: 'loc-4',
     name: 'NBC Sports Production Facility',
-    type: 'Broadcast Center',
+    type: LocationType.BROADCAST_STUDIO,
     address: '1 Blachley Rd, Stamford, CT',
     activeProductions: ['Sunday Night Football', 'Olympics Coverage'],
     deviceCount: 98,

@@ -6,7 +6,10 @@
     description="A dialog component for creating new configuration templates with form validation and device type selection."
   >
     <div>
-      <v-btn @click="openDialog" color="primary">
+      <v-btn
+        color="primary"
+        @click="openDialog"
+      >
         Create New Template
       </v-btn>
       <CreateTemplateDialog

@@ -6,7 +6,12 @@
   >
     <v-card v-if="device">
       <v-card-title class="d-flex align-center">
-        <v-icon class="mr-3" color="primary">mdi-pencil</v-icon>
+        <v-icon
+          class="mr-3"
+          color="primary"
+        >
+          mdi-pencil
+        </v-icon>
         Edit Device
         <v-spacer />
         <v-btn
@@ -17,15 +22,23 @@
       </v-card-title>
 
       <v-card-text>
-        <v-form ref="formRef" v-model="isFormValid">
+        <v-form
+          ref="formRef"
+          v-model="isFormValid"
+        >
           <v-row>
             <!-- Basic Information -->
             <v-col cols="12">
               <v-card variant="outlined">
-                <v-card-title class="text-h6">Basic Information</v-card-title>
+                <v-card-title class="text-h6">
+                  Basic Information
+                </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
                         v-model="formData.name"
                         label="Device Name"
@@ -34,7 +47,10 @@
                         :rules="[rules.required]"
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-select
                         v-model="formData.type"
                         :items="deviceTypes"
@@ -45,7 +61,10 @@
                         prepend-inner-icon="mdi-cellphone"
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-autocomplete
                         v-model="formData.location"
                         :items="locations"
@@ -56,7 +75,10 @@
                         prepend-inner-icon="mdi-map-marker"
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-select
                         v-model="formData.status"
                         :items="statusOptions"
@@ -66,9 +88,9 @@
                         variant="outlined"
                         prepend-inner-icon="mdi-information"
                       >
-                        <template v-slot:item="{ props, item }">
+                        <template #item="{ props, item }">
                           <v-list-item v-bind="props">
-                            <template v-slot:prepend>
+                            <template #prepend>
                               <v-icon :color="getStatusColor(item.raw.value)">
                                 {{ getStatusIcon(item.raw.value) }}
                               </v-icon>
@@ -85,10 +107,15 @@
             <!-- Device Metadata -->
             <v-col cols="12">
               <v-card variant="outlined">
-                <v-card-title class="text-h6">Device Metadata</v-card-title>
+                <v-card-title class="text-h6">
+                  Device Metadata
+                </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
                         v-model="formData.metadata.serialNumber"
                         label="Serial Number"
@@ -96,7 +123,10 @@
                         prepend-inner-icon="mdi-barcode"
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
                         v-model="formData.metadata.osVersion"
                         label="OS Version"
@@ -104,7 +134,10 @@
                         prepend-inner-icon="mdi-information-outline"
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
                         v-model="formData.metadata.lastSeen"
                         label="Last Seen"
@@ -150,7 +183,12 @@
   >
     <v-card>
       <v-card-title class="d-flex align-center">
-        <v-icon class="mr-3" color="warning">mdi-map-marker-alert</v-icon>
+        <v-icon
+          class="mr-3"
+          color="warning"
+        >
+          mdi-map-marker-alert
+        </v-icon>
         Confirm Location Change
       </v-card-title>
       
@@ -161,17 +199,39 @@
           </p>
           
           <v-row>
-            <v-col cols="12" sm="6">
-              <div class="text-subtitle-2 mb-1">From:</div>
-              <v-chip size="small" color="error" variant="outlined">
-                <v-icon start>mdi-map-marker</v-icon>
+            <v-col
+              cols="12"
+              sm="6"
+            >
+              <div class="text-subtitle-2 mb-1">
+                From:
+              </div>
+              <v-chip
+                size="small"
+                color="error"
+                variant="outlined"
+              >
+                <v-icon start>
+                  mdi-map-marker
+                </v-icon>
                 {{ originalLocationObj?.name || 'Unknown Location' }}
               </v-chip>
             </v-col>
-            <v-col cols="12" sm="6">
-              <div class="text-subtitle-2 mb-1">To:</div>
-              <v-chip size="small" color="success" variant="outlined">
-                <v-icon start>mdi-map-marker</v-icon>
+            <v-col
+              cols="12"
+              sm="6"
+            >
+              <div class="text-subtitle-2 mb-1">
+                To:
+              </div>
+              <v-chip
+                size="small"
+                color="success"
+                variant="outlined"
+              >
+                <v-icon start>
+                  mdi-map-marker
+                </v-icon>
                 {{ currentLocation?.name || 'Unknown Location' }}
               </v-chip>
             </v-col>
@@ -180,8 +240,13 @@
           <!-- Capacity Information -->
           <v-divider class="my-4" />
           
-          <div v-if="targetLocationCapacityInfo" class="mb-4">
-            <div class="text-subtitle-2 mb-2">Target Location Capacity</div>
+          <div
+            v-if="targetLocationCapacityInfo"
+            class="mb-4"
+          >
+            <div class="text-subtitle-2 mb-2">
+              Target Location Capacity
+            </div>
             <v-row align="center">
               <v-col cols="8">
                 <v-progress-linear
@@ -193,7 +258,10 @@
                   {{ Math.round(targetLocationCapacityInfo.utilizationPercent) }}%
                 </v-progress-linear>
               </v-col>
-              <v-col cols="4" class="text-right">
+              <v-col
+                cols="4"
+                class="text-right"
+              >
                 <span class="text-body-2">
                   {{ targetLocationCapacityInfo.currentDevices }}/{{ targetLocationCapacityInfo.maxCapacity }} devices
                 </span>
@@ -202,15 +270,24 @@
           </div>
           
           <!-- Warnings -->
-          <div v-if="locationChangeWarnings.length > 0" class="mb-4">
+          <div
+            v-if="locationChangeWarnings.length > 0"
+            class="mb-4"
+          >
             <v-alert
               type="warning"
               variant="tonal"
               density="compact"
             >
-              <div class="text-subtitle-2 mb-2">Important Considerations:</div>
+              <div class="text-subtitle-2 mb-2">
+                Important Considerations:
+              </div>
               <ul class="ml-4">
-                <li v-for="warning in locationChangeWarnings" :key="warning" class="text-body-2">
+                <li
+                  v-for="warning in locationChangeWarnings"
+                  :key="warning"
+                  class="text-body-2"
+                >
                   {{ warning }}
                 </li>
               </ul>
@@ -218,7 +295,9 @@
           </div>
           
           <div class="text-body-2 text-medium-emphasis">
-            <v-icon class="mr-1">mdi-information-outline</v-icon>
+            <v-icon class="mr-1">
+              mdi-information-outline
+            </v-icon>
             This action will:
             <ul class="ml-4 mt-2">
               <li>Update the device location immediately</li>

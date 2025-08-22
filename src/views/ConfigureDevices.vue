@@ -1,6 +1,8 @@
 <template>
   <v-container fluid>
-    <h1 class="text-h4 mb-2">Configure Devices</h1>
+    <h1 class="text-h4 mb-2">
+      Configure Devices
+    </h1>
     <p class="text-body-1 text-medium-emphasis mb-6">
       Apply configuration templates to multiple devices simultaneously. Select devices from any location and device type, then deploy compatible templates across your NBC Universal properties.
     </p>
@@ -13,16 +15,21 @@
       editable
     >
       <!-- Step 1: Select Devices -->
-      <template v-slot:item.1>
+      <template #item.1>
         <v-card flat>
           <v-card-title class="d-flex align-center">
-            <v-icon class="mr-2">mdi-devices</v-icon>
+            <v-icon class="mr-2">
+              mdi-devices
+            </v-icon>
             Select Devices for Configuration
           </v-card-title>
           <v-card-text>
             <!-- Filter Controls -->
             <v-row class="mb-4">
-              <v-col cols="12" md="3">
+              <v-col
+                cols="12"
+                md="3"
+              >
                 <v-select
                   v-model="deviceFilters.location"
                   :items="locationOptions"
@@ -37,7 +44,10 @@
                   closable-chips
                 />
               </v-col>
-              <v-col cols="12" md="3">
+              <v-col
+                cols="12"
+                md="3"
+              >
                 <v-select
                   v-model="deviceFilters.type"
                   :items="deviceTypeOptions"
@@ -52,7 +62,10 @@
                   closable-chips
                 />
               </v-col>
-              <v-col cols="12" md="3">
+              <v-col
+                cols="12"
+                md="3"
+              >
                 <v-select
                   v-model="deviceFilters.status"
                   :items="deviceStatusOptions"
@@ -67,7 +80,10 @@
                   closable-chips
                 />
               </v-col>
-              <v-col cols="12" md="3">
+              <v-col
+                cols="12"
+                md="3"
+              >
                 <v-text-field
                   v-model="deviceFilters.search"
                   label="Search devices"
@@ -116,35 +132,48 @@
               item-value="id"
               :items-per-page="15"
             >
-              <template v-slot:item.name="{ item }">
+              <template #item.name="{ item }">
                 <div class="d-flex align-center">
-                  <v-icon class="mr-2" :color="getDeviceTypeColor(item.type)">
+                  <v-icon
+                    class="mr-2"
+                    :color="getDeviceTypeColor(item.type)"
+                  >
                     {{ getDeviceTypeIcon(item.type) }}
                   </v-icon>
                   {{ item.name }}
                 </div>
               </template>
 
-              <template v-slot:item.status="{ item }">
+              <template #item.status="{ item }">
                 <v-chip
                   :color="getStatusColor(item.status)"
                   size="small"
                   variant="tonal"
                 >
-                  <v-icon start>{{ getStatusIcon(item.status) }}</v-icon>
+                  <v-icon start>
+                    {{ getStatusIcon(item.status) }}
+                  </v-icon>
                   {{ item.status }}
                 </v-chip>
               </template>
 
-              <template v-slot:item.type="{ item }">
-                <v-chip size="small" variant="outlined">
+              <template #item.type="{ item }">
+                <v-chip
+                  size="small"
+                  variant="outlined"
+                >
                   {{ item.type.replace('_', ' ') }}
                 </v-chip>
               </template>
 
-              <template v-slot:item.location="{ item }">
+              <template #item.location="{ item }">
                 <div class="d-flex align-center">
-                  <v-icon class="mr-1" size="small">mdi-map-marker</v-icon>
+                  <v-icon
+                    class="mr-1"
+                    size="small"
+                  >
+                    mdi-map-marker
+                  </v-icon>
                   {{ getLocationName(item.location) }}
                 </div>
               </template>
@@ -154,10 +183,12 @@
       </template>
 
       <!-- Step 2: Select Compatible Templates -->
-      <template v-slot:item.2>
+      <template #item.2>
         <v-card flat>
           <v-card-title class="d-flex align-center">
-            <v-icon class="mr-2">mdi-file-document-multiple</v-icon>
+            <v-icon class="mr-2">
+              mdi-file-document-multiple
+            </v-icon>
             Select Compatible Templates
           </v-card-title>
           <v-card-text>
@@ -213,7 +244,9 @@
                     </v-card-title>
 
                     <v-card-text>
-                      <p class="text-body-2 mb-3">{{ template.description }}</p>
+                      <p class="text-body-2 mb-3">
+                        {{ template.description }}
+                      </p>
 
                       <div class="mb-2">
                         <v-chip-group>
@@ -241,10 +274,12 @@
       </template>
 
       <!-- Step 3: Customize and Deploy -->
-      <template v-slot:item.3>
+      <template #item.3>
         <v-card flat>
           <v-card-title class="d-flex align-center">
-            <v-icon class="mr-2">mdi-cog</v-icon>
+            <v-icon class="mr-2">
+              mdi-cog
+            </v-icon>
             Customize and Deploy Configuration
           </v-card-title>
           <v-card-text>
@@ -259,25 +294,52 @@
 
             <div v-if="selectedTemplate && selectedTemplateData">
               <!-- Deployment Summary -->
-              <v-card variant="outlined" class="mb-4">
+              <v-card
+                variant="outlined"
+                class="mb-4"
+              >
                 <v-card-title>Deployment Summary</v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="4">
-                      <div class="text-subtitle-2 mb-1">Template</div>
-                      <v-chip color="primary" variant="tonal">
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
+                      <div class="text-subtitle-2 mb-1">
+                        Template
+                      </div>
+                      <v-chip
+                        color="primary"
+                        variant="tonal"
+                      >
                         {{ selectedTemplateData.name }}
                       </v-chip>
                     </v-col>
-                    <v-col cols="12" md="4">
-                      <div class="text-subtitle-2 mb-1">Target Devices</div>
-                      <v-chip color="success" variant="tonal">
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
+                      <div class="text-subtitle-2 mb-1">
+                        Target Devices
+                      </div>
+                      <v-chip
+                        color="success"
+                        variant="tonal"
+                      >
                         {{ compatibleDeviceCount }} devices
                       </v-chip>
                     </v-col>
-                    <v-col cols="12" md="4">
-                      <div class="text-subtitle-2 mb-1">Locations</div>
-                      <v-chip color="info" variant="tonal">
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
+                      <div class="text-subtitle-2 mb-1">
+                        Locations
+                      </div>
+                      <v-chip
+                        color="info"
+                        variant="tonal"
+                      >
                         {{ selectedDevicesByLocation.length }} locations
                       </v-chip>
                     </v-col>
@@ -293,7 +355,10 @@
                     <div class="text-body-2">
                       <strong>{{ incompatibleDeviceCount }} devices</strong> are not compatible with this template and will be skipped:
                       <ul class="mt-2 ml-4">
-                        <li v-for="device in incompatibleDevices.slice(0, 5)" :key="device.id">
+                        <li
+                          v-for="device in incompatibleDevices.slice(0, 5)"
+                          :key="device.id"
+                        >
                           {{ device.name }} ({{ device.type.replace('_', ' ') }})
                         </li>
                         <li v-if="incompatibleDevices.length > 5">
@@ -306,9 +371,14 @@
               </v-card>
 
               <!-- Configuration Preview and Customization -->
-              <v-card variant="outlined" class="mb-4">
+              <v-card
+                variant="outlined"
+                class="mb-4"
+              >
                 <v-card-title class="d-flex align-center">
-                  <v-icon class="mr-2">mdi-eye</v-icon>
+                  <v-icon class="mr-2">
+                    mdi-eye
+                  </v-icon>
                   Configuration Preview
                   <v-spacer />
                   <v-switch
@@ -323,7 +393,10 @@
                     <v-expansion-panel title="Network Settings">
                       <v-expansion-panel-text>
                         <v-row>
-                          <v-col cols="12" md="4">
+                          <v-col
+                            cols="12"
+                            md="4"
+                          >
                             <v-text-field
                               v-model="customSettings.network.ssid"
                               label="SSID"
@@ -333,7 +406,10 @@
                               density="compact"
                             />
                           </v-col>
-                          <v-col cols="12" md="4">
+                          <v-col
+                            cols="12"
+                            md="4"
+                          >
                             <v-select
                               v-model="customSettings.network.security"
                               :items="securityOptions"
@@ -344,7 +420,10 @@
                               density="compact"
                             />
                           </v-col>
-                          <v-col cols="12" md="4">
+                          <v-col
+                            cols="12"
+                            md="4"
+                          >
                             <v-text-field
                               v-model="customSettings.network.vlan"
                               label="VLAN"
@@ -362,7 +441,10 @@
                     <v-expansion-panel title="Security Settings">
                       <v-expansion-panel-text>
                         <v-row>
-                          <v-col cols="12" md="4">
+                          <v-col
+                            cols="12"
+                            md="4"
+                          >
                             <v-switch
                               v-model="customSettings.security.encryption"
                               label="Device Encryption"
@@ -370,7 +452,10 @@
                               :readonly="!enableCustomization"
                             />
                           </v-col>
-                          <v-col cols="12" md="4">
+                          <v-col
+                            cols="12"
+                            md="4"
+                          >
                             <v-switch
                               v-model="customSettings.security.remoteWipe"
                               label="Remote Wipe Capability"
@@ -378,7 +463,10 @@
                               :readonly="!enableCustomization"
                             />
                           </v-col>
-                          <v-col cols="12" md="4">
+                          <v-col
+                            cols="12"
+                            md="4"
+                          >
                             <v-select
                               v-model="customSettings.security.passcode"
                               :items="passcodeOptions"
@@ -393,9 +481,14 @@
                       </v-expansion-panel-text>
                     </v-expansion-panel>
 
-                    <v-expansion-panel title="Application Settings" v-if="customSettings.apps">
+                    <v-expansion-panel
+                      v-if="customSettings.apps"
+                      title="Application Settings"
+                    >
                       <v-expansion-panel-text>
-                        <div class="text-body-2 mb-3">Configure which applications will be installed:</div>
+                        <div class="text-body-2 mb-3">
+                          Configure which applications will be installed:
+                        </div>
                         <v-chip-group
                           v-model="customSettings.apps.required"
                           multiple
@@ -407,7 +500,9 @@
                             :value="app.id"
                             filter
                           >
-                            <v-icon start>{{ app.icon }}</v-icon>
+                            <v-icon start>
+                              {{ app.icon }}
+                            </v-icon>
                             {{ app.name }}
                           </v-chip>
                         </v-chip-group>
@@ -420,12 +515,17 @@
               <!-- Deployment Options -->
               <v-card variant="outlined">
                 <v-card-title class="d-flex align-center">
-                  <v-icon class="mr-2">mdi-rocket-launch</v-icon>
+                  <v-icon class="mr-2">
+                    mdi-rocket-launch
+                  </v-icon>
                   Deployment Options
                 </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-select
                         v-model="deploymentOptions.mode"
                         :items="deploymentModes"
@@ -436,7 +536,10 @@
                         prepend-inner-icon="mdi-speedometer"
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-select
                         v-model="deploymentOptions.schedule"
                         :items="scheduleOptions"
@@ -467,23 +570,25 @@
         </v-card>
       </template>
 
-      <template v-slot:actions="{ next, prev }">
+      <template #actions="{ next, prev }">
         <div class="d-flex justify-space-between w-100 pa-4">
           <v-btn
             v-if="currentStep > 1"
-            @click="prev"
             variant="outlined"
+            @click="prev"
           >
-            <v-icon start>mdi-arrow-left</v-icon>
+            <v-icon start>
+              mdi-arrow-left
+            </v-icon>
             Back
           </v-btn>
           <v-spacer v-else />
 
           <v-btn
             v-if="currentStep < steps.length"
-            @click="next"
             color="primary"
             :disabled="!canProceedToNext"
+            @click="next"
           >
             Next
             <v-badge
@@ -492,18 +597,22 @@
               color="secondary"
               inline
             />
-            <v-icon end>mdi-arrow-right</v-icon>
+            <v-icon end>
+              mdi-arrow-right
+            </v-icon>
           </v-btn>
 
           <v-btn
             v-else
-            @click="deployConfiguration"
             color="success"
             :disabled="!selectedTemplate"
             :loading="deploying"
+            @click="deployConfiguration"
           >
             Deploy Configuration
-            <v-icon end>mdi-rocket-launch</v-icon>
+            <v-icon end>
+              mdi-rocket-launch
+            </v-icon>
           </v-btn>
         </div>
       </template>
@@ -794,13 +903,13 @@ watch(selectedTemplate, () => {
     customSettings.value = {
       network: {
         ssid: selectedTemplateData.value.settings.network.ssid,
-        security: selectedTemplateData.value.settings.network.security,
+        security: selectedTemplateData.value.settings.network.security || 'WPA2',
         vlan: String(selectedTemplateData.value.settings.network.vlan)
       },
       security: {
         encryption: selectedTemplateData.value.settings.security.encryption,
         remoteWipe: selectedTemplateData.value.settings.security.remoteWipe,
-        passcode: selectedTemplateData.value.settings.security.passcode
+        passcode: selectedTemplateData.value.settings.security.passcode || 'optional'
       },
       apps: {
         required: selectedTemplateData.value.settings.apps?.required || []

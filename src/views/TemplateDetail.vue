@@ -5,7 +5,7 @@
       :items="breadcrumbItems"
       class="px-0"
     >
-      <template v-slot:item="{ item }">
+      <template #item="{ item }">
         <v-breadcrumbs-item
           :to="item.to"
           :disabled="item.disabled"
@@ -13,20 +13,43 @@
           {{ item.title }}
         </v-breadcrumbs-item>
       </template>
-      <template v-slot:divider>
+      <template #divider>
         <v-icon>mdi-chevron-right</v-icon>
       </template>
     </v-breadcrumbs>
 
-    <div v-if="loading" class="d-flex justify-center">
-      <v-progress-circular indeterminate color="primary" size="64" />
+    <div
+      v-if="loading"
+      class="d-flex justify-center"
+    >
+      <v-progress-circular
+        indeterminate
+        color="primary"
+        size="64"
+      />
     </div>
 
-    <div v-else-if="!template" class="text-center">
-      <v-icon size="64" color="grey">mdi-alert</v-icon>
-      <h2 class="text-h4 mt-4">Template Not Found</h2>
-      <p class="text-body-1 text-medium-emphasis">The requested template could not be found.</p>
-      <v-btn color="primary" :to="'/templates'" class="mt-4">
+    <div
+      v-else-if="!template"
+      class="text-center"
+    >
+      <v-icon
+        size="64"
+        color="grey"
+      >
+        mdi-alert
+      </v-icon>
+      <h2 class="text-h4 mt-4">
+        Template Not Found
+      </h2>
+      <p class="text-body-1 text-medium-emphasis">
+        The requested template could not be found.
+      </p>
+      <v-btn
+        color="primary"
+        :to="'/templates'"
+        class="mt-4"
+      >
         Back to Templates
       </v-btn>
     </div>
@@ -35,7 +58,9 @@
       <!-- Header -->
       <div class="d-flex justify-space-between align-center mb-6">
         <div>
-          <h1 class="text-h4 mb-2">{{ template.name }}</h1>
+          <h1 class="text-h4 mb-2">
+            {{ template.name }}
+          </h1>
           <p class="text-body-1 text-medium-emphasis">
             {{ template.description }}
           </p>
@@ -56,7 +81,7 @@
             Use Template
           </v-btn>
           <v-menu>
-            <template v-slot:activator="{ props }">
+            <template #activator="{ props }">
               <v-btn
                 icon="mdi-dots-vertical"
                 variant="text"
@@ -65,14 +90,16 @@
             </template>
             <v-list>
               <v-list-item @click="duplicateTemplate">
-                <template v-slot:prepend>
+                <template #prepend>
                   <v-icon>mdi-content-copy</v-icon>
                 </template>
                 <v-list-item-title>Duplicate</v-list-item-title>
               </v-list-item>
               <v-list-item @click="deleteTemplate">
-                <template v-slot:prepend>
-                  <v-icon color="error">mdi-delete</v-icon>
+                <template #prepend>
+                  <v-icon color="error">
+                    mdi-delete
+                  </v-icon>
                 </template>
                 <v-list-item-title>Delete</v-list-item-title>
               </v-list-item>
@@ -83,40 +110,64 @@
 
       <v-row>
         <!-- Template Overview -->
-        <v-col cols="12" md="4">
+        <v-col
+          cols="12"
+          md="4"
+        >
           <v-card>
             <v-card-title class="d-flex align-center">
-              <v-icon class="mr-3" color="primary">mdi-file-document</v-icon>
+              <v-icon
+                class="mr-3"
+                color="primary"
+              >
+                mdi-file-document
+              </v-icon>
               Template Overview
             </v-card-title>
             <v-card-text>
               <v-list>
                 <v-list-item class="px-0">
-                  <v-list-item-title class="text-caption text-medium-emphasis">Version</v-list-item-title>
+                  <v-list-item-title class="text-caption text-medium-emphasis">
+                    Version
+                  </v-list-item-title>
                   <v-list-item-subtitle>
-                    <v-chip size="small" variant="outlined">
+                    <v-chip
+                      size="small"
+                      variant="outlined"
+                    >
                       v{{ getTemplateVersion(template) }}
                     </v-chip>
                   </v-list-item-subtitle>
                 </v-list-item>
                 <v-list-item class="px-0">
-                  <v-list-item-title class="text-caption text-medium-emphasis">Security Level</v-list-item-title>
+                  <v-list-item-title class="text-caption text-medium-emphasis">
+                    Security Level
+                  </v-list-item-title>
                   <v-list-item-subtitle>
-                    <v-chip size="small" :color="getSecurityLevelColor(getSecurityLevel(template))">
+                    <v-chip
+                      size="small"
+                      :color="getSecurityLevelColor(getSecurityLevel(template))"
+                    >
                       {{ getSecurityLevel(template).toUpperCase() }}
                     </v-chip>
                   </v-list-item-subtitle>
                 </v-list-item>
                 <v-list-item class="px-0">
-                  <v-list-item-title class="text-caption text-medium-emphasis">Created By</v-list-item-title>
+                  <v-list-item-title class="text-caption text-medium-emphasis">
+                    Created By
+                  </v-list-item-title>
                   <v-list-item-subtitle>{{ template.createdBy }}</v-list-item-subtitle>
                 </v-list-item>
                 <v-list-item class="px-0">
-                  <v-list-item-title class="text-caption text-medium-emphasis">Created</v-list-item-title>
+                  <v-list-item-title class="text-caption text-medium-emphasis">
+                    Created
+                  </v-list-item-title>
                   <v-list-item-subtitle>{{ formatDate(template.createdAt) }}</v-list-item-subtitle>
                 </v-list-item>
                 <v-list-item class="px-0">
-                  <v-list-item-title class="text-caption text-medium-emphasis">Last Updated</v-list-item-title>
+                  <v-list-item-title class="text-caption text-medium-emphasis">
+                    Last Updated
+                  </v-list-item-title>
                   <v-list-item-subtitle>{{ formatDate(template.updatedAt) }}</v-list-item-subtitle>
                 </v-list-item>
               </v-list>
@@ -125,10 +176,18 @@
         </v-col>
 
         <!-- Device Compatibility -->
-        <v-col cols="12" md="8">
+        <v-col
+          cols="12"
+          md="8"
+        >
           <v-card class="mb-4">
             <v-card-title class="d-flex align-center">
-              <v-icon class="mr-3" color="info">mdi-devices</v-icon>
+              <v-icon
+                class="mr-3"
+                color="info"
+              >
+                mdi-devices
+              </v-icon>
               Compatible Device Types
             </v-card-title>
             <v-card-text>
@@ -149,30 +208,55 @@
           <!-- Network Configuration -->
           <v-card class="mb-4">
             <v-card-title class="d-flex align-center">
-              <v-icon class="mr-3" color="success">mdi-wifi</v-icon>
+              <v-icon
+                class="mr-3"
+                color="success"
+              >
+                mdi-wifi
+              </v-icon>
               Network Configuration
             </v-card-title>
             <v-card-text>
               <v-row>
-                <v-col cols="12" sm="6">
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">SSID</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      SSID
+                    </v-list-item-title>
                     <v-list-item-subtitle>
-                      <v-chip size="small" color="primary" variant="tonal">
+                      <v-chip
+                        size="small"
+                        color="primary"
+                        variant="tonal"
+                      >
                         {{ template.settings.network.ssid }}
                       </v-chip>
                     </v-list-item-subtitle>
                   </v-list-item>
                 </v-col>
-                <v-col cols="12" sm="6">
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Security Type</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Security Type
+                    </v-list-item-title>
                     <v-list-item-subtitle>{{ template.settings.network.securityType || template.settings.network.security || 'WPA2' }}</v-list-item-subtitle>
                   </v-list-item>
                 </v-col>
-                <v-col cols="12" sm="6" v-if="template.settings.network.autoConnect !== undefined">
+                <v-col
+                  v-if="template.settings.network.autoConnect !== undefined"
+                  cols="12"
+                  sm="6"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Auto Connect</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Auto Connect
+                    </v-list-item-title>
                     <v-list-item-subtitle>
                       <v-icon :color="template.settings.network.autoConnect ? 'success' : 'grey'">
                         {{ template.settings.network.autoConnect ? 'mdi-check' : 'mdi-close' }}
@@ -181,9 +265,15 @@
                     </v-list-item-subtitle>
                   </v-list-item>
                 </v-col>
-                <v-col cols="12" sm="6" v-if="template.settings.network.hidden !== undefined">
+                <v-col
+                  v-if="template.settings.network.hidden !== undefined"
+                  cols="12"
+                  sm="6"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Hidden Network</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Hidden Network
+                    </v-list-item-title>
                     <v-list-item-subtitle>
                       <v-icon :color="template.settings.network.hidden ? 'success' : 'grey'">
                         {{ template.settings.network.hidden ? 'mdi-check' : 'mdi-close' }}
@@ -199,38 +289,67 @@
           <!-- Security Settings -->
           <v-card class="mb-4">
             <v-card-title class="d-flex align-center">
-              <v-icon class="mr-3" color="warning">mdi-shield</v-icon>
+              <v-icon
+                class="mr-3"
+                color="warning"
+              >
+                mdi-shield
+              </v-icon>
               Security Settings
             </v-card-title>
             <v-card-text>
               <v-row>
-                <v-col cols="12" sm="4">
+                <v-col
+                  cols="12"
+                  sm="4"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Encryption</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Encryption
+                    </v-list-item-title>
                     <v-list-item-subtitle>
-                      <v-icon :color="template.settings.security.encryption ? 'success' : 'error'" class="mr-1">
+                      <v-icon
+                        :color="template.settings.security.encryption ? 'success' : 'error'"
+                        class="mr-1"
+                      >
                         {{ template.settings.security.encryption ? 'mdi-check-circle' : 'mdi-close-circle' }}
                       </v-icon>
                       {{ template.settings.security.encryption ? 'Enabled' : 'Disabled' }}
                     </v-list-item-subtitle>
                   </v-list-item>
                 </v-col>
-                <v-col cols="12" sm="4">
+                <v-col
+                  cols="12"
+                  sm="4"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Remote Wipe</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Remote Wipe
+                    </v-list-item-title>
                     <v-list-item-subtitle>
-                      <v-icon :color="template.settings.security.remoteWipe ? 'success' : 'error'" class="mr-1">
+                      <v-icon
+                        :color="template.settings.security.remoteWipe ? 'success' : 'error'"
+                        class="mr-1"
+                      >
                         {{ template.settings.security.remoteWipe ? 'mdi-check-circle' : 'mdi-close-circle' }}
                       </v-icon>
                       {{ template.settings.security.remoteWipe ? 'Enabled' : 'Disabled' }}
                     </v-list-item-subtitle>
                   </v-list-item>
                 </v-col>
-                <v-col cols="12" sm="4">
+                <v-col
+                  cols="12"
+                  sm="4"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">VPN</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      VPN
+                    </v-list-item-title>
                     <v-list-item-subtitle>
-                      <v-icon :color="template.settings.vpn?.enabled ? 'success' : 'error'" class="mr-1">
+                      <v-icon
+                        :color="template.settings.vpn?.enabled ? 'success' : 'error'"
+                        class="mr-1"
+                      >
                         {{ template.settings.vpn?.enabled ? 'mdi-check-circle' : 'mdi-close-circle' }}
                       </v-icon>
                       {{ template.settings.vpn?.enabled ? 'Enabled' : 'Disabled' }}
@@ -242,17 +361,30 @@
               <v-divider class="my-4" />
               
               <div v-if="template.settings.vpn?.enabled">
-                <h4 class="text-subtitle-1 mb-3">VPN Configuration</h4>
+                <h4 class="text-subtitle-1 mb-3">
+                  VPN Configuration
+                </h4>
                 <v-row>
-                  <v-col cols="12" sm="6">
+                  <v-col
+                    cols="12"
+                    sm="6"
+                  >
                     <v-list-item class="px-0">
-                      <v-list-item-title class="text-caption text-medium-emphasis">Server</v-list-item-title>
+                      <v-list-item-title class="text-caption text-medium-emphasis">
+                        Server
+                      </v-list-item-title>
                       <v-list-item-subtitle>{{ template.settings.vpn.server || 'Not configured' }}</v-list-item-subtitle>
                     </v-list-item>
                   </v-col>
-                  <v-col cols="12" sm="6" v-if="template.settings.vpn?.protocol">
+                  <v-col
+                    v-if="template.settings.vpn?.protocol"
+                    cols="12"
+                    sm="6"
+                  >
                     <v-list-item class="px-0">
-                      <v-list-item-title class="text-caption text-medium-emphasis">Protocol</v-list-item-title>
+                      <v-list-item-title class="text-caption text-medium-emphasis">
+                        Protocol
+                      </v-list-item-title>
                       <v-list-item-subtitle>{{ template.settings.vpn.protocol || 'OpenVPN' }}</v-list-item-subtitle>
                     </v-list-item>
                   </v-col>
@@ -264,7 +396,12 @@
           <!-- Application Settings -->
           <v-card v-if="template.settings.applications?.length || template.settings.apps?.required?.length">
             <v-card-title class="d-flex align-center">
-              <v-icon class="mr-3" color="purple">mdi-apps</v-icon>
+              <v-icon
+                class="mr-3"
+                color="purple"
+              >
+                mdi-apps
+              </v-icon>
               Application Configuration
             </v-card-title>
             <v-card-text>
@@ -294,22 +431,39 @@
     />
 
     <!-- Delete Confirmation Dialog -->
-    <v-dialog v-model="showDeleteDialog" max-width="500px">
+    <v-dialog
+      v-model="showDeleteDialog"
+      max-width="500px"
+    >
       <v-card>
         <v-card-title class="d-flex align-center">
-          <v-icon class="mr-3" color="error">mdi-delete-alert</v-icon>
+          <v-icon
+            class="mr-3"
+            color="error"
+          >
+            mdi-delete-alert
+          </v-icon>
           Delete Template
         </v-card-title>
         <v-card-text>
           <p>Are you sure you want to delete <strong>{{ template?.name }}</strong>?</p>
-          <p class="text-body-2 text-medium-emphasis">This action cannot be undone.</p>
+          <p class="text-body-2 text-medium-emphasis">
+            This action cannot be undone.
+          </p>
         </v-card-text>
         <v-card-actions>
-          <v-btn variant="outlined" @click="showDeleteDialog = false">
+          <v-btn
+            variant="outlined"
+            @click="showDeleteDialog = false"
+          >
             Cancel
           </v-btn>
           <v-spacer />
-          <v-btn color="error" :loading="deleting" @click="confirmDelete">
+          <v-btn
+            color="error"
+            :loading="deleting"
+            @click="confirmDelete"
+          >
             Delete
           </v-btn>
         </v-card-actions>

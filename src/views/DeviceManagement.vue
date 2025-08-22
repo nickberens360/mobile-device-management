@@ -1,6 +1,8 @@
 <template>
   <v-container fluid>
-    <h1 class="text-h4 mb-2">Device Management</h1>
+    <h1 class="text-h4 mb-2">
+      Device Management
+    </h1>
     <p class="text-body-1 text-medium-emphasis mb-6">
       View and manage all networked devices including iPads, laptops, and mobile phones across NBC Universal locations. Monitor device status and perform individual actions.
     </p>
@@ -10,7 +12,7 @@
         All Devices
         <v-spacer />
         <v-menu v-if="selectedDevices.length > 0">
-          <template v-slot:activator="{ props }">
+          <template #activator="{ props }">
             <v-btn
               v-bind="props"
               color="secondary"
@@ -22,19 +24,19 @@
           </template>
           <v-list>
             <v-list-item @click="bulkConfigure">
-              <template v-slot:prepend>
+              <template #prepend>
                 <v-icon>mdi-cog</v-icon>
               </template>
               <v-list-item-title>Configure Devices</v-list-item-title>
             </v-list-item>
             <v-list-item @click="bulkUpdateStatus">
-              <template v-slot:prepend>
+              <template #prepend>
                 <v-icon>mdi-sync</v-icon>
               </template>
               <v-list-item-title>Update Status</v-list-item-title>
             </v-list-item>
             <v-list-item @click="clearSelection">
-              <template v-slot:prepend>
+              <template #prepend>
                 <v-icon>mdi-close</v-icon>
               </template>
               <v-list-item-title>Clear Selection</v-list-item-title>
@@ -44,8 +46,8 @@
         <v-btn
           color="primary"
           prepend-icon="mdi-refresh"
-          @click="refreshDevices"
           :loading="loading"
+          @click="refreshDevices"
         >
           Refresh
         </v-btn>
@@ -63,10 +65,13 @@
         >
           Showing devices that need attention (Offline or Error status)
         </v-alert>
-        
+
         <!-- Filters -->
         <v-row class="mb-4">
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-select
               v-model="filters.location"
               :items="locationOptions"
@@ -79,7 +84,10 @@
               @update:model-value="applyFilters"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-select
               v-model="filters.type"
               :items="deviceTypeOptions"
@@ -92,7 +100,10 @@
               @update:model-value="applyFilters"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-select
               v-model="filters.status"
               :items="statusFilterOptions"
@@ -105,7 +116,10 @@
               @update:model-value="() => { filters.showAttention = false; applyFilters(); }"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-text-field
               v-model="filters.search"
               label="Search devices"
@@ -131,7 +145,7 @@
           item-value="id"
           @update:options="handleTableOptions"
         >
-          <template v-slot:item.status="{ item }">
+          <template #item.status="{ item }">
             <v-chip
               :color="getStatusColor(item.status)"
               size="small"
@@ -141,28 +155,25 @@
             </v-chip>
           </template>
 
-          <template v-slot:item.type="{ item }">
-            <v-chip size="small" variant="outlined">
+          <template #item.type="{ item }">
+            <v-chip
+              size="small"
+              variant="outlined"
+            >
               {{ item.type.replace('_', ' ') }}
             </v-chip>
           </template>
 
-          <template v-slot:item.location="{ item }">
+          <template #item.location="{ item }">
             <span>{{ getLocationName(item.location) }}</span>
           </template>
 
-          <template v-slot:item.metadata.lastSeen="{ item }">
+          <template #item.metadata.lastSeen="{ item }">
             <span>{{ formatDate(item.metadata.lastSeen) }}</span>
           </template>
 
-          <template v-slot:item.actions="{ item }">
+          <template #item.actions="{ item }">
             <div class="d-flex align-center">
-              <v-btn
-                icon="mdi-eye"
-                size="small"
-                variant="text"
-                @click="viewDevice(item)"
-              />
               <v-btn
                 icon="mdi-cog"
                 size="small"
@@ -174,7 +185,6 @@
         </v-data-table>
       </v-card-text>
     </v-card>
-
   </v-container>
 </template>
 

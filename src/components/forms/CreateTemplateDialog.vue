@@ -6,7 +6,12 @@
   >
     <v-card>
       <v-card-title class="d-flex align-center">
-        <v-icon class="mr-3" color="primary">mdi-plus-circle</v-icon>
+        <v-icon
+          class="mr-3"
+          color="primary"
+        >
+          mdi-plus-circle
+        </v-icon>
         {{ isEditMode ? 'Edit Template' : 'Create New Template' }}
         <v-spacer />
         <v-btn
@@ -17,15 +22,23 @@
       </v-card-title>
 
       <v-card-text>
-        <v-form ref="formRef" v-model="isFormValid">
+        <v-form
+          ref="formRef"
+          v-model="isFormValid"
+        >
           <v-row>
             <!-- Basic Information -->
             <v-col cols="12">
               <v-card variant="outlined">
-                <v-card-title class="text-h6">Basic Information</v-card-title>
+                <v-card-title class="text-h6">
+                  Basic Information
+                </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
                         v-model="formData.name"
                         label="Template Name"
@@ -35,7 +48,10 @@
                         placeholder="e.g., Production Crew - Universal Studios"
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
                         v-model="formData.createdBy"
                         label="Created By"
@@ -80,12 +96,17 @@
             <v-col cols="12">
               <v-card variant="outlined">
                 <v-card-title class="text-h6">
-                  <v-icon class="mr-2">mdi-wifi</v-icon>
+                  <v-icon class="mr-2">
+                    mdi-wifi
+                  </v-icon>
                   Network Settings
                 </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="4">
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
                       <v-text-field
                         v-model="formData.settings.network.ssid"
                         label="WiFi SSID"
@@ -95,7 +116,10 @@
                         placeholder="NETWORK_NAME"
                       />
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
                       <v-select
                         v-model="formData.settings.network.security"
                         :items="securityOptions"
@@ -106,7 +130,10 @@
                         prepend-inner-icon="mdi-shield"
                       />
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
                       <v-text-field
                         v-model.number="formData.settings.network.vlan"
                         label="VLAN ID"
@@ -126,26 +153,35 @@
             <v-col cols="12">
               <v-card variant="outlined">
                 <v-card-title class="text-h6">
-                  <v-icon class="mr-2">mdi-vpn</v-icon>
+                  <v-icon class="mr-2">
+                    mdi-vpn
+                  </v-icon>
                   VPN Settings
                 </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-switch
-                        v-model="formData.settings.vpn.enabled"
+                        v-model="formData.settings.vpn!.enabled"
                         label="Enable VPN Connection"
                         color="primary"
                         inset
                       />
                     </v-col>
-                    <v-col cols="12" md="6" v-if="formData.settings.vpn.enabled">
+                    <v-col
+                      v-if="formData.settings.vpn?.enabled"
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
-                        v-model="formData.settings.vpn.server"
+                        v-model="formData.settings.vpn!.server"
                         label="VPN Server"
                         variant="outlined"
                         prepend-inner-icon="mdi-server"
-                        :rules="formData.settings.vpn.enabled ? [rules.required] : []"
+                        :rules="formData.settings.vpn?.enabled ? [rules.required] : []"
                         placeholder="vpn.nbcuni.com"
                       />
                     </v-col>
@@ -158,12 +194,17 @@
             <v-col cols="12">
               <v-card variant="outlined">
                 <v-card-title class="text-h6">
-                  <v-icon class="mr-2">mdi-security</v-icon>
+                  <v-icon class="mr-2">
+                    mdi-security
+                  </v-icon>
                   Security Settings
                 </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="4">
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
                       <v-select
                         v-model="formData.settings.security.passcode"
                         :items="passcodeOptions"
@@ -174,7 +215,10 @@
                         prepend-inner-icon="mdi-lock"
                       />
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
                       <v-switch
                         v-model="formData.settings.security.encryption"
                         label="Enable Device Encryption"
@@ -182,7 +226,10 @@
                         inset
                       />
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
                       <v-switch
                         v-model="formData.settings.security.remoteWipe"
                         label="Enable Remote Wipe"
@@ -199,14 +246,19 @@
             <v-col cols="12">
               <v-card variant="outlined">
                 <v-card-title class="text-h6">
-                  <v-icon class="mr-2">mdi-application</v-icon>
+                  <v-icon class="mr-2">
+                    mdi-application
+                  </v-icon>
                   App Management
                 </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-combobox
-                        v-model="formData.settings.apps.required"
+                        v-model="formData.settings.apps!.required"
                         label="Required Apps"
                         variant="outlined"
                         prepend-inner-icon="mdi-check"
@@ -217,9 +269,12 @@
                         persistent-hint
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-combobox
-                        v-model="formData.settings.apps.blocked"
+                        v-model="formData.settings.apps!.blocked"
                         label="Blocked Apps"
                         variant="outlined"
                         prepend-inner-icon="mdi-block-helper"
@@ -371,11 +426,11 @@ const loadDuplicateData = () => {
       deviceTypes: [...props.duplicateTemplate.deviceTypes],
       settings: {
         network: { ...props.duplicateTemplate.settings.network },
-        vpn: { ...props.duplicateTemplate.settings.vpn },
-        apps: {
+        vpn: props.duplicateTemplate.settings.vpn ? { ...props.duplicateTemplate.settings.vpn } : { enabled: false, server: '', protocol: '' },
+        apps: props.duplicateTemplate.settings.apps ? {
           required: [...props.duplicateTemplate.settings.apps.required],
           blocked: [...props.duplicateTemplate.settings.apps.blocked]
-        },
+        } : { required: [], blocked: [] },
         security: { ...props.duplicateTemplate.settings.security }
       }
     };

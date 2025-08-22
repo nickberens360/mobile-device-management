@@ -12,7 +12,7 @@
         class="notification-item mb-2"
         @click:close="removeNotification(notification.id)"
       >
-        <template v-slot:prepend>
+        <template #prepend>
           <v-icon>
             {{ getNotificationIcon(notification.type) }}
           </v-icon>

@@ -6,7 +6,10 @@
     description="A dialog component for viewing detailed device information including status, configuration, and management actions."
   >
     <div>
-      <v-btn @click="openDialog" color="primary">
+      <v-btn
+        color="primary"
+        @click="openDialog"
+      >
         Open Device Details
       </v-btn>
       <DeviceDetailsDialog

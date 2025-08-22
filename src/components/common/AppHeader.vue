@@ -31,7 +31,7 @@
     <v-btn icon="mdi-bell-outline" />
 
     <v-menu>
-      <template v-slot:activator="{ props }">
+      <template #activator="{ props }">
         <v-btn
           icon="mdi-account-circle"
           v-bind="props"

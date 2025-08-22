@@ -6,7 +6,12 @@
   >
     <v-card v-if="template">
       <v-card-title class="d-flex align-center">
-        <v-icon class="mr-3" color="primary">mdi-file-document-multiple</v-icon>
+        <v-icon
+          class="mr-3"
+          color="primary"
+        >
+          mdi-file-document-multiple
+        </v-icon>
         Template Details
         <v-spacer />
         <v-btn
@@ -17,15 +22,23 @@
       </v-card-title>
 
       <v-card-text>
-        <v-form ref="formRef" v-model="isFormValid">
+        <v-form
+          ref="formRef"
+          v-model="isFormValid"
+        >
           <v-row>
             <!-- Basic Information -->
             <v-col cols="12">
               <v-card variant="outlined">
-                <v-card-title class="text-h6">Basic Information</v-card-title>
+                <v-card-title class="text-h6">
+                  Basic Information
+                </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
                         v-model="formData.name"
                         label="Template Name"
@@ -35,7 +48,10 @@
                         :readonly="!isEditing"
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
                         v-model="formData.createdBy"
                         label="Created By"
@@ -77,12 +93,17 @@
             <v-col cols="12">
               <v-card variant="outlined">
                 <v-card-title class="text-h6">
-                  <v-icon class="mr-2">mdi-wifi</v-icon>
+                  <v-icon class="mr-2">
+                    mdi-wifi
+                  </v-icon>
                   Network Settings
                 </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="4">
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
                       <v-text-field
                         v-model="formData.settings.network.ssid"
                         label="WiFi SSID"
@@ -91,7 +112,10 @@
                         :readonly="!isEditing"
                       />
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
                       <v-select
                         v-model="formData.settings.network.security"
                         :items="['WPA2', 'WPA3']"
@@ -101,7 +125,10 @@
                         :readonly="!isEditing"
                       />
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
                       <v-text-field
                         v-model.number="formData.settings.network.vlan"
                         label="VLAN ID"
@@ -120,22 +147,31 @@
             <v-col cols="12">
               <v-card variant="outlined">
                 <v-card-title class="text-h6">
-                  <v-icon class="mr-2">mdi-vpn</v-icon>
+                  <v-icon class="mr-2">
+                    mdi-vpn
+                  </v-icon>
                   VPN Settings
                 </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-switch
-                        v-model="formData.settings.vpn.enabled"
+                        v-model="formData.settings.vpn!.enabled"
                         label="Enable VPN"
                         color="primary"
                         :readonly="!isEditing"
                       />
                     </v-col>
-                    <v-col cols="12" md="6" v-if="formData.settings.vpn.enabled">
+                    <v-col
+                      v-if="formData.settings.vpn?.enabled"
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
-                        v-model="formData.settings.vpn.server"
+                        v-model="formData.settings.vpn!.server"
                         label="VPN Server"
                         variant="outlined"
                         prepend-inner-icon="mdi-server"
@@ -151,12 +187,17 @@
             <v-col cols="12">
               <v-card variant="outlined">
                 <v-card-title class="text-h6">
-                  <v-icon class="mr-2">mdi-security</v-icon>
+                  <v-icon class="mr-2">
+                    mdi-security
+                  </v-icon>
                   Security Settings
                 </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="4">
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
                       <v-select
                         v-model="formData.settings.security.passcode"
                         :items="passcodeOptions"
@@ -168,7 +209,10 @@
                         :readonly="!isEditing"
                       />
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
                       <v-switch
                         v-model="formData.settings.security.encryption"
                         label="Enable Encryption"
@@ -176,7 +220,10 @@
                         :readonly="!isEditing"
                       />
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
                       <v-switch
                         v-model="formData.settings.security.remoteWipe"
                         label="Enable Remote Wipe"
@@ -193,14 +240,19 @@
             <v-col cols="12">
               <v-card variant="outlined">
                 <v-card-title class="text-h6">
-                  <v-icon class="mr-2">mdi-application</v-icon>
+                  <v-icon class="mr-2">
+                    mdi-application
+                  </v-icon>
                   App Management
                 </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-combobox
-                        v-model="formData.settings.apps.required"
+                        v-model="formData.settings.apps!.required"
                         label="Required Apps"
                         variant="outlined"
                         prepend-inner-icon="mdi-check"
@@ -209,9 +261,12 @@
                         :readonly="!isEditing"
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-combobox
-                        v-model="formData.settings.apps.blocked"
+                        v-model="formData.settings.apps!.blocked"
                         label="Blocked Apps"
                         variant="outlined"
                         prepend-inner-icon="mdi-block-helper"
@@ -228,10 +283,15 @@
             <!-- Metadata -->
             <v-col cols="12">
               <v-card variant="outlined">
-                <v-card-title class="text-h6">Template Metadata</v-card-title>
+                <v-card-title class="text-h6">
+                  Template Metadata
+                </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
                         :model-value="formatDate(template.createdAt)"
                         label="Created At"
@@ -240,7 +300,10 @@
                         readonly
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
                         :model-value="formatDate(template.updatedAt)"
                         label="Last Updated"
@@ -413,11 +476,11 @@ const loadTemplateData = () => {
       deviceTypes: [...props.template.deviceTypes],
       settings: {
         network: { ...props.template.settings.network },
-        vpn: { ...props.template.settings.vpn },
-        apps: {
+        vpn: props.template.settings.vpn ? { ...props.template.settings.vpn } : { enabled: false, server: '', protocol: '' },
+        apps: props.template.settings.apps ? {
           required: [...props.template.settings.apps.required],
           blocked: [...props.template.settings.apps.blocked]
-        },
+        } : { required: [], blocked: [] },
         security: { ...props.template.settings.security }
       }
     };

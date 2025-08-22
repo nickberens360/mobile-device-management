@@ -1,12 +1,18 @@
 <template>
   <v-container fluid>
-    <h1 class="text-h4 mb-2">Dashboard</h1>
+    <h1 class="text-h4 mb-2">
+      Dashboard
+    </h1>
     <p class="text-body-1 text-medium-emphasis mb-6">
       Overview of all NBC Universal devices, locations, and recent configuration activities across film sets, theme parks, and corporate offices.
     </p>
 
     <v-row>
-      <v-col cols="12" sm="6" md="3">
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+      >
         <StatsCard
           title="Total Devices"
           :value="totalDevices"
@@ -18,7 +24,11 @@
         />
       </v-col>
 
-      <v-col cols="12" sm="6" md="3">
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+      >
         <StatsCard
           title="Online Devices"
           :value="onlineDevices"
@@ -30,7 +40,11 @@
         />
       </v-col>
 
-      <v-col cols="12" sm="6" md="3">
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+      >
         <StatsCard
           title="Locations"
           :value="totalLocations"
@@ -43,7 +57,11 @@
         />
       </v-col>
 
-      <v-col cols="12" sm="6" md="3">
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+      >
         <StatsCard
           title="Device Exceptions"
           :value="devicesNeedingAttention"
@@ -58,7 +76,11 @@
 
     <!-- Additional Metrics Row -->
     <v-row class="mt-4">
-      <v-col cols="12" sm="6" md="3">
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+      >
         <StatsCard
           title="Templates"
           :value="totalTemplates"
@@ -69,7 +91,11 @@
           @action-click="$router.push('/templates')"
         />
       </v-col>
-      <v-col cols="12" sm="6" md="3">
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+      >
         <StatsCard
           title="Recent Configs"
           :value="recentConfigurations"
@@ -80,7 +106,11 @@
           @action-click="$router.push('/configure')"
         />
       </v-col>
-      <v-col cols="12" sm="6" md="3">
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+      >
         <StatsCard
           title="Uptime"
           :value="systemUptime"
@@ -92,7 +122,11 @@
           @action-click="$router.push('/history')"
         />
       </v-col>
-      <v-col cols="12" sm="6" md="3">
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+      >
         <StatsCard
           title="Active Users"
           :value="activeUsers"
@@ -106,7 +140,10 @@
     </v-row>
 
     <v-row class="mt-4">
-      <v-col cols="12" md="8">
+      <v-col
+        cols="12"
+        md="8"
+      >
         <v-card>
           <v-card-title>Recent Configuration Activities</v-card-title>
           <v-card-text>
@@ -121,7 +158,10 @@
         </v-card>
       </v-col>
 
-      <v-col cols="12" md="4">
+      <v-col
+        cols="12"
+        md="4"
+      >
         <v-card>
           <v-card-title>Quick Actions</v-card-title>
           <v-card-text>

@@ -5,7 +5,7 @@
       :items="breadcrumbItems"
       class="px-0"
     >
-      <template v-slot:item="{ item }">
+      <template #item="{ item }">
         <v-breadcrumbs-item
           :to="item.to"
           :disabled="item.disabled"
@@ -13,20 +13,43 @@
           {{ item.title }}
         </v-breadcrumbs-item>
       </template>
-      <template v-slot:divider>
+      <template #divider>
         <v-icon>mdi-chevron-right</v-icon>
       </template>
     </v-breadcrumbs>
 
-    <div v-if="loading" class="d-flex justify-center">
-      <v-progress-circular indeterminate color="primary" size="64" />
+    <div
+      v-if="loading"
+      class="d-flex justify-center"
+    >
+      <v-progress-circular
+        indeterminate
+        color="primary"
+        size="64"
+      />
     </div>
 
-    <div v-else-if="!location" class="text-center">
-      <v-icon size="64" color="grey">mdi-alert</v-icon>
-      <h2 class="text-h4 mt-4">Location Not Found</h2>
-      <p class="text-body-1 text-medium-emphasis">The requested location could not be found.</p>
-      <v-btn color="primary" :to="'/locations'" class="mt-4">
+    <div
+      v-else-if="!location"
+      class="text-center"
+    >
+      <v-icon
+        size="64"
+        color="grey"
+      >
+        mdi-alert
+      </v-icon>
+      <h2 class="text-h4 mt-4">
+        Location Not Found
+      </h2>
+      <p class="text-body-1 text-medium-emphasis">
+        The requested location could not be found.
+      </p>
+      <v-btn
+        color="primary"
+        :to="'/locations'"
+        class="mt-4"
+      >
         Back to Locations
       </v-btn>
     </div>
@@ -35,7 +58,9 @@
       <!-- Header -->
       <div class="d-flex justify-space-between align-center mb-6">
         <div>
-          <h1 class="text-h4 mb-2">{{ location.name }}</h1>
+          <h1 class="text-h4 mb-2">
+            {{ location.name }}
+          </h1>
           <p class="text-body-1 text-medium-emphasis">
             {{ location.type.replace('_', ' ') }} • {{ location.address }}
           </p>
@@ -60,19 +85,30 @@
 
       <v-row>
         <!-- Location Information -->
-        <v-col cols="12" md="8">
+        <v-col
+          cols="12"
+          md="8"
+        >
           <v-card>
             <v-card-title class="d-flex align-center">
-              <v-icon class="mr-3" :color="getLocationTypeColor(location.type)">
+              <v-icon
+                class="mr-3"
+                :color="getLocationTypeColor(location.type)"
+              >
                 {{ getLocationTypeIcon(location.type) }}
               </v-icon>
               Location Information
             </v-card-title>
             <v-card-text>
               <v-row>
-                <v-col cols="12" sm="6">
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Type</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Type
+                    </v-list-item-title>
                     <v-list-item-subtitle>
                       <v-chip
                         :color="getLocationTypeColor(location.type)"
@@ -84,9 +120,14 @@
                     </v-list-item-subtitle>
                   </v-list-item>
                 </v-col>
-                <v-col cols="12" sm="6">
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Status</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Status
+                    </v-list-item-title>
                     <v-list-item-subtitle>
                       <v-chip
                         :color="getLocationStatusColor(location)"
@@ -100,13 +141,20 @@
                 </v-col>
                 <v-col cols="12">
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Address</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Address
+                    </v-list-item-title>
                     <v-list-item-subtitle>{{ location.address }}</v-list-item-subtitle>
                   </v-list-item>
                 </v-col>
-                <v-col cols="12" sm="6">
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Device Count</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Device Count
+                    </v-list-item-title>
                     <v-list-item-subtitle class="d-flex align-center">
                       <span class="text-h6 mr-2">{{ location.deviceCount }}</span>
                       <v-progress-circular
@@ -127,27 +175,30 @@
         </v-col>
 
         <!-- Quick Actions -->
-        <v-col cols="12" md="4">
+        <v-col
+          cols="12"
+          md="4"
+        >
           <v-card>
             <v-card-title>Quick Actions</v-card-title>
             <v-card-text class="pa-0">
               <v-list>
                 <v-list-item @click="editLocation">
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <v-icon>mdi-pencil</v-icon>
                   </template>
                   <v-list-item-title>Edit Location</v-list-item-title>
                   <v-list-item-subtitle>Update location information</v-list-item-subtitle>
                 </v-list-item>
                 <v-list-item @click="viewDevices">
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <v-icon>mdi-devices</v-icon>
                   </template>
                   <v-list-item-title>View Devices</v-list-item-title>
                   <v-list-item-subtitle>{{ location.deviceCount }} devices</v-list-item-subtitle>
                 </v-list-item>
                 <v-list-item @click="configureNetwork">
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <v-icon>mdi-wifi-settings</v-icon>
                   </template>
                   <v-list-item-title>Network Settings</v-list-item-title>
@@ -159,10 +210,19 @@
         </v-col>
 
         <!-- Active Productions -->
-        <v-col cols="12" md="6" v-if="location.activeProductions?.length">
+        <v-col
+          v-if="location.activeProductions?.length"
+          cols="12"
+          md="6"
+        >
           <v-card>
             <v-card-title class="d-flex align-center">
-              <v-icon class="mr-3" color="success">mdi-movie</v-icon>
+              <v-icon
+                class="mr-3"
+                color="success"
+              >
+                mdi-movie
+              </v-icon>
               Active Productions
             </v-card-title>
             <v-card-text>
@@ -182,10 +242,18 @@
         </v-col>
 
         <!-- Network Profiles -->
-        <v-col cols="12" :md="location.activeProductions?.length ? 6 : 12">
+        <v-col
+          cols="12"
+          :md="location.activeProductions?.length ? 6 : 12"
+        >
           <v-card>
             <v-card-title class="d-flex align-center">
-              <v-icon class="mr-3" color="info">mdi-wifi</v-icon>
+              <v-icon
+                class="mr-3"
+                color="info"
+              >
+                mdi-wifi
+              </v-icon>
               Network Profiles
               <v-spacer />
               <v-btn
@@ -209,9 +277,19 @@
                   {{ profile }}
                 </v-chip>
               </div>
-              <div v-if="location.networkProfiles.length === 0" class="text-center text-medium-emphasis py-4">
-                <v-icon size="48" color="grey">mdi-wifi-off</v-icon>
-                <p class="mt-2">No network profiles configured</p>
+              <div
+                v-if="location.networkProfiles.length === 0"
+                class="text-center text-medium-emphasis py-4"
+              >
+                <v-icon
+                  size="48"
+                  color="grey"
+                >
+                  mdi-wifi-off
+                </v-icon>
+                <p class="mt-2">
+                  No network profiles configured
+                </p>
               </div>
             </v-card-text>
           </v-card>

@@ -1,5 +1,8 @@
 <template>
-  <v-container class="d-flex justify-center align-center" :style="{ minHeight }">
+  <v-container
+    class="d-flex justify-center align-center"
+    :style="{ minHeight }"
+  >
     <v-progress-circular
       :size="size"
       :width="width"

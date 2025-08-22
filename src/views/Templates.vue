@@ -2,7 +2,9 @@
   <v-container fluid>
     <div class="d-flex justify-space-between align-start mb-6">
       <div>
-        <h1 class="text-h4 mb-2">Configuration Templates</h1>
+        <h1 class="text-h4 mb-2">
+          Configuration Templates
+        </h1>
         <p class="text-body-1 text-medium-emphasis">
           Pre-defined configuration templates for different scenarios including film production, theme parks, corporate offices, and media events.
         </p>
@@ -21,7 +23,7 @@
         Configuration Templates
         <v-spacer />
         <v-menu v-if="selectedTemplates.length > 0">
-          <template v-slot:activator="{ props }">
+          <template #activator="{ props }">
             <v-btn
               v-bind="props"
               color="secondary"
@@ -33,19 +35,19 @@
           </template>
           <v-list>
             <v-list-item @click="bulkDuplicate">
-              <template v-slot:prepend>
+              <template #prepend>
                 <v-icon>mdi-content-copy</v-icon>
               </template>
               <v-list-item-title>Duplicate Templates</v-list-item-title>
             </v-list-item>
             <v-list-item @click="bulkDelete">
-              <template v-slot:prepend>
+              <template #prepend>
                 <v-icon>mdi-delete</v-icon>
               </template>
               <v-list-item-title>Delete Templates</v-list-item-title>
             </v-list-item>
             <v-list-item @click="clearSelection">
-              <template v-slot:prepend>
+              <template #prepend>
                 <v-icon>mdi-close</v-icon>
               </template>
               <v-list-item-title>Clear Selection</v-list-item-title>
@@ -55,9 +57,9 @@
         <v-btn
           color="primary"
           prepend-icon="mdi-refresh"
-          @click="refreshTemplates"
           :loading="loading"
           class="mr-2"
+          @click="refreshTemplates"
         >
           Refresh
         </v-btn>
@@ -66,7 +68,10 @@
       <v-card-text>
         <!-- Filters -->
         <v-row class="mb-4">
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-select
               v-model="filters.deviceType"
               :items="deviceTypeFilterOptions"
@@ -79,7 +84,10 @@
               @update:model-value="applyFilters"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-select
               v-model="filters.createdBy"
               :items="createdByOptions"
@@ -90,7 +98,10 @@
               @update:model-value="applyFilters"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-select
               v-model="filters.securityLevel"
               :items="securityLevelOptions"
@@ -103,7 +114,10 @@
               @update:model-value="applyFilters"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-text-field
               v-model="filters.search"
               label="Search templates"
@@ -129,11 +143,18 @@
           item-value="id"
           @update:options="handleTableOptions"
         >
-          <template v-slot:item.name="{ item }">
+          <template #item.name="{ item }">
             <div class="d-flex align-center">
-              <v-icon class="mr-2" color="primary">mdi-file-document</v-icon>
+              <v-icon
+                class="mr-2"
+                color="primary"
+              >
+                mdi-file-document
+              </v-icon>
               <div>
-                <div class="font-weight-medium">{{ item.name }}</div>
+                <div class="font-weight-medium">
+                  {{ item.name }}
+                </div>
                 <div class="text-caption text-medium-emphasis">
                   {{ item.description }}
                 </div>
@@ -141,7 +162,7 @@
             </div>
           </template>
 
-          <template v-slot:item.deviceTypes="{ item }">
+          <template #item.deviceTypes="{ item }">
             <div class="d-flex flex-wrap ga-1">
               <v-chip
                 v-for="deviceType in item.deviceTypes.slice(0, 2)"
@@ -161,13 +182,17 @@
             </div>
           </template>
 
-          <template v-slot:item.settings.network.ssid="{ item }">
-            <v-chip size="small" color="primary" variant="tonal">
+          <template #item.settings.network.ssid="{ item }">
+            <v-chip
+              size="small"
+              color="primary"
+              variant="tonal"
+            >
               {{ item.settings.network.ssid }}
             </v-chip>
           </template>
 
-          <template v-slot:item.security="{ item }">
+          <template #item.security="{ item }">
             <div class="d-flex align-center">
               <v-icon
                 size="small"
@@ -192,23 +217,26 @@
             </div>
           </template>
 
-          <template v-slot:item.version="{ item }">
-            <v-chip size="small" variant="outlined">
+          <template #item.version="{ item }">
+            <v-chip
+              size="small"
+              variant="outlined"
+            >
               v{{ getTemplateVersion(item) }}
             </v-chip>
           </template>
 
-          <template v-slot:item.updatedAt="{ item }">
+          <template #item.updatedAt="{ item }">
             <span>{{ formatDate(item.updatedAt) }}</span>
           </template>
 
-          <template v-slot:item.createdBy="{ item }">
+          <template #item.createdBy="{ item }">
             <span>{{ item.createdBy }}</span>
           </template>
 
-          <template v-slot:item.actions="{ item }">
+          <template #item.actions="{ item }">
             <v-menu>
-              <template v-slot:activator="{ props }">
+              <template #activator="{ props }">
                 <v-btn
                   icon="mdi-dots-vertical"
                   size="small"
@@ -218,33 +246,35 @@
               </template>
               <v-list>
                 <v-list-item @click="openTemplateDialog(item)">
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <v-icon>mdi-eye</v-icon>
                   </template>
                   <v-list-item-title>View Details</v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="editTemplate(item)">
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <v-icon>mdi-pencil</v-icon>
                   </template>
                   <v-list-item-title>Edit</v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="duplicateTemplateAction(item)">
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <v-icon>mdi-content-copy</v-icon>
                   </template>
                   <v-list-item-title>Duplicate</v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="useTemplate(item)">
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <v-icon>mdi-play</v-icon>
                   </template>
                   <v-list-item-title>Use Template</v-list-item-title>
                 </v-list-item>
                 <v-divider />
                 <v-list-item @click="deleteTemplate(item)">
-                  <template v-slot:prepend>
-                    <v-icon color="error">mdi-delete</v-icon>
+                  <template #prepend>
+                    <v-icon color="error">
+                      mdi-delete
+                    </v-icon>
                   </template>
                   <v-list-item-title>Delete</v-list-item-title>
                 </v-list-item>

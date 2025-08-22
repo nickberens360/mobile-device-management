@@ -6,6 +6,7 @@ export interface Device {
   status: DeviceStatus;
   currentConfig: DeviceConfiguration | null;
   metadata: DeviceMetadata;
+  serialNumber: string;
 }
 
 export enum DeviceType {
@@ -23,6 +24,7 @@ export enum DeviceStatus {
 }
 
 export interface DeviceConfiguration {
+  id: string;
   template: string;
   appliedAt: string;
   appliedBy: string;

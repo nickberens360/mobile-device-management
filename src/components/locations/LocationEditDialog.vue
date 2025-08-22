@@ -6,7 +6,10 @@
   >
     <v-card>
       <v-card-title class="d-flex align-center">
-        <v-icon class="mr-3" color="primary">
+        <v-icon
+          class="mr-3"
+          color="primary"
+        >
           {{ isCreating ? 'mdi-plus-circle' : 'mdi-pencil' }}
         </v-icon>
         {{ isCreating ? 'Create New Location' : 'Edit Location' }}
@@ -19,15 +22,23 @@
       </v-card-title>
 
       <v-card-text>
-        <v-form ref="formRef" v-model="isFormValid">
+        <v-form
+          ref="formRef"
+          v-model="isFormValid"
+        >
           <v-row>
             <!-- Basic Information -->
             <v-col cols="12">
               <v-card variant="outlined">
-                <v-card-title class="text-h6">Basic Information</v-card-title>
+                <v-card-title class="text-h6">
+                  Basic Information
+                </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
                         v-model="formData.name"
                         label="Location Name"
@@ -37,7 +48,10 @@
                         placeholder="e.g., Universal Studios - Stage 12"
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-select
                         v-model="formData.type"
                         :items="locationTypeOptions"
@@ -69,7 +83,9 @@
             <v-col cols="12">
               <v-card variant="outlined">
                 <v-card-title class="text-h6">
-                  <v-icon class="mr-2">mdi-movie</v-icon>
+                  <v-icon class="mr-2">
+                    mdi-movie
+                  </v-icon>
                   Active Productions
                 </v-card-title>
                 <v-card-text>
@@ -91,7 +107,9 @@
             <v-col cols="12">
               <v-card variant="outlined">
                 <v-card-title class="text-h6">
-                  <v-icon class="mr-2">mdi-wifi</v-icon>
+                  <v-icon class="mr-2">
+                    mdi-wifi
+                  </v-icon>
                   Network Configuration
                 </v-card-title>
                 <v-card-text>
@@ -118,12 +136,17 @@
             <v-col cols="12">
               <v-card variant="outlined">
                 <v-card-title class="text-h6">
-                  <v-icon class="mr-2">mdi-devices</v-icon>
+                  <v-icon class="mr-2">
+                    mdi-devices
+                  </v-icon>
                   Device Information
                 </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
                         v-model.number="formData.deviceCount"
                         label="Current Device Count"
@@ -134,7 +157,10 @@
                         :rules="[rules.required, rules.nonNegative]"
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
                         v-model.number="formData.maxCapacity"
                         label="Maximum Device Capacity"
@@ -155,12 +181,17 @@
             <v-col cols="12">
               <v-card variant="outlined">
                 <v-card-title class="text-h6">
-                  <v-icon class="mr-2">mdi-information</v-icon>
+                  <v-icon class="mr-2">
+                    mdi-information
+                  </v-icon>
                   Additional Details
                 </v-card-title>
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
                         v-model="formData.contactPerson"
                         label="Contact Person"
@@ -169,7 +200,10 @@
                         placeholder="Location manager or primary contact"
                       />
                     </v-col>
-                    <v-col cols="12" md="6">
+                    <v-col
+                      cols="12"
+                      md="6"
+                    >
                       <v-text-field
                         v-model="formData.contactEmail"
                         label="Contact Email"

@@ -1,6 +1,8 @@
 <template>
   <v-container fluid>
-    <h1 class="text-h4 mb-2">Configuration History</h1>
+    <h1 class="text-h4 mb-2">
+      Configuration History
+    </h1>
     <p class="text-body-1 text-medium-emphasis mb-6">
       Track all device configuration changes, template updates, and system activities. View detailed logs with rollback capabilities for audit and troubleshooting.
     </p>
@@ -12,16 +14,16 @@
         <v-btn
           color="primary"
           prepend-icon="mdi-download"
-          @click="exportHistory"
           class="mr-2"
+          @click="exportHistory"
         >
           Export History
         </v-btn>
         <v-btn
           color="secondary"
           prepend-icon="mdi-refresh"
-          @click="refreshHistory"
           :loading="loading"
+          @click="refreshHistory"
         >
           Refresh
         </v-btn>
@@ -30,7 +32,10 @@
       <v-card-text>
         <!-- Filters -->
         <v-row class="mb-4">
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-select
               v-model="filters.status"
               :items="statusFilterOptions"
@@ -43,7 +48,10 @@
               @update:model-value="applyFilters"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-select
               v-model="filters.user"
               :items="userFilterOptions"
@@ -54,7 +62,10 @@
               @update:model-value="applyFilters"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-select
               v-model="filters.activityType"
               :items="activityTypeOptions"
@@ -67,7 +78,10 @@
               @update:model-value="applyFilters"
             />
           </v-col>
-          <v-col cols="12" md="3">
+          <v-col
+            cols="12"
+            md="3"
+          >
             <v-text-field
               v-model="filters.search"
               label="Search history"
@@ -85,16 +99,22 @@
             :dot-color="activity.color"
             size="small"
           >
-            <template v-slot:icon>
-              <v-icon :color="activity.color">{{ activity.icon }}</v-icon>
+            <template #icon>
+              <v-icon :color="activity.color">
+                {{ activity.icon }}
+              </v-icon>
             </template>
 
             <v-card variant="outlined">
               <v-card-text>
                 <div class="d-flex justify-space-between align-start mb-2">
                   <div>
-                    <div class="text-h6">{{ activity.title }}</div>
-                    <div class="text-body-2 text-medium-emphasis">{{ activity.description }}</div>
+                    <div class="text-h6">
+                      {{ activity.title }}
+                    </div>
+                    <div class="text-body-2 text-medium-emphasis">
+                      {{ activity.description }}
+                    </div>
                   </div>
                   <v-chip
                     :color="activity.statusColor"
@@ -106,15 +126,31 @@
                 </div>
 
                 <div class="d-flex align-center mt-2">
-                  <v-icon size="small" class="mr-1">mdi-account</v-icon>
+                  <v-icon
+                    size="small"
+                    class="mr-1"
+                  >
+                    mdi-account
+                  </v-icon>
                   <span class="text-caption mr-4">{{ activity.user }}</span>
 
-                  <v-icon size="small" class="mr-1">mdi-clock-outline</v-icon>
+                  <v-icon
+                    size="small"
+                    class="mr-1"
+                  >
+                    mdi-clock-outline
+                  </v-icon>
                   <span class="text-caption">{{ activity.timestamp }}</span>
                 </div>
 
-                <div v-if="activity.affectedDevices" class="mt-2">
-                  <v-chip size="small" variant="outlined">
+                <div
+                  v-if="activity.affectedDevices"
+                  class="mt-2"
+                >
+                  <v-chip
+                    size="small"
+                    variant="outlined"
+                  >
                     {{ activity.affectedDevices }} devices affected
                   </v-chip>
                 </div>
@@ -126,8 +162,8 @@
                   size="small"
                   variant="outlined"
                   prepend-icon="mdi-backup-restore"
-                  @click="rollbackConfiguration(activity)"
                   :loading="activity.rolling"
+                  @click="rollbackConfiguration(activity)"
                 >
                   Rollback
                 </v-btn>

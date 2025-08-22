@@ -2,17 +2,26 @@
   <v-list-item 
     :title="activity.title"
     :subtitle="activity.subtitle"
-    @click="handleClick"
     class="cursor-pointer"
     hover
+    @click="handleClick"
   >
-    <template v-slot:prepend>
-      <v-icon :color="activity.color">{{ activity.icon }}</v-icon>
+    <template #prepend>
+      <v-icon :color="activity.color">
+        {{ activity.icon }}
+      </v-icon>
     </template>
-    <template v-slot:append>
+    <template #append>
       <div class="d-flex align-center">
-        <v-list-item-subtitle class="mr-2">{{ activity.time }}</v-list-item-subtitle>
-        <v-icon size="small" color="primary">mdi-chevron-right</v-icon>
+        <v-list-item-subtitle class="mr-2">
+          {{ activity.time }}
+        </v-list-item-subtitle>
+        <v-icon
+          size="small"
+          color="primary"
+        >
+          mdi-chevron-right
+        </v-icon>
       </div>
     </template>
   </v-list-item>

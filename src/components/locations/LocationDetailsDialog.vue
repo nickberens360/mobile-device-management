@@ -5,7 +5,10 @@
   >
     <v-card v-if="location">
       <v-card-title class="d-flex align-center">
-        <v-icon class="mr-3" :color="getLocationTypeColor(location.type)">
+        <v-icon
+          class="mr-3"
+          :color="getLocationTypeColor(location.type)"
+        >
           {{ getLocationTypeIcon(location.type) }}
         </v-icon>
         {{ location.name }}
@@ -20,9 +23,14 @@
       <v-card-text>
         <v-row>
           <!-- Basic Information -->
-          <v-col cols="12" md="6">
+          <v-col
+            cols="12"
+            md="6"
+          >
             <v-card variant="outlined">
-              <v-card-title class="text-h6">Basic Information</v-card-title>
+              <v-card-title class="text-h6">
+                Basic Information
+              </v-card-title>
               <v-card-text>
                 <div class="mb-3">
                   <v-chip
@@ -30,18 +38,26 @@
                     size="large"
                     variant="tonal"
                   >
-                    <v-icon start>{{ getLocationTypeIcon(location.type) }}</v-icon>
+                    <v-icon start>
+                      {{ getLocationTypeIcon(location.type) }}
+                    </v-icon>
                     {{ location.type.replace('_', ' ') }}
                   </v-chip>
                 </div>
                 
                 <div class="mb-3">
-                  <div class="text-subtitle-2 mb-1">Address</div>
-                  <div class="text-body-1">{{ location.address }}</div>
+                  <div class="text-subtitle-2 mb-1">
+                    Address
+                  </div>
+                  <div class="text-body-1">
+                    {{ location.address }}
+                  </div>
                 </div>
 
                 <div class="mb-3">
-                  <div class="text-subtitle-2 mb-1">Status</div>
+                  <div class="text-subtitle-2 mb-1">
+                    Status
+                  </div>
                   <v-chip
                     :color="getLocationStatusColor(location)"
                     size="small"
@@ -55,20 +71,36 @@
           </v-col>
 
           <!-- Device Statistics -->
-          <v-col cols="12" md="6">
+          <v-col
+            cols="12"
+            md="6"
+          >
             <v-card variant="outlined">
-              <v-card-title class="text-h6">Device Statistics</v-card-title>
+              <v-card-title class="text-h6">
+                Device Statistics
+              </v-card-title>
               <v-card-text>
                 <div class="d-flex align-center mb-3">
-                  <v-icon color="primary" class="mr-2">mdi-devices</v-icon>
+                  <v-icon
+                    color="primary"
+                    class="mr-2"
+                  >
+                    mdi-devices
+                  </v-icon>
                   <div>
-                    <div class="text-h4">{{ location.deviceCount }}</div>
-                    <div class="text-caption text-medium-emphasis">Total Devices</div>
+                    <div class="text-h4">
+                      {{ location.deviceCount }}
+                    </div>
+                    <div class="text-caption text-medium-emphasis">
+                      Total Devices
+                    </div>
                   </div>
                 </div>
 
                 <div class="mb-3">
-                  <div class="text-subtitle-2 mb-2">Device Utilization</div>
+                  <div class="text-subtitle-2 mb-2">
+                    Device Utilization
+                  </div>
                   <v-progress-linear
                     :model-value="getDeviceUtilization(location.deviceCount)"
                     :color="getUtilizationColor(getDeviceUtilization(location.deviceCount))"
@@ -80,7 +112,12 @@
                 </div>
 
                 <div class="d-flex align-center">
-                  <v-icon color="info" class="mr-2">mdi-database</v-icon>
+                  <v-icon
+                    color="info"
+                    class="mr-2"
+                  >
+                    mdi-database
+                  </v-icon>
                   <span>Max Capacity: {{ getMaxCapacity(location) }}</span>
                 </div>
               </v-card-text>
@@ -88,10 +125,15 @@
           </v-col>
 
           <!-- Active Productions -->
-          <v-col cols="12" md="6">
+          <v-col
+            cols="12"
+            md="6"
+          >
             <v-card variant="outlined">
               <v-card-title class="text-h6">
-                <v-icon class="mr-2">mdi-movie</v-icon>
+                <v-icon class="mr-2">
+                  mdi-movie
+                </v-icon>
                 Active Productions
               </v-card-title>
               <v-card-text>
@@ -104,12 +146,19 @@
                     color="purple"
                     class="mr-1 mb-1"
                   >
-                    <v-icon start>mdi-movie</v-icon>
+                    <v-icon start>
+                      mdi-movie
+                    </v-icon>
                     {{ production }}
                   </v-chip>
                 </div>
-                <div v-else class="text-medium-emphasis">
-                  <v-icon class="mr-1">mdi-information-outline</v-icon>
+                <div
+                  v-else
+                  class="text-medium-emphasis"
+                >
+                  <v-icon class="mr-1">
+                    mdi-information-outline
+                  </v-icon>
                   No active productions
                 </div>
               </v-card-text>
@@ -117,10 +166,15 @@
           </v-col>
 
           <!-- Network Profiles -->
-          <v-col cols="12" md="6">
+          <v-col
+            cols="12"
+            md="6"
+          >
             <v-card variant="outlined">
               <v-card-title class="text-h6">
-                <v-icon class="mr-2">mdi-wifi</v-icon>
+                <v-icon class="mr-2">
+                  mdi-wifi
+                </v-icon>
                 Network Profiles
               </v-card-title>
               <v-card-text>
@@ -132,7 +186,9 @@
                     color="info"
                     variant="tonal"
                   >
-                    <v-icon start>mdi-wifi</v-icon>
+                    <v-icon start>
+                      mdi-wifi
+                    </v-icon>
                     {{ profile }}
                   </v-chip>
                 </div>
@@ -144,16 +200,32 @@
           <v-col cols="12">
             <v-card variant="outlined">
               <v-card-title class="text-h6">
-                <v-icon class="mr-2">mdi-chart-pie</v-icon>
+                <v-icon class="mr-2">
+                  mdi-chart-pie
+                </v-icon>
                 Device Breakdown
               </v-card-title>
               <v-card-text>
                 <v-row>
-                  <v-col cols="6" sm="3" v-for="stat in deviceBreakdown" :key="stat.type">
+                  <v-col
+                    v-for="stat in deviceBreakdown"
+                    :key="stat.type"
+                    cols="6"
+                    sm="3"
+                  >
                     <div class="text-center">
-                      <v-icon :color="stat.color" size="32">{{ stat.icon }}</v-icon>
-                      <div class="text-h6 mt-1">{{ stat.count }}</div>
-                      <div class="text-caption">{{ stat.type }}</div>
+                      <v-icon
+                        :color="stat.color"
+                        size="32"
+                      >
+                        {{ stat.icon }}
+                      </v-icon>
+                      <div class="text-h6 mt-1">
+                        {{ stat.count }}
+                      </div>
+                      <div class="text-caption">
+                        {{ stat.type }}
+                      </div>
                     </div>
                   </v-col>
                 </v-row>
@@ -165,7 +237,9 @@
           <v-col cols="12">
             <v-card variant="outlined">
               <v-card-title class="text-h6">
-                <v-icon class="mr-2">mdi-lightning-bolt</v-icon>
+                <v-icon class="mr-2">
+                  mdi-lightning-bolt
+                </v-icon>
                 Quick Actions
               </v-card-title>
               <v-card-text>
@@ -204,37 +278,65 @@
           </v-col>
 
           <!-- Additional Information (if available) -->
-          <v-col cols="12" v-if="hasAdditionalInfo">
+          <v-col
+            v-if="hasAdditionalInfo"
+            cols="12"
+          >
             <v-card variant="outlined">
               <v-card-title class="text-h6">
-                <v-icon class="mr-2">mdi-information</v-icon>
+                <v-icon class="mr-2">
+                  mdi-information
+                </v-icon>
                 Additional Information
               </v-card-title>
               <v-card-text>
                 <v-row>
-                  <v-col cols="12" md="6" v-if="(location as any).contactPerson">
+                  <v-col
+                    v-if="(location as any).contactPerson"
+                    cols="12"
+                    md="6"
+                  >
                     <div class="mb-2">
-                      <div class="text-subtitle-2 mb-1">Contact Person</div>
+                      <div class="text-subtitle-2 mb-1">
+                        Contact Person
+                      </div>
                       <div class="d-flex align-center">
-                        <v-icon class="mr-2">mdi-account</v-icon>
+                        <v-icon class="mr-2">
+                          mdi-account
+                        </v-icon>
                         <span>{{ (location as any).contactPerson }}</span>
                       </div>
                     </div>
                   </v-col>
-                  <v-col cols="12" md="6" v-if="(location as any).contactEmail">
+                  <v-col
+                    v-if="(location as any).contactEmail"
+                    cols="12"
+                    md="6"
+                  >
                     <div class="mb-2">
-                      <div class="text-subtitle-2 mb-1">Contact Email</div>
+                      <div class="text-subtitle-2 mb-1">
+                        Contact Email
+                      </div>
                       <div class="d-flex align-center">
-                        <v-icon class="mr-2">mdi-email</v-icon>
+                        <v-icon class="mr-2">
+                          mdi-email
+                        </v-icon>
                         <span>{{ (location as any).contactEmail }}</span>
                       </div>
                     </div>
                   </v-col>
-                  <v-col cols="12" v-if="(location as any).notes">
+                  <v-col
+                    v-if="(location as any).notes"
+                    cols="12"
+                  >
                     <div class="mb-2">
-                      <div class="text-subtitle-2 mb-1">Notes</div>
+                      <div class="text-subtitle-2 mb-1">
+                        Notes
+                      </div>
                       <div class="d-flex align-start">
-                        <v-icon class="mr-2 mt-1">mdi-note-text</v-icon>
+                        <v-icon class="mr-2 mt-1">
+                          mdi-note-text
+                        </v-icon>
                         <span>{{ (location as any).notes }}</span>
                       </div>
                     </div>

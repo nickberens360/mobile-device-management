@@ -6,12 +6,12 @@
     description="A versatile alert component for displaying informational, warning, success, or error messages with optional actions."
   >
     <AlertMessage
+      v-model="visible"
       :type="type"
       :title="title"
       :text="text"
       :closable="closable"
       :variant="variant"
-      v-model="visible"
     />
     <template #[`item.actions`]="{item}">
       <v-select

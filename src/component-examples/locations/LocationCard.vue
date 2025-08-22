@@ -64,11 +64,12 @@
 import { ref } from 'vue';
 import LocationCard from '@/components/locations/LocationCard.vue';
 import type { Location } from '@/types/location';
+import { LocationType } from '@/types/location';
 
 const location = ref<Location>({
   id: 'example-loc-1',
   name: 'Universal Studios - Stage 12',
-  type: 'Studio',
+  type: LocationType.BROADCAST_STUDIO,
   address: '100 Universal City Plaza, Universal City, CA',
   activeProductions: ['Jurassic World: Dominion'],
   deviceCount: 50,
@@ -80,11 +81,11 @@ const totalCount = ref(50);
 const showDetails = ref(true);
 
 const locationTypes = [
-  'Studio',
-  'Corporate Office',
-  'Theme Park',
-  'Production Set',
-  'Broadcast Center'
+  LocationType.BROADCAST_STUDIO,
+  LocationType.CORPORATE_OFFICE,
+  LocationType.THEME_PARK,
+  LocationType.FILM_SET,
+  LocationType.BROADCAST_STUDIO
 ];
 
 const propItems = [

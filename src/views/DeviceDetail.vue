@@ -5,7 +5,7 @@
       :items="breadcrumbItems"
       class="px-0"
     >
-      <template v-slot:item="{ item }">
+      <template #item="{ item }">
         <v-breadcrumbs-item
           :to="item.to"
           :disabled="item.disabled"
@@ -13,20 +13,43 @@
           {{ item.title }}
         </v-breadcrumbs-item>
       </template>
-      <template v-slot:divider>
+      <template #divider>
         <v-icon>mdi-chevron-right</v-icon>
       </template>
     </v-breadcrumbs>
 
-    <div v-if="loading" class="d-flex justify-center">
-      <v-progress-circular indeterminate color="primary" size="64" />
+    <div
+      v-if="loading"
+      class="d-flex justify-center"
+    >
+      <v-progress-circular
+        indeterminate
+        color="primary"
+        size="64"
+      />
     </div>
 
-    <div v-else-if="!device" class="text-center">
-      <v-icon size="64" color="grey">mdi-alert</v-icon>
-      <h2 class="text-h4 mt-4">Device Not Found</h2>
-      <p class="text-body-1 text-medium-emphasis">The requested device could not be found.</p>
-      <v-btn color="primary" :to="'/devices'" class="mt-4">
+    <div
+      v-else-if="!device"
+      class="text-center"
+    >
+      <v-icon
+        size="64"
+        color="grey"
+      >
+        mdi-alert
+      </v-icon>
+      <h2 class="text-h4 mt-4">
+        Device Not Found
+      </h2>
+      <p class="text-body-1 text-medium-emphasis">
+        The requested device could not be found.
+      </p>
+      <v-btn
+        color="primary"
+        :to="'/devices'"
+        class="mt-4"
+      >
         Back to Devices
       </v-btn>
     </div>
@@ -35,7 +58,9 @@
       <!-- Header -->
       <div class="d-flex justify-space-between align-center mb-6">
         <div>
-          <h1 class="text-h4 mb-2">{{ device.name }}</h1>
+          <h1 class="text-h4 mb-2">
+            {{ device.name }}
+          </h1>
           <p class="text-body-1 text-medium-emphasis">
             {{ device.type.replace('_', ' ') }} • {{ getLocationName(device.location) }}
           </p>
@@ -60,58 +85,101 @@
 
       <v-row>
         <!-- Device Information -->
-        <v-col cols="12" md="8">
+        <v-col
+          cols="12"
+          md="8"
+        >
           <v-card>
             <v-card-title class="d-flex align-center">
-              <v-icon class="mr-3" color="primary">mdi-devices</v-icon>
+              <v-icon
+                class="mr-3"
+                color="primary"
+              >
+                mdi-devices
+              </v-icon>
               Device Information
             </v-card-title>
             <v-card-text>
               <v-row>
-                <v-col cols="12" sm="6">
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Status</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Status
+                    </v-list-item-title>
                     <v-list-item-subtitle>
                       <v-chip
                         :color="getStatusColor(device.status)"
                         size="small"
                         variant="tonal"
                       >
-                        <v-icon start>{{ getStatusIcon(device.status) }}</v-icon>
+                        <v-icon start>
+                          {{ getStatusIcon(device.status) }}
+                        </v-icon>
                         {{ device.status }}
                       </v-chip>
                     </v-list-item-subtitle>
                   </v-list-item>
                 </v-col>
-                <v-col cols="12" sm="6">
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Device Type</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Device Type
+                    </v-list-item-title>
                     <v-list-item-subtitle>{{ device.type.replace('_', ' ') }}</v-list-item-subtitle>
                   </v-list-item>
                 </v-col>
-                <v-col cols="12" sm="6">
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Serial Number</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Serial Number
+                    </v-list-item-title>
                     <v-list-item-subtitle>{{ device.metadata.serialNumber }}</v-list-item-subtitle>
                   </v-list-item>
                 </v-col>
-                <v-col cols="12" sm="6">
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">OS Version</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      OS Version
+                    </v-list-item-title>
                     <v-list-item-subtitle>{{ device.metadata.osVersion }}</v-list-item-subtitle>
                   </v-list-item>
                 </v-col>
-                <v-col cols="12" sm="6">
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Last Seen</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Last Seen
+                    </v-list-item-title>
                     <v-list-item-subtitle>{{ formatDate(device.metadata.lastSeen) }}</v-list-item-subtitle>
                   </v-list-item>
                 </v-col>
-                <v-col cols="12" sm="6">
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Location</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Location
+                    </v-list-item-title>
                     <v-list-item-subtitle>
-                      <router-link :to="`/locations/${device.location}`" class="text-decoration-none">
+                      <router-link
+                        :to="`/locations/${device.location}`"
+                        class="text-decoration-none"
+                      >
                         {{ getLocationName(device.location) }}
                       </router-link>
                     </v-list-item-subtitle>
@@ -123,27 +191,30 @@
         </v-col>
 
         <!-- Quick Actions -->
-        <v-col cols="12" md="4">
+        <v-col
+          cols="12"
+          md="4"
+        >
           <v-card>
             <v-card-title>Quick Actions</v-card-title>
             <v-card-text class="pa-0">
               <v-list>
                 <v-list-item @click="editDevice">
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <v-icon>mdi-pencil</v-icon>
                   </template>
                   <v-list-item-title>Edit Device</v-list-item-title>
                   <v-list-item-subtitle>Update device information</v-list-item-subtitle>
                 </v-list-item>
                 <v-list-item @click="configureDevice">
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <v-icon>mdi-cog</v-icon>
                   </template>
                   <v-list-item-title>Configure Device</v-list-item-title>
                   <v-list-item-subtitle>Apply configuration template</v-list-item-subtitle>
                 </v-list-item>
                 <v-list-item @click="refreshStatus">
-                  <template v-slot:prepend>
+                  <template #prepend>
                     <v-icon>mdi-refresh</v-icon>
                   </template>
                   <v-list-item-title>Refresh Status</v-list-item-title>
@@ -158,42 +229,78 @@
         <v-col cols="12">
           <v-card v-if="device.currentConfig">
             <v-card-title class="d-flex align-center">
-              <v-icon class="mr-3" color="success">mdi-check-circle</v-icon>
+              <v-icon
+                class="mr-3"
+                color="success"
+              >
+                mdi-check-circle
+              </v-icon>
               Current Configuration
             </v-card-title>
             <v-card-text>
               <v-row>
-                <v-col cols="12" md="4">
+                <v-col
+                  cols="12"
+                  md="4"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Template</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Template
+                    </v-list-item-title>
                     <v-list-item-subtitle>
-                      <router-link :to="`/templates/${device.currentConfig.template}`" class="text-decoration-none">
+                      <router-link
+                        :to="`/templates/${device.currentConfig.template}`"
+                        class="text-decoration-none"
+                      >
                         {{ device.currentConfig.template }}
                       </router-link>
                     </v-list-item-subtitle>
                   </v-list-item>
                 </v-col>
-                <v-col cols="12" md="4">
+                <v-col
+                  cols="12"
+                  md="4"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Applied By</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Applied By
+                    </v-list-item-title>
                     <v-list-item-subtitle>{{ device.currentConfig.appliedBy }}</v-list-item-subtitle>
                   </v-list-item>
                 </v-col>
-                <v-col cols="12" md="4">
+                <v-col
+                  cols="12"
+                  md="4"
+                >
                   <v-list-item class="px-0">
-                    <v-list-item-title class="text-caption text-medium-emphasis">Applied At</v-list-item-title>
+                    <v-list-item-title class="text-caption text-medium-emphasis">
+                      Applied At
+                    </v-list-item-title>
                     <v-list-item-subtitle>{{ formatDate(device.currentConfig.appliedAt) }}</v-list-item-subtitle>
                   </v-list-item>
                 </v-col>
               </v-row>
             </v-card-text>
           </v-card>
-          <v-card v-else variant="outlined" color="warning">
+          <v-card
+            v-else
+            variant="outlined"
+            color="warning"
+          >
             <v-card-text class="d-flex align-center">
-              <v-icon color="warning" class="mr-3">mdi-alert</v-icon>
+              <v-icon
+                color="warning"
+                class="mr-3"
+              >
+                mdi-alert
+              </v-icon>
               <div>
-                <div class="text-h6">No Configuration Applied</div>
-                <div class="text-body-2">This device has not been configured yet.</div>
+                <div class="text-h6">
+                  No Configuration Applied
+                </div>
+                <div class="text-body-2">
+                  This device has not been configured yet.
+                </div>
               </div>
               <v-spacer />
               <v-btn
