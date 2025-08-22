@@ -1,11 +1,13 @@
 <template>
   <v-container fluid>
-    <h1 class="text-h4 mb-2">
-      Dashboard
-    </h1>
-    <p class="text-body-1 text-medium-emphasis mb-6">
-      Overview of all NBC Universal devices, locations, and recent configuration activities across film sets, theme parks, and corporate offices.
-    </p>
+    <header>
+      <h1 class="text-h4 mb-2">
+        Dashboard
+      </h1>
+      <p class="text-body-1 text-medium-emphasis mb-6">
+        Overview of all NBC Universal devices, locations, and recent configuration activities across film sets, theme parks, and corporate offices.
+      </p>
+    </header>
 
     <v-row>
       <v-col
@@ -145,7 +147,11 @@
         md="8"
       >
         <v-card>
-          <v-card-title>Recent Configuration Activities</v-card-title>
+          <v-card-title>
+            <h2 class="text-h6">
+              Recent Configuration Activities
+            </h2>
+          </v-card-title>
           <v-card-text>
             <v-list>
               <ConfigurationActivityItem
@@ -163,7 +169,11 @@
         md="4"
       >
         <v-card>
-          <v-card-title>Quick Actions</v-card-title>
+          <v-card-title>
+            <h2 class="text-h6">
+              Quick Actions
+            </h2>
+          </v-card-title>
           <v-card-text>
             <v-btn
               block
@@ -200,11 +210,14 @@
       <v-col cols="12">
         <v-card>
           <v-card-title>
-            Devices by Location
+            <h2 class="text-h6">
+              Devices by Location
+            </h2>
             <v-spacer />
             <v-btn
               variant="text"
               size="small"
+              aria-label="Refresh devices by location data"
               @click="loadDevicesByLocation"
             >
               Refresh

@@ -1,15 +1,19 @@
 <template>
   <v-container fluid>
-    <h1 class="text-h4 mb-2">
-      Device Management
-    </h1>
-    <p class="text-body-1 text-medium-emphasis mb-6">
-      View and manage all networked devices including iPads, laptops, and mobile phones across NBC Universal locations. Monitor device status and perform individual actions.
-    </p>
+    <header>
+      <h1 class="text-h4 mb-2">
+        Device Management
+      </h1>
+      <p class="text-body-1 text-medium-emphasis mb-6">
+        View and manage all networked devices including iPads, laptops, and mobile phones across NBC Universal locations. Monitor device status and perform individual actions.
+      </p>
+    </header>
 
     <v-card>
       <v-card-title class="d-flex align-center py-4">
-        All Devices
+        <h2 class="text-h6">
+          All Devices
+        </h2>
         <v-spacer />
         <v-menu v-if="selectedDevices.length > 0">
           <template #activator="{ props }">
@@ -143,6 +147,10 @@
           multi-sort
           class="elevation-1"
           item-value="id"
+          role="table"
+          aria-label="Device management table"
+          :aria-rowcount="totalItems"
+          :aria-busy="loading ? 'true' : 'false'"
           @update:options="handleTableOptions"
         >
           <template #item.status="{ item }">
@@ -178,6 +186,7 @@
                 icon="mdi-cog"
                 size="small"
                 variant="text"
+                :aria-label="`Configure device ${item.name}`"
                 @click="openDeviceDialog(item)"
               />
             </div>
@@ -338,7 +347,7 @@ const bulkUpdateStatus = async () => {
     );
     clearSelection();
     refreshDevices();
-  } catch (error) {
+  } catch {
     showError('Update Failed', 'Failed to update device status');
   }
 };

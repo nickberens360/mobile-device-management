@@ -501,7 +501,7 @@ const saveTemplate = async () => {
     );
     
     closeDialog();
-  } catch (error) {
+  } catch {
     showError('Creation Failed', 'Failed to create template. Please try again.');
   } finally {
     saving.value = false;

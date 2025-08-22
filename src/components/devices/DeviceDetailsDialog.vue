@@ -3,35 +3,53 @@
     v-model="isOpen"
     max-width="800px"
     persistent
+    role="dialog"
+    :aria-labelledby="device ? `device-dialog-title-${device.id}` : 'device-dialog-title'"
+    aria-describedby="device-dialog-description"
   >
     <v-card v-if="device">
       <v-card-title class="d-flex align-center">
         <v-icon
           class="mr-3"
           color="primary"
+          aria-hidden="true"
         >
           mdi-devices
         </v-icon>
-        Device Details
+        <h2
+          :id="`device-dialog-title-${device.id}`"
+          class="text-h6"
+        >
+          Device Details
+        </h2>
         <v-spacer />
         <v-btn
           icon="mdi-close"
           variant="text"
+          aria-label="Close device details dialog"
           @click="closeDialog"
         />
       </v-card-title>
 
       <v-card-text>
+        <div
+          id="device-dialog-description"
+          class="sr-only"
+        >
+          Device details form for {{ device?.name || 'device' }}. Use Tab to navigate between form fields.
+        </div>
         <v-form
           ref="formRef"
           v-model="isFormValid"
+          role="form"
+          :aria-labelledby="`device-dialog-title-${device.id}`"
         >
           <v-row>
             <!-- Basic Information -->
             <v-col cols="12">
               <v-card variant="outlined">
                 <v-card-title class="text-h6">
-                  Basic Information
+                  <h3>Basic Information</h3>
                 </v-card-title>
                 <v-card-text>
                   <v-row>
@@ -453,10 +471,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLocationStore } from '@/stores/locations';
 import { useNotifications } from '@/composables/useNotifications';
+import { useFocusManagement } from '@/composables/useFocusManagement';
 import type { Device, DeviceType, DeviceStatus } from '@/types/device';
 
 interface Props {
@@ -475,6 +494,7 @@ const emit = defineEmits<{
 const router = useRouter();
 const locationStore = useLocationStore();
 const { showSuccess, showError } = useNotifications();
+const { saveFocus, restoreFocus, focusFirstElement, announceToScreenReader } = useFocusManagement();
 
 const formRef = ref();
 const isFormValid = ref(false);
@@ -716,7 +736,7 @@ const performSave = async () => {
     
     isEditing.value = false;
     originalLocation.value = formData.value.location; // Update original location
-  } catch (error) {
+  } catch {
     showError('Update Failed', 'Failed to update device. Please try again.');
   } finally {
     saving.value = false;
@@ -739,6 +759,7 @@ const configureDevice = () => {
 const closeDialog = () => {
   isOpen.value = false;
   isEditing.value = false;
+  restoreFocus();
   emit('dialog-closed');
 };
 
@@ -769,8 +790,33 @@ watch(() => props.device, loadDeviceData, { immediate: true });
 
 // Load locations when dialog opens
 watch(isOpen, (newValue) => {
-  if (newValue && locationStore.locations.length === 0) {
-    locationStore.fetchLocations();
+  if (newValue) {
+    saveFocus();
+    if (locationStore.locations.length === 0) {
+      locationStore.fetchLocations();
+    }
+    // Focus the first form element
+    nextTick(() => {
+      const dialogElement = document.querySelector('[role="dialog"]') as HTMLElement;
+      if (dialogElement) {
+        focusFirstElement(dialogElement);
+      }
+    });
+    announceToScreenReader('Device details dialog opened');
   }
 });
 </script>
+
+<style scoped>
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+</style>

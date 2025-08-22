@@ -1,5 +1,11 @@
 <template>
-  <div class="notification-container">
+  <div 
+    class="notification-container"
+    role="region"
+    aria-label="Notifications"
+    aria-live="polite"
+    aria-atomic="false"
+  >
     <v-slide-x-transition group>
       <v-alert
         v-for="notification in notifications"
@@ -10,12 +16,25 @@
         variant="flat"
         closable
         class="notification-item mb-2"
+        role="alert"
+        :aria-labelledby="`notification-title-${notification.id}`"
+        :aria-describedby="`notification-message-${notification.id}`"
         @click:close="removeNotification(notification.id)"
       >
         <template #prepend>
-          <v-icon>
+          <v-icon aria-hidden="true">
             {{ getNotificationIcon(notification.type) }}
           </v-icon>
+        </template>
+        <template #title>
+          <span :id="`notification-title-${notification.id}`">
+            {{ notification.title }}
+          </span>
+        </template>
+        <template #text>
+          <span :id="`notification-message-${notification.id}`">
+            {{ notification.message }}
+          </span>
         </template>
       </v-alert>
     </v-slide-x-transition>

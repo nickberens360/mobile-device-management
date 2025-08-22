@@ -1,13 +1,21 @@
 <template>
-  <v-card :height="height">
+  <v-card 
+    :height="height"
+    role="article"
+    :aria-labelledby="`stats-title-${title.replace(/\s+/g, '-').toLowerCase()}`"
+  >
     <v-card-text class="d-flex flex-column h-100 pa-3">
-      <div class="text-overline mb-1">
+      <div 
+        :id="`stats-title-${title.replace(/\s+/g, '-').toLowerCase()}`"
+        class="text-overline mb-1"
+      >
         {{ title }}
       </div>
       <div class="d-flex align-center">
         <div
           class="text-h4 font-weight-bold"
           :class="`text-${computedValueColor}`"
+          :aria-label="`${title}: ${value}${suffix}`"
         >
           {{ value }}{{ suffix }}
         </div>
@@ -15,6 +23,7 @@
         <v-icon
           :size="iconSize"
           :color="computedIconColor"
+          aria-hidden="true"
         >
           {{ icon }}
         </v-icon>
@@ -26,6 +35,7 @@
         :color="computedActionColor"
         variant="text"
         class="pa-0 align-self-start"
+        :aria-label="`${actionText} for ${title}`"
         @click="$emit('action-click')"
       >
         {{ actionText }}

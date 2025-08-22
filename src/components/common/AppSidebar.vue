@@ -5,8 +5,14 @@
     permanent
     height="100vh"
     style="position: fixed;"
+    role="navigation"
+    aria-label="Main navigation menu"
   >
-    <v-list nav>
+    <v-list 
+      nav
+      role="menubar"
+      aria-label="Navigation links"
+    >
       <v-list-item
         v-for="item in navigationItems"
         :key="item.title"
@@ -14,21 +20,32 @@
         :prepend-icon="item.icon"
         :title="item.title"
         color="primary"
+        role="menuitem"
+        :aria-label="`Navigate to ${item.title}`"
+        :aria-current="isCurrentPage(item.to) ? 'page' : undefined"
       />
     </v-list>
 
     <template #append>
-      <v-divider />
-      <v-list nav>
+      <v-divider role="separator" />
+      <v-list 
+        nav
+        role="menubar"
+        aria-label="Additional links"
+      >
         <v-list-item
           prepend-icon="mdi-code-tags"
           title="Component Docs"
           href="/atomic-docs"
           target="_blank"
+          role="menuitem"
+          aria-label="Open component documentation in new tab"
         />
         <v-list-item
           prepend-icon="mdi-help-circle-outline"
           title="Help"
+          role="menuitem"
+          aria-label="Get help"
         />
       </v-list>
     </template>
@@ -36,8 +53,10 @@
 </template>
 
 <script setup lang="ts">
+import { useRoute } from 'vue-router';
 import { useDrawer } from '@/composables/useDrawer';
 
+const route = useRoute();
 const { drawer } = useDrawer();
 
 const navigationItems = [
@@ -72,5 +91,9 @@ const navigationItems = [
     to: '/history'
   }
 ];
+
+const isCurrentPage = (path: string): boolean => {
+  return route.path === path || route.path.startsWith(path + '/');
+};
 </script>
 
